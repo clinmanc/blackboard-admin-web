@@ -1,3 +1,66 @@
-<h1>
-  {{title}}
-</h1>
+<mdl-layout mdl-layout-fixed-header mdl-layout-fixed-drawer mdl-layout-mode="waterfall">
+  <mdl-layout-header class="mat-elevation-z2">
+    <mdl-layout-header-row>
+      <mdl-layout-title>{{selectedItem != null ? selectedItem.name : ''}}</mdl-layout-title>
+      <mdl-layout-spacer></mdl-layout-spacer>
+      <nav class="mdl-navigation">
+        <md-input-container>
+          <input type="search" mdInput placeholder="搜索">
+        </md-input-container>
+        <button class="user-button" md-button [mdMenuTriggerFor]="menu">
+          <span class="">KOMA</span>
+          <md-icon>keyboard_arrow_down</md-icon>
+        </button>
+        <md-menu #menu>
+          <button md-menu-item>
+            <md-icon md-list-icon>account_circle</md-icon>
+            <span md-line>用户</span>
+          </button>
+          <button md-menu-item disabled>
+            <md-icon md-list-icon>settings</md-icon>
+            <span md-line>设置</span>
+          </button>
+          <button md-menu-item>
+            <md-icon md-list-icon>help</md-icon>
+            <span md-line>帮助</span>
+          </button>
+          <md-divider></md-divider>
+          <button md-menu-item>
+            <md-icon md-list-icon>exit_to_app</md-icon>
+            <span md-line>登出</span>
+          </button>
+        </md-menu>
+      </nav>
+    </mdl-layout-header-row>
+  </mdl-layout-header>
+  <mdl-layout-drawer class="sidenav">
+    <mdl-layout-title class="mat-elevation-z2">
+      <md-icon>dashboard</md-icon>
+      <span md-line>Admin</span>
+    </mdl-layout-title>
+    <md-nav-list>
+
+      <ng-container *ngFor="let item of navItems">
+        <md-list-item (click)="toggleExpanded(item)">
+          <md-icon md-list-icon>{{item.icon}}</md-icon>
+          <span md-line>{{item.name}}</span>
+          <md-icon *ngIf="item.children != null && item.children.length != 0"
+                   [@rotate180]="allowExpandSubmenu && item === selectedItem ? 'expanded' : 'collapsed'">
+            expand_more
+          </md-icon>
+        </md-list-item>
+
+        <md-nav-list *ngIf="allowExpandSubmenu && item === selectedItem" class="sub-nav-list" [@flyInOut]="'in'">
+          <md-list-item *ngFor="let child of item.children"
+                        [routerLink]="child.url" routerLinkActive="active">
+            <md-icon md-list-icon>{{child.icon}}</md-icon>
+            <span md-line>{{child.name}}</span>
+          </md-list-item>
+        </md-nav-list>
+      </ng-container>
+    </md-nav-list>
+  </mdl-layout-drawer>
+  <mdl-layout-content>
+    <router-outlet></router-outlet>
+  </mdl-layout-content>
+</mdl-layout>

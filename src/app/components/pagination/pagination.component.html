@@ -1,0 +1,36 @@
+<div class="app-pagination-container">
+  <div class="app-pagination-rows">
+    <label>
+      每页数量：
+      <md-select placeholder="每页数量" floatPlaceholder="never"
+                 [(ngModel)]="pageable.size" (change)="rowsPerPageChanged()">
+        <md-option *ngFor="let rowsPerPage of rowsPerPages" [value]="rowsPerPage">
+          {{rowsPerPage}}
+        </md-option>
+      </md-select>
+    </label>
+  </div>
+  <div class="app-pagination-state">
+    <pre class="card card-block card-header">显示 {{page.numberOfElements}} 项中的 {{page.number + 1}}-{{page.number + page.size}} 项</pre>
+  </div>
+  <div class="app-pagination-pager">
+    <!--<button md-button (click)="onClick">-->
+    <!--<md-icon>first_page</md-icon>-->
+    <!--</button>-->
+    <button md-button [disabled]="page.first"  (click)="goToPreviousPage()">
+      <md-icon>chevron_left</md-icon>
+    </button>
+    <!--<button *ngFor="let row of content" md-button (click)="onClick">1</button>-->
+    <!--<button md-button (click)="onClick">2</button>-->
+    <!--<button md-button (click)="onClick">3</button>-->
+    <!--<button md-button (click)="onClick">4</button>-->
+    <!--<button md-button (click)="onClick">5</button>-->
+    <button md-button [disabled]="page.last" (click)="goToNextPage()">
+      <md-icon>chevron_right</md-icon>
+    </button>
+    <!--<button md-button (click)="onClick">-->
+    <!--<md-icon>last_page</md-icon>-->
+    <!--</button>-->
+  </div>
+  <div></div>
+</div>
