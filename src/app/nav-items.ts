@@ -1,6 +1,7 @@
 import { NavItem } from "./nav-item";
 
 export const NAV_ITEMS: NavItem[] = [
+  new NavItem('概览', 'dashboard', '/dashboard'),
   new NavItem('权限管理', 'security', null,
     [
       new NavItem('角色管理', null, '/sys/role'),
@@ -51,6 +52,5 @@ export const NAV_ITEMS: NavItem[] = [
       new NavItem('消息列表', null, '/dashboard'),
       new NavItem('注册用户统计', null, '/dashboard'),
       new NavItem('用户归属地', null, '/dashboard')
-    ]),
-  new NavItem('退出系统', 'exit_to_app', null, null)
+    ])
 ];

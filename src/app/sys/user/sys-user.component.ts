@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostBinding, OnInit} from '@angular/core';
 import { SysUserService } from "./sys-user.service";
 import { MdSnackBar } from "@angular/material";
 import { SysUser } from "./sys-user";
@@ -10,6 +10,8 @@ import { Page } from "../../components/page";
   styleUrls: ['./sys-user.component.css']
 })
 export class SysUserComponent implements OnInit {
+  // @HostBinding('@routeAnimation') routeAnimation = true;
+
   page: Page<SysUser>;
 
   settings = {

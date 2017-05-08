@@ -1,6 +1,6 @@
 import { animate, group, state, style, transition, trigger } from "@angular/animations";
 
-export const flyInOut = trigger('flyInOut', [
+export const flyInOutAnimation = trigger('flyInOutAnimation', [
   state('in', style({ height: '*', transform: 'translateX(0)', opacity: 1 })),
   transition('void => *', [
     style({ height: 0, transform: 'translateX(50px)', opacity: 0 }),

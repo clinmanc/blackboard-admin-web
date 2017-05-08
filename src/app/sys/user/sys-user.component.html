@@ -3,6 +3,8 @@
 <!--<button mdSuffix>搜索</button>-->
 <!--</md-input-container>-->
 <md-card>
-  <app-table [settings]="settings" [source]="source"></app-table>
-  <app-pagination [page]="page" (onSwitchPage)="onSwitchPage($event)"></app-pagination>
+  <md-card-content>
+    <app-table [settings]="settings" [source]="source"></app-table>
+    <app-pagination [page]="page" (onSwitchPage)="onSwitchPage($event)"></app-pagination>
+  </md-card-content>
 </md-card>

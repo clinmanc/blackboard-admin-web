@@ -1,0 +1,38 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: #5472d3;
+
+  md-card {
+    min-width: 240px;
+    width: 320px;
+
+    md-card-title, md-card-subtitle {
+      text-align: center;
+    }
+
+    .login-from {
+      display: flex;
+      flex-direction: column;
+      .form-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .form-row-item {
+          display: flex;
+        }
+      }
+    }
+
+    .login-from > * {
+      min-width: 240px;
+      margin-bottom: 24px;
+      button {
+        text-align: center;
+      }
+    }
+  }
+}
