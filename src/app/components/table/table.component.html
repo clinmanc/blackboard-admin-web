@@ -1,5 +1,7 @@
-<mdl-table-selectable [table-model]="tableModel"
+<mdl-table class="app-table" *ngIf="!selectable" [table-model]="tableModel"></mdl-table>
+<mdl-table-selectable class="app-table" *ngIf="selectable" [table-model]="tableModel"
                       [table-model-selected]="selected"
                       (table-model-selectionChanged)="selectionChanged($event)">
 </mdl-table-selectable>
-<p *ngIf="tableModel.data == null || tableModel.data.length === 0" style="text-align: center; line-height: 36px;">没有数据</p>
+<p *ngIf="tableModel.data == null || tableModel.data.length === 0" style="text-align: center; line-height: 36px;">
+  没有数据</p>

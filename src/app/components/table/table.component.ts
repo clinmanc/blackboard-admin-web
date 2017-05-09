@@ -32,36 +32,33 @@ export class TableComponent implements OnInit {
   private _settings: Settings;
   private _source: any;
 
+  @Input()
+  selectable: boolean;
+
   @Input() set settings(settings: Settings) {
     this._settings = settings;
 
-    this.tableModel = new MdlDefaultTableModel(settings.columns);
+    this.tableModel = new MdlDefaultTableModel(this.settings.columns);
   }
 
   get settings() {
     return this._settings;
   }
 
-  @Input() set source(source: any) {
-    this._source = source;
+  @Input() set source(source: any[]) {
+    this._source = source || [];
 
-    if (isNullOrUndefined(source)) {
-      this.tableModel.data = [];
-    } else {
-      this.tableModel.data = source.map(item => {
-        if (!isNullOrUndefined(this.settings) && isArray(this.settings.columns)) {
-          for (let column of this.settings.columns) {
-            if (!isNullOrUndefined(column.formatter)) {
-              console.log(column);
-              item[column.key] = column.formatter(item[column.key]);
-              console.log(item);
-            }
+    this.tableModel.data = this._source.map(item => {
+      if (!isNullOrUndefined(this.settings) && isArray(this.settings.columns)) {
+        for (let column of this.settings.columns) {
+          if (!isNullOrUndefined(column.formatter)) {
+            item[column.key] = column.formatter(item[column.key], item);
           }
         }
-        return Object.assign(new TableItem(), item);
-      });
-      this.selected = this.tableModel.data.filter(data => data.selected);
-    }
+      }
+      return Object.assign(new TableItem(), item);
+    }) || [];
+    this.selected = this.tableModel.data.filter(data => data.selected);
   }
 
   get source() {
@@ -75,6 +72,9 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (isNullOrUndefined(this.selectable)) {
+      this.selectable = false;
+    }
   }
 
   selectionChanged($event) {

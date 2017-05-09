@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {SysUserService} from "../../sys/user/sys-user.service";
-import {rotate180Animation} from "../../animations/rotate-180.animation";
-import {flyInOutAnimation} from "../../animations/fly-in-out.animation";
-import {NAV_ITEMS} from "../../nav-items";
-import {SysUser} from "../../sys/user/sys-user";
-import {NavItem} from "../../nav-item";
-import {AuthService} from "../../auth.service";
-import {Router} from "@angular/router";
+import { SysUserService } from "../sys/user/sys-user.service";
+import { rotate180Animation } from "../../animations/rotate-180.animation";
+import { flyInOutAnimation } from "../../animations/fly-in-out.animation";
+import { NAV_ITEMS } from "../../nav-items";
+import { SysUser } from "../sys/user/sys-user";
+import { NavItem } from "../../nav-item";
+import { AuthService } from "../../auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -16,7 +16,7 @@ import {Router} from "@angular/router";
   animations: [rotate180Animation, flyInOutAnimation]
 })
 export class HomeComponent implements OnInit {
-  constructor(private authService: AuthService,private router:Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
     this.selectedItem = item;
   }
 
-  logout(){
+  logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }

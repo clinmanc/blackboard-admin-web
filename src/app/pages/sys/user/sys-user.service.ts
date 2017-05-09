@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Http} from "@angular/http";
-import {SysUser} from "./sys-user";
+import { Injectable } from '@angular/core';
+import { Http } from "@angular/http";
+import { SysUser } from "./sys-user";
 import 'rxjs/add/operator/toPromise'
-import {Observable} from "rxjs/Observable";
-import {Page} from "../../components/page";
-import {environment} from "../../../environments/environment";
+import { Observable } from "rxjs/Observable";
+import { Page } from "../../../components/page";
+import { environment } from "../../../../environments/environment";
 
 @Injectable()
 export class SysUserService {
@@ -15,7 +15,7 @@ export class SysUserService {
 
   login(): Observable<any> {
     return this.http.post(`${this.userUrl}/login`, {})
-      .map(response => response.json().data as any);
+      .map(response => response.json() as any);
   }
 
   logout(): any[] {
@@ -29,6 +29,6 @@ export class SysUserService {
 
   getUser(userId: string): Observable<SysUser> {
     return this.http.get(`${this.userUrl}/${userId}`)
-      .map(response => response.json().data as SysUser);
+      .map(response => response.json() as SysUser);
   }
 }

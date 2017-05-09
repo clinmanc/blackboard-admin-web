@@ -19,19 +19,12 @@ export class PaginationComponent implements OnInit {
   @Output()
   onSwitchPage = new EventEmitter<Pageable>();
 
-  constructor() {
-  }
+  constructor() { }
 
   ngOnInit() {
-    if (isUndefined(this.pageable)) {
-      this.pageable = new Pageable();
-    }
-    if (isUndefined(this.page)) {
-      this.page = new Page();
-    }
-    if (isUndefined(this.rowsPerPages)) {
-      this.rowsPerPages = [10, 20, 50, 100];
-    }
+    this.pageable = this.pageable || new Pageable();
+    this.page = this.page || new Page();
+    this.rowsPerPages = this.rowsPerPages || [10, 20, 50, 100];
   }
 
   goToPreviousPage() {

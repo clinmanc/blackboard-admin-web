@@ -9,17 +9,25 @@ import { MaterialModule } from "@angular/material";
 import 'hammerjs';
 import { MdlModule } from "@angular-mdl/core";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { SysUserComponent } from './sys/user/sys-user.component';
-import { SysRoleComponent } from "./sys/role/sys-role.component";
-import { SysPermissionComponent } from "./sys/permission/sys-permission.component";
+import { SysUserComponent } from './pages/sys/user/sys-user.component';
+import { SysRoleComponent } from "./pages/sys/role/sys-role.component";
+import { SysPermissionComponent } from "./pages/sys/permission/sys-permission.component";
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { TableComponent } from './components/table/table.component';
-import { PageNotFoundComponent } from "./page/not-found/page-not-found.component";
-import { LoginComponent } from './page/login/login.component';
+import { PageNotFoundComponent } from "./pages/not-found/page-not-found.component";
+import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from "./auth.guard";
 import { AuthService } from "./auth.service";
-import { HomeComponent } from './page/home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { AppRoutingModule } from "./app-routing.module";
+import { InvitationStatisticsComponent } from './pages/invitation-statistics/invitation-statistics.component';
+import { BasePage } from './pages/base-page';
+import { ItemListDialogComponent } from './components/item-list-dialog/item-list-dialog.component';
+import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from "ngx-perfect-scrollbar";
+
+const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 
 @NgModule({
   declarations: [
@@ -32,7 +40,9 @@ import { AppRoutingModule } from "./app-routing.module";
     TableComponent,
     PageNotFoundComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    InvitationStatisticsComponent,
+    ItemListDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -42,9 +52,11 @@ import { AppRoutingModule } from "./app-routing.module";
     MdlModule,
     ReactiveFormsModule,
     MaterialModule.forRoot(),
+    PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     AppRoutingModule
   ],
   providers: [AuthGuard, AuthService],
+  entryComponents: [ItemListDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

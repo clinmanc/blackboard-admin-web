@@ -1,8 +1,9 @@
 import { Routes } from "@angular/router";
 import { DashboardComponent } from "../../dashboard/dashboard.component";
-import { SysUserComponent } from "../../sys/user/sys-user.component";
-import { SysRoleComponent } from "../../sys/role/sys-role.component";
-import { SysPermissionComponent } from "../../sys/permission/sys-permission.component";
+import { SysUserComponent } from "../sys/user/sys-user.component";
+import { SysRoleComponent } from "../sys/role/sys-role.component";
+import { SysPermissionComponent } from "../sys/permission/sys-permission.component";
+import { InvitationStatisticsComponent } from "../invitation-statistics/invitation-statistics.component";
 
 export const homeRoutes: Routes = [
   {
@@ -25,5 +26,9 @@ export const homeRoutes: Routes = [
   {
     path: 'sys/permission',
     component: SysPermissionComponent
+  },
+  {
+    path: 'invitation_statistics',
+    component: InvitationStatisticsComponent
   }
 ];

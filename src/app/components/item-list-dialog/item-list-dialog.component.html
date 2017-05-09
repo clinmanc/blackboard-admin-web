@@ -1,0 +1,23 @@
+<div class="app-dialog-container">
+  <h4 md-dialog-title>
+    {{title}}
+    <small md-subheader *ngIf="!inQuery && (items != null && items.length !== 0)">共 {{items?.length}} 项</small>
+  </h4>
+  <perfect-scrollbar md-dialog-content>
+    <p *ngIf="!inQuery && (items == null || items.length === 0)" class="empty-message">列表为空</p>
+    <table *ngIf="!inQuery && items != null && items.length !== 0" contenteditable="true">
+      <tr *ngFor="let item of items; let i = index">
+        <td class="app-table-index">{{i + 1}}</td>
+        <td *ngFor="let column of item">
+          <div>{{column}}</div>
+        </td>
+      </tr>
+    </table>
+  </perfect-scrollbar>
+  <div md-dialog-actions *ngIf="!inQuery">
+    <div class="app-button-container">
+      <button md-dialog-close md-button (click)="onClick">关闭</button>
+    </div>
+  </div>
+</div>
+<md-progress-bar class="app-progress-bar-bottom" mode="indeterminate" *ngIf="inQuery"></md-progress-bar>

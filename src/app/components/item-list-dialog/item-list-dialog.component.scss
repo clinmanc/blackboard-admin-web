@@ -1,0 +1,31 @@
+.app-dialog-container {
+  min-width: 320px;
+
+  table {
+    td.app-table-index {
+      text-align: right;
+    }
+    td:not(.app-table-index) > div {
+      max-width: 240px;
+      word-break: keep-all;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .empty-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app-button-container {
+    display: flex;
+  }
+
+  div[md-dialog-actions] {
+    flex-direction: row-reverse;
+  }
+}
+

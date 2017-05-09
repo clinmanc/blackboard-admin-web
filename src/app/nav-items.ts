@@ -8,7 +8,7 @@ export const NAV_ITEMS: NavItem[] = [
       new NavItem('用户管理', null, '/sys/user'),
       new NavItem('权限管理', null, '/sys/permission')
     ]),
-  new NavItem('班级管理', 'dashboard', null,
+  new NavItem('班级管理', 'school', null,
     [
       new NavItem('班级信息列表', null, '/dashboard'),
       new NavItem('活跃班级信息', null, '/dashboard'),
@@ -36,7 +36,7 @@ export const NAV_ITEMS: NavItem[] = [
   new NavItem('培训统计', 'insert_chart', null,
     [
       new NavItem('班级关联', null, '/dashboard'),
-      new NavItem('邀请统计', null, '/dashboard')
+      new NavItem('邀请统计', null, '/invitation_statistics')
     ]),
   new NavItem('系统管理', 'settings', null,
     [
