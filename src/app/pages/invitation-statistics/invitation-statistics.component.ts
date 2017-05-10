@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Settings } from "../../components/table/table.component";
-import { Page } from "../../components/page";
-import { Pageable } from "../../components/pageable";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { InvitationStatisticsService } from "./invitation-statistics.service";
-import { MdDialog, MdDialogRef, MdSnackBar } from "@angular/material";
-import { BasePage } from "../base-page";
-import { ItemListDialogComponent } from "../../components/item-list-dialog/item-list-dialog.component";
-import { Observable } from "rxjs/Observable";
+import { Page } from '../../components/page';
+import { Pageable } from '../../components/pageable';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { InvitationStatisticsService } from './invitation-statistics.service';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { BasePage } from '../base-page';
+import { ItemListDialogComponent } from '../../components/item-list-dialog/item-list-dialog.component';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-invitation-statistics',
@@ -21,7 +20,7 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
   source: any[];
   page: Page<any>;
   pageable: Pageable;
-  settings: Settings = {
+  settings = {
     columns: [
       { key: 'inviter', name: '邀请人', sortable: true },
       { key: 'invitationCode', name: '邀请码', sortable: true },
@@ -43,8 +42,8 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
   buildForm(): void {
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1 < 10 ? "0" + (now.getMonth() + 1) : now.getMonth();
-    const day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+    const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth();
+    const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
 
     // const from: string = `${year}-${month}-01`;
     const from: string = `${year}-01-01`;

@@ -1,4 +1,4 @@
-import { MdSnackBar } from "@angular/material";
+import { MdSnackBar } from '@angular/material';
 
 export class BasePage {
   protected inQuery: boolean = false;
@@ -16,6 +16,6 @@ export class BasePage {
 
   handleError(err: any) {
     this.completeQuery();
-    this.snackBar.open(err.message || '查询失败', "知道了", { duration: 5000 });
+    this.snackBar.open(err.message || '查询失败', '知道了', { duration: 5000 });
   }
 }

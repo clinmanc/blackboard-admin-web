@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { MdDialogRef, MdSnackBar } from "@angular/material";
-import { BasePage } from "../../pages/base-page";
+import { MdDialogRef, MdSnackBar } from '@angular/material';
+import { BasePage } from '../../pages/base-page';
 
 @Component({
   selector: 'app-item-list-dialog',

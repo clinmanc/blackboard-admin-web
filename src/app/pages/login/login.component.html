@@ -6,20 +6,16 @@
       <form class="login-from" [formGroup]="loginForm" novalidate (ngSubmit)="login()">
         <!--<p>{{message}}</p>-->
         <md-input-container>
-          <input mdInput type="text" formControlName="username" required
-                 name="username" placeholder="用户名" minlength="1" maxlength="24">
+          <input mdInput type="text" formControlName="username" required name="username" placeholder="用户名" minlength="1" maxlength="24">
         </md-input-container>
         <md-input-container>
-          <input mdInput type="password" formControlName="password" required
-                 name="password" placeholder="密码" minlength="1" maxlength="24">
+          <input mdInput type="password" formControlName="password" required name="password" placeholder="密码" minlength="1" maxlength="24">
         </md-input-container>
         <div class="form-row">
           <md-checkbox class="form-row-item" formControlName="rememberMe">记住我</md-checkbox>
           <a routerLink="/dashboard">忘记密码</a>
         </div>
-        <button class="form-row-item" type="submit" md-raised-button color="primary"
-                [disabled]="!loginForm.valid"
-                *ngIf="!authService.isLoggedIn">登录
+        <button class="form-row-item" type="submit" md-raised-button color="primary" [disabled]="!loginForm.valid" *ngIf="!authService.isLoggedIn">登录
         </button>
         <button md-raised-button color="primary" (click)="logout()" *ngIf="authService.isLoggedIn">登出</button>
       </form>

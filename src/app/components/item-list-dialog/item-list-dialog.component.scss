@@ -1,6 +1,4 @@
 .app-dialog-container {
-  min-width: 320px;
-
   table {
     td.app-table-index {
       text-align: right;
@@ -18,14 +16,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .app-button-container {
-    display: flex;
-  }
-
-  div[md-dialog-actions] {
-    flex-direction: row-reverse;
   }
 }
 

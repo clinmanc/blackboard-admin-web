@@ -1,42 +1,59 @@
-<!--<md-input-container>-->
-<!--<input mdInput name="componentProperty" [(ngModel)]="searchValue" type="search" placeholder="关键字">-->
-<!--<button mdSuffix>搜索</button>-->
-<!--</md-input-container>-->
 <md-card>
-  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
+  <!--<md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>-->
+  <md-card-header>
+    <div class="app-row-reverse-container">
+      <div class="app-item-container">
+        <button md-icon-button [mdMenuTriggerFor]="moreMenu">
+          <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #moreMenu>
+          <button md-menu-item>
+            <md-icon>person_add</md-icon>
+            <span>添加</span>
+          </button>
+          <button md-menu-item (click)="openConfirmDialog('deleteAll')">
+            <md-icon>delete_sweep</md-icon>
+            <span>清空</span>
+          </button>
+        </md-menu>
+      </div>
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>sort</md-icon>
+        </button>
+      </div>
+    </div>
+  </md-card-header>
   <md-card-content>
     <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable app-table">
       <thead>
       <tr>
-        <th *ngFor="let columnsSetting of settings.columns" [ngClass]="{'mdl-data-table__cell--non-numeric': !columnsSetting.numeric}">
+        <th *ngFor="let columnsSetting of settings.columns"
+            [ngClass]="{'mdl-data-table__cell--non-numeric': !columnsSetting.numeric}">
           {{columnsSetting.name}}
         </th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let row of source;">
-        <td [ngClass]="{'mdl-data-table__cell--non-numeric': !settings.columns[0].numeric}">
-          {{row.inviterName}}【{{row.inviterMobile}}】
+      <tr *ngFor="let row of page?.content">
+        <td class="mdl-data-table__cell--non-numeric">
+          {{row.username}}
         </td>
-        <td [ngClass]="{'mdl-data-table__cell--non-numeric': !settings.columns[1].numeric}">
-          {{row.invitationCode}}
+        <td class="mdl-data-table__cell--non-numeric">
+          <md-chip-list *ngFor="let role of row.roles">
+            <md-chip>
+              {{role.name}}
+            </md-chip>
+          </md-chip-list>
         </td>
-        <td [ngClass]="{'mdl-data-table__cell--non-numeric': !settings.columns[2].numeric}">
-          <a color="Primary" (click)="openDialog('invitees', row.invitationCode)">{{row.inviteeNum}}</a>
-        </td>
-        <td [ngClass]="{'mdl-data-table__cell--non-numeric': !settings.columns[3].numeric}">
-          <a color="Primary"
-             (click)="openDialog('classrooms', row.invitationCode)">{{row.classroomNum}}</a>
-        </td>
-        <td [ngClass]="{'mdl-data-table__cell--non-numeric': !settings.columns[4].numeric}">
-          <a color="Primary" (click)="openDialog('users', row.invitationCode)">{{row.userNum}}</a>
+        <td class="mdl-data-table__cell--non-numeric">
+          <a (click)="openConfirmDialog('delete', { userId: row.userId })">删除</a>
         </td>
       </tr>
       </tbody>
     </table>
-    <p *ngIf="!source || source.length === 0" style="text-align: center; margin-top: 8px">没有数据</p>
-    <!--<app-table [settings]="settings" [source]="source"></app-table>-->
-    <app-pagination [page]="page" (onSwitchPage)="onSwitchPage($event)"></app-pagination>
+    <p *ngIf="!page?.totalElements" style="text-align: center; margin-top: 8px">没有数据</p>
+    <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
   </md-card-content>
 </md-card>
 

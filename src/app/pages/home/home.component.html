@@ -4,12 +4,15 @@
       <mdl-layout-title>{{selectedItem?.name}}</mdl-layout-title>
       <mdl-layout-spacer></mdl-layout-spacer>
       <nav class="mdl-navigation">
-        <md-input-container>
-          <input type="search" mdInput placeholder="搜索">
-        </md-input-container>
-        <button class="user-button" md-button [mdMenuTriggerFor]="menu">
+        <button class="nav-button" md-button>
+          <md-icon>search</md-icon>
+        </button>
+        <!--<md-input-container>-->
+          <!--<input type="search" mdInput placeholder="搜索">-->
+        <!--</md-input-container>-->
+        <button class="nav-button" md-button [mdMenuTriggerFor]="menu">
           <span>{{authService.isLoggedIn}}</span>
-          <md-icon>keyboard_arrow_down</md-icon>
+          <md-icon class="arrow_down">keyboard_arrow_down</md-icon>
         </button>
         <md-menu #menu>
           <button md-menu-item>

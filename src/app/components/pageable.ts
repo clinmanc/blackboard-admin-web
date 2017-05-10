@@ -1,6 +1,6 @@
 export class Pageable {
-  size: number = 10;
-  page: number = 0;
+  size = 10;
+  page = 0;
   sort: string[] = [];
-  direction: string = 'ASC';
+  direction = 'ASC';
 }

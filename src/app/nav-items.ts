@@ -1,4 +1,4 @@
-import { NavItem } from "./nav-item";
+import { NavItem } from './nav-item';
 
 export const NAV_ITEMS: NavItem[] = [
   new NavItem('概览', 'dashboard', '/dashboard'),

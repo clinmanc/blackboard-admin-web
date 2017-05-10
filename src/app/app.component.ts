@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SysUserService } from "./pages/sys/user/sys-user.service";
-import { flyInOutAnimation } from "./animations/fly-in-out.animation";
-import { rotate180Animation } from "./animations/rotate-180.animation";
-import { AuthService } from "./auth.service";
+import { SysUserService } from './pages/sys/user/sys-user.service';
+import { flyInOutAnimation } from './animations/fly-in-out.animation';
+import { rotate180Animation } from './animations/rotate-180.animation';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -22,5 +22,10 @@ export class AppComponent implements OnInit {
     if (this.authService.isLoggedIn) {
 
     }
+  }
+
+  isWebkit(): boolean {
+    let ua = navigator.userAgent;
+    return (ua.indexOf('AppleWebKit') > -1) && ua.indexOf('Edge') < 0;
   }
 }

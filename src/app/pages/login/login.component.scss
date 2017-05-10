@@ -5,15 +5,13 @@
   min-width: 100vw;
   min-height: 100vh;
   background-color: #5472d3;
-
   md-card {
     min-width: 240px;
     width: 320px;
-
-    md-card-title, md-card-subtitle {
+    md-card-title,
+    md-card-subtitle {
       text-align: center;
     }
-
     .login-from {
       display: flex;
       flex-direction: column;
@@ -26,8 +24,7 @@
         }
       }
     }
-
-    .login-from > * {
+    .login-from>* {
       min-width: 240px;
       margin-bottom: 24px;
       button {

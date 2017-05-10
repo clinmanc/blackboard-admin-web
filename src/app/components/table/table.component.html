@@ -1,7 +1,28 @@
-<mdl-table class="app-table" *ngIf="!selectable" [table-model]="tableModel"></mdl-table>
-<mdl-table-selectable class="app-table" *ngIf="selectable" [table-model]="tableModel"
-                      [table-model-selected]="selected"
-                      (table-model-selectionChanged)="selectionChanged($event)">
-</mdl-table-selectable>
-<p *ngIf="tableModel.data == null || tableModel.data.length === 0" style="text-align: center; line-height: 36px;">
-  没有数据</p>
+<!--<ng2-smart-table [settings]="settings" [source]="source">-->
+
+<!--</ng2-smart-table>-->
+<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable app-table">
+  <thead>
+  <tr>
+    <th *ngFor="let column of columns" [ngClass]="{'mdl-data-table__cell--non-numeric': !column.numeric}">
+      {{column.name}}
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td *ngIf="data.length === 0" style="text-align: center; margin-top: 8px">没有数据</td>
+  </tr>
+  <tr *ngFor="let row of data">
+    <td *ngFor="let column of columns; let i = index"
+        [ngClass]="{ 'mdl-data-table__cell--non-numeric': !column.numeric }">
+      <app-render *ngIf="column.renderComponent; else renderComponentElseBlock"
+                  [renderComponent]="column.renderComponent" [renderValue]="{ value: row[column.key], row: row, index: i }"
+                  [renderSubject]="column.renderSubject"></app-render>
+      <ng-template #renderComponentElseBlock>
+        {{row[column.key]}}
+      </ng-template>
+    </td>
+  </tr>
+  </tbody>
+</table>

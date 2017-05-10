@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableComponent } from './table.component';
+import { AlertDialogComponent } from './alert-dialog.component';
 
-describe('SimpleTableComponent', () => {
-  let component: TableComponent;
-  let fixture: ComponentFixture<TableComponent>;
+describe('AlertDialogComponent', () => {
+  let component: AlertDialogComponent;
+  let fixture: ComponentFixture<AlertDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableComponent ]
+      declarations: [ AlertDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TableComponent);
+    fixture = TestBed.createComponent(AlertDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

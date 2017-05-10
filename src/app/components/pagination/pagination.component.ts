@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Optional, Output, ViewEncapsulation } from '@angular/core';
-import { isUndefined } from "util";
-import { Pageable } from "../pageable";
-import { Page } from "../page";
+import { Pageable } from '../pageable';
+import { Page } from '../page';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -17,7 +16,7 @@ export class PaginationComponent implements OnInit {
   @Input()
   rowsPerPages: number[];
   @Output()
-  onSwitchPage = new EventEmitter<Pageable>();
+  change = new EventEmitter<Pageable>();
 
   constructor() { }
 
@@ -33,7 +32,7 @@ export class PaginationComponent implements OnInit {
       this.pageable.page = 0;
     }
 
-    this.onSwitchPage.emit(this.pageable);
+    this.change.emit(this.pageable);
   }
 
   goToNextPage() {
@@ -42,10 +41,10 @@ export class PaginationComponent implements OnInit {
       this.pageable.page = 0;
     }
 
-    this.onSwitchPage.emit(this.pageable);
+    this.change.emit(this.pageable);
   }
 
   rowsPerPageChanged() {
-    this.onSwitchPage.emit(this.pageable);
+    this.change.emit(this.pageable);
   }
 }

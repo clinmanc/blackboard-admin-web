@@ -1,1 +1,7 @@
 <router-outlet></router-outlet>
+<small *ngIf="!isWebkit()" style="position: fixed; left: 0; right: 0; bottom: 0; margin:0 auto; z-index: 100; text-align: center;">
+  建议使用
+  <a style="text-decoration: none" href="https://www.baidu.com/s?wd=Chrome" target="_blank">Chrome</a>
+  或
+  <a style="text-decoration: none" href="https://www.baidu.com/s?wd=Safari" target="_blank">Safari</a>  浏览器查看
+</small>

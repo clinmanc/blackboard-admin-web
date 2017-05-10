@@ -16,7 +16,27 @@
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <md-card-header>
-    <md-icon mdTooltip="统计数据有一天的延迟" mdTooltipPosition="after">help_outline</md-icon>
+    <div class="app-row-container">
+      <div class="app-item-container">
+        <button md-icon-button mdTooltip="统计数据有一天的延迟" mdTooltipPosition="after">
+          <md-icon class="help">help_outline</md-icon>
+        </button>
+      </div>
+    </div>
+    <div class="app-row-reverse-container">
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>more_vert</md-icon>
+        </button>
+      </div>
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>sort</md-icon>
+        </button>
+      </div>
+    </div>
+  </md-card-header>
+  <md-card-header>
   </md-card-header>
   <md-card-content>
     <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable app-table">
@@ -51,6 +71,6 @@
     </table>
     <p *ngIf="!source || source.length === 0" style="text-align: center; margin-top: 8px">没有数据</p>
     <!--<app-table [settings]="settings" [source]="source"></app-table>-->
-    <app-pagination [page]="page" (onSwitchPage)="onSwitchPage($event)"></app-pagination>
+    <app-pagination [page]="page" (change)="onSwitchPage($event)"></app-pagination>
   </md-card-content>
 </md-card>

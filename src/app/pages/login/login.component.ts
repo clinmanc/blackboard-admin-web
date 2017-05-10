@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../auth.service";
-import { Router } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AuthService } from '../../auth.service';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +11,21 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 export class LoginComponent implements OnInit {
   message: string;
   loginForm: FormGroup;
+  formErrors = {
+    'username': '',
+    'password': ''
+  };
+  validationMessages = {
+    'username': {
+      'required': 'Username is required.',
+      'minlength': 'Username must be at least 4 characters long.',
+      'maxlength': 'Username cannot be more than 24 characters long.',
+      'forbiddenName': 'Someone named "Bob" cannot be a hero.'
+    },
+    'password': {
+      'required': 'Password is required.'
+    }
+  };
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {
     this.setMessage();
@@ -70,20 +85,4 @@ export class LoginComponent implements OnInit {
       }
     }
   }
-
-  formErrors = {
-    'username': '',
-    'password': ''
-  };
-  validationMessages = {
-    'username': {
-      'required': 'Username is required.',
-      'minlength': 'Username must be at least 4 characters long.',
-      'maxlength': 'Username cannot be more than 24 characters long.',
-      'forbiddenName': 'Someone named "Bob" cannot be a hero.'
-    },
-    'password': {
-      'required': 'Password is required.'
-    }
-  };
 }

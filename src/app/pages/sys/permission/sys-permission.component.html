@@ -1,3 +1,55 @@
-<p>
-  sys-permission works!
-</p>
+<md-card>
+  <!--<md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>-->
+  <md-card-header>
+    <div class="app-row-reverse-container">
+      <div class="app-item-container">
+        <button md-icon-button [mdMenuTriggerFor]="moreMenu">
+          <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #moreMenu>
+          <button md-menu-item>
+            <md-icon>person_add</md-icon>
+            <span>添加</span>
+          </button>
+          <button md-menu-item>
+            <md-icon>delete_sweep</md-icon>
+            <span>清空</span>
+          </button>
+        </md-menu>
+      </div>
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>sort</md-icon>
+        </button>
+      </div>
+    </div>
+  </md-card-header>
+  <md-card-content>
+    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable app-table">
+      <thead>
+      <tr>
+        <th *ngFor="let columnsSetting of settings.columns"
+            [ngClass]="{'mdl-data-table__cell--non-numeric': !columnsSetting.numeric}">
+          {{columnsSetting.name}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of page?.content">
+        <td class="mdl-data-table__cell--non-numeric">
+          {{row.name}}
+        </td>
+        <td class="mdl-data-table__cell--non-numeric">
+          {{row.url}}
+        </td>
+        <td class="mdl-data-table__cell--non-numeric">
+          <a>删除</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <p *ngIf="!page?.totalElements" style="text-align: center; margin-top: 8px">没有数据</p>
+    <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
+  </md-card-content>
+</md-card>
+

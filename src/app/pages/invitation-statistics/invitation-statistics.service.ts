@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs/Observable";
-import { environment } from "../../../environments/environment";
-import { Http, URLSearchParams } from "@angular/http";
-import { Pageable } from "../../components/pageable";
-import { isNullOrUndefined } from "util";
-import { Page } from "../../components/page";
+import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../environments/environment';
+import { Http, URLSearchParams } from '@angular/http';
+import { Pageable } from '../../components/pageable';
+import { isNullOrUndefined } from 'util';
+import { Page } from '../../components/page';
 
 @Injectable()
 export class InvitationStatisticsService {
@@ -12,23 +12,23 @@ export class InvitationStatisticsService {
 
   constructor(private http: Http) { }
 
-  searchStatistics(invitationCodes: string, from: string, to: string, page?: Pageable): Observable<Page<any>> {
+  searchStatistics(invitationCodes: string, from: string, to: string, pageable?: Pageable): Observable<Page<any>> {
     const url = `${this.invitationUrl}/statistics`;
 
     const params = new URLSearchParams();
     params.set('invitationCodes', invitationCodes);
     params.set('from', from);
     params.set('to', to);
-    if (!isNullOrUndefined(page)) {
-      params.set('page', String(page.page));
-      params.set('size', String(page.size));
-      params.set('direction', page.direction);
-      for (let field of page.sort) {
+    if (!isNullOrUndefined(pageable)) {
+      params.set('page', String(pageable.page));
+      params.set('size', String(pageable.size));
+      params.set('direction', pageable.direction);
+      for (let field of pageable.sort) {
         params.append('sort', field);
       }
     }
 
-    return this.http.get(url, { search: params })
+    return this.http.post(url, { search: params })
       .map(response => response.json() as Page<any>);
   }
 
