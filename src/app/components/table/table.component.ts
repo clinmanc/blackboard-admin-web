@@ -1,19 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentType } from '@angular/material';
-import { Subject } from 'rxjs/Subject';
 
 export class Column {
-  key = '';
-  name = '';
-  sortable = true;
+  key?= '';
+  name?= '';
+  sortable?= false;
+  numeric?= false;
   renderComponent?: ComponentType<any>;
-  renderSubject?: Subject<any> | Subject<any>[];
+  // renderViewFunction?: (value?: any, row?: any[], index?: number) => void;
   //   component: ComponentType<any>,
-  //   // handler: (value?: any, row?: any[], index?: number) => void
-  // } = {
-  //   component: null,
-  //   handler: null
-  // };
+}
+export class CellInfo {
+  value = {};
+  column: Column = {};
+  row = {};
+  index = 0;
 }
 
 @Component({
@@ -21,12 +22,23 @@ export class Column {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
+export class TableComponent {
   @Input()
   columns: Column[] = [];
   @Input()
   data: any[] = [];
+  @Output()
+  view = new EventEmitter<any>();
+  @Output()
+  edit = new EventEmitter<any>();
 
   constructor() { }
-  ngOnInit() { }
+
+  onView(value) {
+    this.view.emit(value);
+  }
+
+  onEdit(value) {
+    this.edit.emit(value);
+  }
 }

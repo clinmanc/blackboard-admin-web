@@ -1,0 +1,32 @@
+<md-card>
+  <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+    <md-input-container>
+      <input mdInput formControlName="invitationCodes" type="text" placeholder="邀请码"
+             required minlength="6" autocomplete="off">
+    </md-input-container>
+    <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
+  </form>
+</md-card>
+<md-card>
+  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
+  <md-card-header>
+    <div class="app-row-reverse-container">
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>more_vert</md-icon>
+        </button>
+      </div>
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>sort</md-icon>
+        </button>
+      </div>
+    </div>
+  </md-card-header>
+  <md-card-header>
+  </md-card-header>
+  <md-card-content>
+    <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)"></app-table>
+    <app-pagination [page]="page" (change)="onSwitchPage($event)"></app-pagination>
+  </md-card-content>
+</md-card>

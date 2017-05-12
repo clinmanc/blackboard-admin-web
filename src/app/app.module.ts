@@ -19,15 +19,21 @@ import { PageNotFoundComponent } from './pages/not-found/page-not-found.componen
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
-import { HomeComponent } from './pages/home/home.component';
+import { HomeComponent } from './pages/home.component';
 import { AppRoutingModule } from './app-routing.module';
-import { InvitationStatisticsComponent } from './pages/invitation-statistics/invitation-statistics.component';
-import { ItemListDialogComponent } from './components/item-list-dialog/item-list-dialog.component';
+import { InvitationStatisticsComponent } from './pages/invitation/statistics/invitation-statistics.component';
+import { ItemListDialogComponent } from './components/dialog/item-list/item-list-dialog.component';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { AlertDialogComponent } from './components/dialog/alert/alert-dialog.component';
+import { ConfirmDialogComponent } from './components/dialog/confirm/confirm-dialog.component';
 import { RenderComponent } from './components/table/render.component';
 import { ViewComponent } from 'app/components/table/view.component';
+import { ClassroomComponent } from './pages/classroom/classroom.component';
+import {ResourceModule} from "ngx-resource";
+import { AvatarPreviewComponent } from './components/table/avatar-preview.component';
+import { UserComponent } from './pages/user/user.component';
+import { SchoolComponent } from './pages/school/school.component';
+import { InvitationRecordComponent } from './pages/invitation/record/invitation-record.component';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -43,6 +49,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PaginationComponent,
     RenderComponent,
     ViewComponent,
+    AvatarPreviewComponent,
     TableComponent,
     PageNotFoundComponent,
     LoginComponent,
@@ -50,13 +57,18 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     InvitationStatisticsComponent,
     ItemListDialogComponent,
     AlertDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ClassroomComponent,
+    UserComponent,
+    SchoolComponent,
+    InvitationRecordComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    ResourceModule.forRoot(),
     MdlModule,
     ReactiveFormsModule,
     MaterialModule.forRoot(),
@@ -65,7 +77,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppRoutingModule
   ],
   providers: [AuthGuard, AuthService],
-  entryComponents: [ViewComponent, AlertDialogComponent, ConfirmDialogComponent, ItemListDialogComponent],
+  entryComponents: [ViewComponent,AvatarPreviewComponent, AlertDialogComponent, ConfirmDialogComponent, ItemListDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,8 +1,7 @@
 export class NavItem {
-  constructor(
-    public name: string,
-    public icon?: string,
-    public url?: string,
-    public children?: NavItem[]
-  ) { }
+  name: string;
+  icon?: string;
+  url?: string;
+  queryParams?: any;
+  children?: NavItem[];
 }

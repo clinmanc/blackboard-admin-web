@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Optional, Output, ViewEncapsulation } from '@angular/core';
-import { Pageable } from '../pageable';
-import { Page } from '../page';
+import { Pageable } from '../../shared/pageable';
+import { Page } from '../../shared/page';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -10,21 +10,17 @@ import { Page } from '../page';
 })
 export class PaginationComponent implements OnInit {
   @Input()
-  pageable: Pageable;
+  pageable: Pageable = new Pageable();
   @Input()
-  page: Page<any>;
+  page: Page<any> = new Page();
   @Input()
-  rowsPerPages: number[];
+  rowsPerPages: number[] = [10, 20, 50, 100];
   @Output()
   change = new EventEmitter<Pageable>();
 
   constructor() { }
 
-  ngOnInit() {
-    this.pageable = this.pageable || new Pageable();
-    this.page = this.page || new Page();
-    this.rowsPerPages = this.rowsPerPages || [10, 20, 50, 100];
-  }
+  ngOnInit() { }
 
   goToPreviousPage() {
     this.pageable.page -= 1;

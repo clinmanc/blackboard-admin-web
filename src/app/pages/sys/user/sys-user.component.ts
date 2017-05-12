@@ -2,30 +2,25 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { SysUserService } from './sys-user.service';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { SysUser } from './sys-user';
-import { Page } from '../../../components/page';
+import { Page } from '../../../shared/page';
 import { BasePage } from '../../base-page';
-import { Pageable } from '../../../components/pageable';
-import { ConfirmDialogComponent } from '../../../components/confirm-dialog/confirm-dialog.component';
+import { Pageable } from '../../../shared/pageable';
+import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
+import { Column } from '../../../components/table/table.component';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-sys-user',
   templateUrl: './sys-user.component.html',
   styleUrls: ['./sys-user.component.scss'],
 })
 export class SysUserComponent extends BasePage implements OnInit {
   // @HostBinding('@routeAnimation') routeAnimation = true;
-  pageable: Pageable;
-  page: Page<SysUser>;
-
-  settings = {
-    columns: [
-      { key: 'username', name: '用户', sortable: true },
-      { key: 'role', name: '角色', sortable: true },
-      { name: '操作' }
-    ]
-  };
-
-  selected = [];
+  page = new Page<SysUser>();
+  pageable = new Pageable();
+  columns: Column[] = [
+    { key: 'username', name: '用户', sortable: true },
+    { key: 'role', name: '角色', sortable: true }
+  ];
 
   constructor(private sysUserService: SysUserService, protected snackBar: MdSnackBar,
     private dialog: MdDialog) {
@@ -33,13 +28,13 @@ export class SysUserComponent extends BasePage implements OnInit {
   }
 
   ngOnInit() {
-    this.loadPage(new Pageable);
+    this.loadPage();
   }
 
   loadPage(pageable: Pageable = new Pageable()) {
     this.pageable = pageable;
     this.startQuery();
-    this.sysUserService.listAll(pageable)
+    this.sysUserService.query(pageable).$observable
       .subscribe((page) => {
         this.completeQuery();
         this.page = page;
@@ -51,10 +46,11 @@ export class SysUserComponent extends BasePage implements OnInit {
     dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'ok') {
-        this.sysUserService.delete(options.userId).subscribe(
+        this.sysUserService.remove({ userId: options.userId }).$observable
+          .subscribe(
           () => this.loadPage(),
           (err) => this.handleError.bind(this)
-        );
+          );
       }
     });
   }

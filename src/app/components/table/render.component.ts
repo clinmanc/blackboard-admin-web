@@ -1,8 +1,11 @@
 import {
-  Component, ComponentFactory, ComponentFactoryResolver, ComponentRef, Input, OnDestroy, OnInit, ViewChild,
-  ViewContainerRef
+  Component, ComponentFactory, ComponentFactoryResolver, ComponentRef, EventEmitter, Input, OnDestroy, OnInit, Output,
+  ViewChild, ViewContainerRef
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-render',
@@ -11,27 +14,45 @@ import { Subject } from 'rxjs/Subject';
   `
 })
 export class RenderComponent implements OnInit, OnDestroy {
+  @ViewChild('containerRef', { read: ViewContainerRef })
+  containerRef: ViewContainerRef;
+  componentRef: ComponentRef<any>;
   @Input()
   renderComponent;
   @Input()
   renderValue: any;
-  @Input()
-  renderSubject: Subject<any> | Subject<any>[];
-  @ViewChild('containerRef', { read: ViewContainerRef })
-  containerRef: ViewContainerRef;
-  componentRef: ComponentRef<any>;
+  @Output()
+  view = new EventEmitter<any>();
+  @Output()
+  edit = new EventEmitter<any>();
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
+  viewSubject: Subject<any> = new Subject();
+  viewObservable: Observable<any> = this.viewSubject.asObservable();
+  viewSubscription: Subscription;
+
+  editSubject: Subject<any> = new Subject();
+  editObservable: Observable<any> = this.editSubject.asObservable();
+  editSubscription: Subscription;
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+    this.viewSubscription = this.viewObservable.subscribe((value) => this.view.emit(value));
+    this.editSubscription = this.editObservable.subscribe((value) => this.edit.emit(value));
+  }
 
   ngOnInit() {
-    if (!this.componentRef) {
+    if (isNullOrUndefined(this.componentRef)) {
       this.createComponent();
     }
   }
 
   ngOnDestroy() {
-    if (this.componentRef) {
+    if (!isNullOrUndefined(this.componentRef)) {
       this.componentRef.destroy();
+    }
+    if (!isNullOrUndefined(this.viewSubscription)) {
+      this.viewSubscription.unsubscribe();
+    }
+    if (!isNullOrUndefined(this.editSubscription)) {
+      this.editSubscription.unsubscribe();
     }
   }
 
@@ -41,6 +62,7 @@ export class RenderComponent implements OnInit, OnDestroy {
     this.componentRef = this.containerRef.createComponent(componentFactory);
 
     this.componentRef.instance.renderValue = this.renderValue;
-    this.componentRef.instance.renderSubject = this.renderSubject;
+    this.componentRef.instance.renderViewSubject = this.viewSubject;
+    this.componentRef.instance.renderEditSubject = this.editSubject;
   }
 }

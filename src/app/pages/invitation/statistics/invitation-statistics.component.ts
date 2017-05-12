@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Page } from '../../components/page';
-import { Pageable } from '../../components/pageable';
+import { Page } from '../../../shared/page';
+import { Pageable } from '../../../shared/pageable';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InvitationStatisticsService } from './invitation-statistics.service';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { BasePage } from '../base-page';
-import { ItemListDialogComponent } from '../../components/item-list-dialog/item-list-dialog.component';
+import { BasePage } from '../../base-page';
+import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
 import { Observable } from 'rxjs/Observable';
+import { Column } from '../../../components/table/table.component';
+import { ViewComponent } from '../../../components/table/view.component';
 
 @Component({
   selector: 'app-invitation-statistics',
@@ -17,21 +19,21 @@ import { Observable } from 'rxjs/Observable';
 export class InvitationStatisticsComponent extends BasePage implements OnInit {
   searchForm: FormGroup;
 
-  source: any[];
-  page: Page<any>;
-  pageable: Pageable;
-  settings = {
-    columns: [
-      { key: 'inviter', name: '邀请人', sortable: true },
-      { key: 'invitationCode', name: '邀请码', sortable: true },
-      { key: 'inviteeNum', name: '邀请的老师数量', sortable: true, numeric: true },
-      { key: 'classroomNum', name: '邀请的老师创建的班级数量', sortable: true, numeric: true },
-      { key: 'userNum', name: '申请加入班级的人员数量', sortable: true, numeric: true }
-    ]
-  };
+  page = new Page<any>();
+  pageable = new Pageable();
+  columns: Column[] = [
+    { key: 'inviter', name: '邀请人', sortable: true },
+    { key: 'invitationCode', name: '邀请码', sortable: true },
+    { key: 'inviteeNum', name: '邀请的老师数量', sortable: true, numeric: true, renderComponent: ViewComponent },
+    { key: 'classroomNum', name: '邀请的老师创建的班级数量', sortable: true, numeric: true, renderComponent: ViewComponent },
+    { key: 'userNum', name: '申请加入班级的人员数量', sortable: true, numeric: true, renderComponent: ViewComponent }
+  ];
 
-  constructor(private invitationStatisticsService: InvitationStatisticsService, private formBuilder: FormBuilder
-    , protected snackBar: MdSnackBar, private dialog: MdDialog) {
+  constructor(
+    protected snackBar: MdSnackBar,
+    private invitationStatisticsService: InvitationStatisticsService,
+    private formBuilder: FormBuilder,
+    private dialog: MdDialog) {
     super(snackBar);
   }
 
@@ -46,8 +48,8 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
     const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
 
     // const from: string = `${year}-${month}-01`;
-    const from: string = `${year}-01-01`;
-    const to: string = `${year}-${month}-${day}`;
+    const from = `${year}-01-01`;
+    const to = `${year}-${month}-${day}`;
 
     this.searchForm = this.formBuilder.group({
       invitationCodes: ['150608', [Validators.required, Validators.minLength(6)]],
@@ -58,35 +60,48 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
 
   search() {
     const formModel = this.searchForm.value;
+    const queryInput = {
+      invitationCodes: formModel.invitationCodes,
+      from: formModel.from,
+      to: formModel.to
+    };
 
     this.startQuery();
-    this.invitationStatisticsService.searchStatistics(formModel.invitationCodes, formModel.from, formModel.to, this.pageable)
+    this.invitationStatisticsService.queryStatistics(Object.assign(queryInput, this.pageable)).$observable
       .subscribe(page => {
-        this.source = page.content;
         this.page = page;
         this.completeQuery();
       }, this.handleError.bind(this));
   }
 
-  onSwitchPage(pageable: Pageable) {
+  onSwitchPage(pageable: Pageable = new Pageable()) {
     this.pageable = pageable;
 
     this.search();
   }
 
+  openViewDialog(event) {
+    this.openDialog(event.column.key, event.row.invitationCode);
+  }
+
   openDialog(type: string, invitationCode: string) {
     const formModel = this.searchForm.value;
+    const queryInput = {
+      invitationCode: invitationCode,
+      from: formModel.from,
+      to: formModel.to
+    };
 
     let result: Observable<any>;
     let title;
-    if (type === 'invitees') {
-      result = this.invitationStatisticsService.listTeachers(invitationCode, formModel.from, formModel.to);
+    if (type === 'inviteeNum') {
+      result = this.invitationStatisticsService.queryTeachers(queryInput).$observable;
       title = '老师列表';
-    } else if (type === 'classrooms') {
-      result = this.invitationStatisticsService.listClassrooms(invitationCode, formModel.from, formModel.to);
+    } else if (type === 'classroomNum') {
+      result = this.invitationStatisticsService.queryClassrooms(queryInput).$observable;
       title = '班级列表';
-    } else if (type === 'users') {
-      result = this.invitationStatisticsService.listMembers(invitationCode, formModel.from, formModel.to);
+    } else if (type === 'userNum') {
+      result = this.invitationStatisticsService.queryMembers(queryInput).$observable;
       title = '用户列表';
     } else {
       return;

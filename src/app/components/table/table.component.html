@@ -10,15 +10,16 @@
   </tr>
   </thead>
   <tbody>
-  <tr>
-    <td *ngIf="data.length === 0" style="text-align: center; margin-top: 8px">没有数据</td>
+  <tr *ngIf="data.length === 0">
+    <td [attr.colspan]="columns.length" style="text-align: center;">没有数据</td>
   </tr>
   <tr *ngFor="let row of data">
     <td *ngFor="let column of columns; let i = index"
         [ngClass]="{ 'mdl-data-table__cell--non-numeric': !column.numeric }">
       <app-render *ngIf="column.renderComponent; else renderComponentElseBlock"
-                  [renderComponent]="column.renderComponent" [renderValue]="{ value: row[column.key], row: row, index: i }"
-                  [renderSubject]="column.renderSubject"></app-render>
+                  [renderComponent]="column.renderComponent"
+                  [renderValue]="{ value: column.key ? row[column.key] : null, column: column, row: row, index: i }"
+                  (view)="onView($event)" (edit)="onEdit($event)"></app-render>
       <ng-template #renderComponentElseBlock>
         {{row[column.key]}}
       </ng-template>

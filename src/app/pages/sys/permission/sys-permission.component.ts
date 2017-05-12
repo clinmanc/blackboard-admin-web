@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SysPermissionService } from './sys-permission.service';
 import { BasePage } from '../../base-page';
-import { Pageable } from '../../../components/pageable';
-import { Page } from '../../../components/page';
+import { Pageable } from '../../../shared/pageable';
+import { Page } from '../../../shared/page';
 import { MdSnackBar } from '@angular/material';
 
 @Component({
@@ -12,8 +12,8 @@ import { MdSnackBar } from '@angular/material';
   providers: [SysPermissionService]
 })
 export class SysPermissionComponent extends BasePage implements OnInit {
-  pageable: Pageable;
-  page: Page<any>;
+  pageable = new Pageable();
+  page = new Page<any>();
 
   settings = {
     columns: [
@@ -22,8 +22,6 @@ export class SysPermissionComponent extends BasePage implements OnInit {
       { name: '操作' }
     ]
   };
-
-  selected = [];
 
   constructor(private sysPermissionService: SysPermissionService, protected snackBar: MdSnackBar) {
     super(snackBar);
@@ -36,7 +34,7 @@ export class SysPermissionComponent extends BasePage implements OnInit {
   loadPage(pageable: Pageable) {
     this.pageable = pageable;
     this.startQuery();
-    this.sysPermissionService.listAll(pageable)
+    this.sysPermissionService.query(pageable).$observable
       .subscribe((page) => {
         this.completeQuery();
         this.page = page;

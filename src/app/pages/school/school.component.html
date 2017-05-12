@@ -1,0 +1,23 @@
+<md-card>
+  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
+  <md-card-header>
+    <div class="app-row-reverse-container">
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>more_vert</md-icon>
+        </button>
+      </div>
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>sort</md-icon>
+        </button>
+      </div>
+    </div>
+  </md-card-header>
+  <md-card-header>
+  </md-card-header>
+  <md-card-content>
+    <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)"></app-table>
+    <app-pagination [page]="page" (change)="switchPage($event)"></app-pagination>
+  </md-card-content>
+</md-card>

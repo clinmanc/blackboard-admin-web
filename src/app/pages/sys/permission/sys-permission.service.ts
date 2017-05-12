@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BaseService } from '../../base-service';
-import { Http } from '@angular/http';
+import { ResourceAction, ResourceParams } from 'ngx-resource';
+import { ResourceMethod } from 'ngx-resource/src/Interfaces';
+import { RestClient } from '../../../shared/rest-client';
+import { Pageable } from '../../../shared/pageable';
+import { Page } from '../../../shared/page';
 
+class QueryInput extends Pageable { }
+
+@ResourceParams({
+  url: '/sys/permissions'
+})
 @Injectable()
-export class SysPermissionService extends BaseService<any>{
+export class SysPermissionService extends RestClient {
 
-  constructor(protected http: Http) {
-    super(http, 'api/sys/permissions');
-  }
-
+  @ResourceAction()
+  query: ResourceMethod<QueryInput, Page<any>>;
 }
