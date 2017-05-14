@@ -11,8 +11,10 @@ $appPaginationFontSize: 13px;
 
 .app-pagination-container {
   justify-content: flex-end;
-  padding: 2px;
   flex-wrap: wrap;
+  box-sizing: border-box;
+  height: 56px;
+  padding: 2px;
 
   .app-pagination-rows {
     label {
@@ -41,11 +43,9 @@ $appPaginationFontSize: 13px;
   }
 
   .app-pagination-state {
-    pre {
-      margin-left: 24px;
-      margin-right: 24px;
-      font-size: $appPaginationFontSize;
-    }
+    margin-left: 24px;
+    margin-right: 24px;
+    font-size: $appPaginationFontSize;
   }
 
   .app-pagination-pager {

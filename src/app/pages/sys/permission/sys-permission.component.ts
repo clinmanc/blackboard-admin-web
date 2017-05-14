@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { SysPermissionService } from './sys-permission.service';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
-import { MdSnackBar } from '@angular/material';
+import { TableColumn } from '../../../components/table/table-column';
+import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
+import { SysPermissionService } from './sys-permission.service';
 
 @Component({
   selector: 'app-sys-permission',
@@ -12,26 +14,22 @@ import { MdSnackBar } from '@angular/material';
   providers: [SysPermissionService]
 })
 export class SysPermissionComponent extends BasePage implements OnInit {
-  pageable = new Pageable();
+  columns: TableColumn[] = [
+    { key: 'name', name: '角色', sortable: true },
+    { key: 'code', name: '权限码', sortable: true }
+  ];
   page = new Page<any>();
+  pageable = new Pageable();
 
-  settings = {
-    columns: [
-      { key: 'name', name: '权限', sortable: true },
-      { key: 'url', name: '资源', sortable: true },
-      { name: '操作' }
-    ]
-  };
-
-  constructor(private sysPermissionService: SysPermissionService, protected snackBar: MdSnackBar) {
+  constructor(protected snackBar: MdSnackBar, private sysPermissionService: SysPermissionService, private dialog: MdDialog) {
     super(snackBar);
   }
 
   ngOnInit() {
-    this.loadPage(new Pageable);
+    this.loadPage();
   }
 
-  loadPage(pageable: Pageable) {
+  loadPage(pageable = new Pageable()) {
     this.pageable = pageable;
     this.startQuery();
     this.sysPermissionService.query(pageable).$observable
@@ -39,5 +37,15 @@ export class SysPermissionComponent extends BasePage implements OnInit {
         this.completeQuery();
         this.page = page;
       }, this.handleError.bind(this));
+  }
+
+  openConfirmDialog(event?: any) {
+    let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        alert(result);
+      }
+    });
   }
 }

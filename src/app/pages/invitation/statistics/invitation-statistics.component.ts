@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Page } from '../../../shared/page';
-import { Pageable } from '../../../shared/pageable';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 import { InvitationStatisticsService } from './invitation-statistics.service';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { BasePage } from '../../base-page';
+import { Page } from '../../../shared/page';
+import { Pageable } from '../../../shared/pageable';
+import { TableColumn } from '../../../components/table/table-column';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
-import { Observable } from 'rxjs/Observable';
-import { Column } from '../../../components/table/table.component';
 import { ViewComponent } from '../../../components/table/view.component';
 
 @Component({
@@ -21,13 +21,10 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
 
   page = new Page<any>();
   pageable = new Pageable();
-  columns: Column[] = [
-    { key: 'inviter', name: '邀请人', sortable: true },
-    { key: 'invitationCode', name: '邀请码', sortable: true },
-    { key: 'inviteeNum', name: '邀请的老师数量', sortable: true, numeric: true, renderComponent: ViewComponent },
-    { key: 'classroomNum', name: '邀请的老师创建的班级数量', sortable: true, numeric: true, renderComponent: ViewComponent },
-    { key: 'userNum', name: '申请加入班级的人员数量', sortable: true, numeric: true, renderComponent: ViewComponent }
-  ];
+  columns: TableColumn[] = [];
+
+  @ViewChild('inviterDisplay') inviterDisplay: TemplateRef<any>;
+  @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
   constructor(
     protected snackBar: MdSnackBar,
@@ -39,6 +36,14 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.buildForm();
+
+    this.columns = [
+      { key: 'inviter', name: '邀请人', sortable: true, cellTemplate: this.inviterDisplay },
+      { key: 'invitationCode', name: '邀请码', sortable: true },
+      { key: 'inviteeNum', name: '邀请的老师数量', sortable: true, numeric: true, cellTemplate: this.viewImpl },
+      { key: 'classroomNum', name: '邀请的老师创建的班级数量', sortable: true, numeric: true, cellTemplate: this.viewImpl },
+      { key: 'userNum', name: '申请加入班级的人员数量', sortable: true, numeric: true, cellTemplate: this.viewImpl }
+    ];
   }
 
   buildForm(): void {

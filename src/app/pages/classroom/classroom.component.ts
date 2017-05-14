@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
-import { CellInfo, Column } from '../../components/table/table.component';
-import { ViewComponent } from '../../components/table/view.component';
 import { BasePage } from '../base-page';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ClassroomService } from './classroom.service';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { Observable } from 'rxjs/Observable';
-import { AvatarPreviewComponent } from '../../components/table/avatar-preview.component';
 import { ActivatedRoute, Params } from '@angular/router';
+import { TableColumn } from '../../components/table/table-column';
 
 @Component({
   selector: 'app-classroom',
@@ -23,16 +21,13 @@ export class ClassroomComponent extends BasePage implements OnInit {
 
   page = new Page<any>();
   pageable = new Pageable();
-  columns: Column[] = [
-    { key: 'name', name: '班级', sortable: true, renderComponent: AvatarPreviewComponent },
-    { key: 'code', name: '班级号', sortable: true },
-    { key: 'createBy', name: '创建人姓名（电话）', sortable: true, numeric: true },
-    { key: 'createTime', name: '创建时间', sortable: true, numeric: true },
-    { key: 'members', name: '班级成员', sortable: true, numeric: true, renderComponent: ViewComponent },
-    { key: 'messages', name: '班级消息', sortable: true, numeric: true, renderComponent: ViewComponent }
-  ];
 
   queryType = 'info';
+
+  @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
+  @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
+
+  columns: TableColumn[] = [];
 
   constructor(protected snackBar: MdSnackBar,
     private route: ActivatedRoute,
@@ -45,6 +40,15 @@ export class ClassroomComponent extends BasePage implements OnInit {
   ngOnInit() {
     this.buildForm();
     this.route.params.subscribe((params: Params) => this.queryType = params && params['queryType'] || '');
+
+    this.columns = [
+      { key: 'name', name: '班级', sortable: true, cellTemplate: this.previewImpl },
+      { key: 'code', name: '班级号', sortable: true },
+      { key: 'createBy', name: '创建人姓名（电话）', sortable: true, numeric: true },
+      { key: 'createTime', name: '创建时间', sortable: true, numeric: true },
+      { key: 'members', name: '班级成员', sortable: true, numeric: true, cellTemplate: this.viewImpl },
+      { key: 'messages', name: '班级消息', sortable: true, numeric: true, cellTemplate: this.viewImpl }
+    ];
   }
 
   buildForm(): void {
@@ -85,7 +89,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
       }, this.handleError.bind(this));
   }
 
-  openViewDialog(event: CellInfo) {
+  openViewDialog(event) {
     const type = event.column.key;
     const formModel = this.searchForm.value;
 

@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { BasePage } from '../base-page';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
-import { CellInfo, Column } from '../../components/table/table.component';
-import { ViewComponent } from '../../components/table/view.component';
-import { BasePage } from '../base-page';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
-import { Observable } from 'rxjs/Observable';
-import { AvatarPreviewComponent } from '../../components/table/avatar-preview.component';
 import { UserService } from './user.service';
+import { TableColumn } from '../../components/table/table-column';
 
 @Component({
   selector: 'app-user',
@@ -22,14 +20,10 @@ export class UserComponent extends BasePage implements OnInit {
 
   page = new Page<any>();
   pageable = new Pageable();
-  columns: Column[] = [
-    { key: 'name', name: '姓名（电话）', sortable: true, renderComponent: AvatarPreviewComponent },
-    { key: 'status', name: '状态', sortable: true },
-    { key: 'role', name: '角色', sortable: true },
-    { key: 'school', name: '学校', sortable: true },
-    { key: 'messages', name: '用户消息', sortable: true, numeric: true, renderComponent: ViewComponent },
-    { key: 'createTime', name: '注册时间', sortable: true, numeric: true }
-  ];
+  columns: TableColumn[] = [];
+
+  @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
+  @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
   constructor(protected snackBar: MdSnackBar,
     private userService: UserService,
@@ -40,6 +34,15 @@ export class UserComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.buildForm();
+
+    this.columns = [
+      { key: 'name', name: '姓名（电话）', sortable: true, cellTemplate: this.previewImpl },
+      { key: 'status', name: '状态', sortable: true },
+      { key: 'role', name: '角色', sortable: true },
+      { key: 'school', name: '学校', sortable: true },
+      { key: 'messages', name: '用户消息', sortable: true, numeric: true, cellTemplate: this.viewImpl },
+      { key: 'createTime', name: '注册时间', sortable: true, numeric: true }
+    ];
   }
 
   buildForm(): void {
@@ -79,7 +82,7 @@ export class UserComponent extends BasePage implements OnInit {
       }, this.handleError.bind(this));
   }
 
-  openViewDialog(event: CellInfo) {
+  openViewDialog(event) {
     const type = event.column.key;
     const formModel = this.searchForm.value;
 

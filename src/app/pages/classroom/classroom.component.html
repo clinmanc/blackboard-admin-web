@@ -1,20 +1,22 @@
 <md-card>
-  <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
-    <ng-container *ngIf="queryType === 'active' || queryType === 'recent'; else searchElseBlock">
-      <md-input-container>
-        <input mdInput formControlName="from" type="date" placeholder="开始时间" autocomplete="off">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput formControlName="to" type="date" placeholder="结束时间" autocomplete="off">
-      </md-input-container>
-    </ng-container>
-    <ng-template #searchElseBlock>
-      <md-input-container>
-        <input mdInput formControlName="keyword" type="text" placeholder="关键字" autocomplete="off">
-      </md-input-container>
-    </ng-template>
-    <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
-  </form>
+  <md-card-content>
+    <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+      <ng-container *ngIf="queryType === 'active' || queryType === 'recent'; else searchElseBlock">
+        <md-input-container>
+          <input mdInput formControlName="from" type="date" placeholder="开始时间" autocomplete="off">
+        </md-input-container>
+        <md-input-container>
+          <input mdInput formControlName="to" type="date" placeholder="结束时间" autocomplete="off">
+        </md-input-container>
+      </ng-container>
+      <ng-template #searchElseBlock>
+        <md-input-container>
+          <input mdInput formControlName="keyword" type="text" placeholder="关键字" autocomplete="off">
+        </md-input-container>
+      </ng-template>
+      <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
+    </form>
+  </md-card-content>
 </md-card>
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
@@ -35,7 +37,19 @@
   <md-card-header>
   </md-card-header>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)"></app-table>
+    <app-table [columns]="columns" [data]="page.content" [selectable]="true" (view)="openViewDialog($event)">
+      <ng-template #previewImpl let-value="value" let-row="row">
+        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
+      </ng-template>
+      <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
+        <app-view [text]="value" [value]="{
+          value: value,
+          column: column,
+          row: row,
+          index: index
+        }" (view)="openViewDialog($event)"></app-view>
+      </ng-template>
+    </app-table>
     <app-pagination [page]="page" (change)="switchPage($event)"></app-pagination>
   </md-card-content>
 </md-card>

@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
-  selector: 'app-sys-role-view',
+  selector: 'app-view',
   template: `
-    <a (click)="renderViewSubject.next(renderValue)">{{renderValue.value}}</a>
+    <a (click)="view.emit(value)">{{text}}</a>
   `
 })
 export class ViewComponent {
-  renderValue: any = {};
-  renderViewSubject: Subject<any>;
+  @Input() text: any;
+  @Input() value: any;
+  @Output() view = new EventEmitter<any>();
 }

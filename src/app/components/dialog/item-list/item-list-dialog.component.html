@@ -4,14 +4,18 @@
     <small md-subheader *ngIf="!inQuery && (items != null && items.length !== 0)">共 {{items?.length}} 项</small>
   </h4>
   <perfect-scrollbar md-dialog-content>
-    <p *ngIf="!inQuery && (items == null || items.length === 0)" class="empty-message">列表为空</p>
-    <table *ngIf="!inQuery && items != null && items.length !== 0" contenteditable="true">
-      <tr *ngFor="let item of items; let i = index">
-        <td class="app-table-index">{{i + 1}}</td>
-        <td *ngFor="let column of item">
-          <div>{{column}}</div>
-        </td>
+    <table contenteditable="true">
+      <tr *ngIf="!inQuery && (items == null || items.length === 0)">
+        <td class="empty-message">列表为空</td>
       </tr>
+      <ng-container *ngIf="!inQuery && items != null && items.length !== 0">
+        <tr *ngFor="let item of items; let i = index">
+          <td class="app-table-index">{{i + 1}}</td>
+          <td *ngFor="let column of item">
+            <div>{{column}}</div>
+          </td>
+        </tr>
+      </ng-container>
     </table>
   </perfect-scrollbar>
   <div md-dialog-actions *ngIf="!inQuery" class="app-row-reverse-container">

@@ -4,6 +4,9 @@
 <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable app-table">
   <thead>
   <tr>
+    <th *ngIf="selectable" class="app-table-checkbox">
+      <md-checkbox [(ngModel)]="selectedAll"></md-checkbox>
+    </th>
     <th *ngFor="let column of columns" [ngClass]="{'mdl-data-table__cell--non-numeric': !column.numeric}">
       {{column.name}}
     </th>
@@ -11,18 +14,14 @@
   </thead>
   <tbody>
   <tr *ngIf="data.length === 0">
-    <td [attr.colspan]="columns.length" style="text-align: center;">没有数据</td>
+    <td [attr.colspan]="selectable ? columns.length + 1 : columns.length" style="text-align: center;">没有数据</td>
   </tr>
   <tr *ngFor="let row of data">
-    <td *ngFor="let column of columns; let i = index"
-        [ngClass]="{ 'mdl-data-table__cell--non-numeric': !column.numeric }">
-      <app-render *ngIf="column.renderComponent; else renderComponentElseBlock"
-                  [renderComponent]="column.renderComponent"
-                  [renderValue]="{ value: column.key ? row[column.key] : null, column: column, row: row, index: i }"
-                  (view)="onView($event)" (edit)="onEdit($event)"></app-render>
-      <ng-template #renderComponentElseBlock>
-        {{row[column.key]}}
-      </ng-template>
+    <td *ngIf="selectable" class="app-table-checkbox">
+      <md-checkbox [(ngModel)]="selectedAll" aria-label></md-checkbox>
+    </td>
+    <td *ngFor="let column of columns; let i = index" [ngClass]="{ 'mdl-data-table__cell--non-numeric': !column.numeric}">
+      <app-table-body-cell [index]="i" [column]="column" [row]="row"></app-table-body-cell>
     </td>
   </tr>
   </tbody>

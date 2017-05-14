@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { SysRoleService } from './sys-role.service';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { BasePage } from '../../base-page';
-import { Column } from '../../../components/table/table.component';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
+import { TableColumn } from '../../../components/table/table-column';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
 
 @Component({
@@ -14,14 +14,14 @@ import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confi
   providers: [SysRoleService]
 })
 export class SysRoleComponent extends BasePage implements OnInit {
-  columns: Column[] = [
+  columns: TableColumn[] = [
     { key: 'name', name: '角色', sortable: true },
     { key: 'code', name: '权限码', sortable: true }
   ];
   page = new Page<any>();
   pageable = new Pageable();
 
-  constructor(private sysRoleService: SysRoleService, protected snackBar: MdSnackBar, private dialog: MdDialog) {
+  constructor(protected snackBar: MdSnackBar, private sysRoleService: SysRoleService, private dialog: MdDialog) {
     super(snackBar);
   }
 
@@ -29,7 +29,7 @@ export class SysRoleComponent extends BasePage implements OnInit {
     this.loadPage();
   }
 
-  loadPage(pageable: Pageable = new Pageable) {
+  loadPage(pageable = new Pageable()) {
     this.pageable = pageable;
     this.startQuery();
     this.sysRoleService.query(pageable).$observable

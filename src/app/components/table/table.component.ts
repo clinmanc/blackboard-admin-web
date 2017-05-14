@@ -1,21 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ComponentType } from '@angular/material';
-
-export class Column {
-  key?= '';
-  name?= '';
-  sortable?= false;
-  numeric?= false;
-  renderComponent?: ComponentType<any>;
-  // renderViewFunction?: (value?: any, row?: any[], index?: number) => void;
-  //   component: ComponentType<any>,
-}
-export class CellInfo {
-  value = {};
-  column: Column = {};
-  row = {};
-  index = 0;
-}
+import { Component, ContentChildren, EventEmitter, Input, Output, QueryList } from '@angular/core';
+import { TableColumnDirective } from './column/table-column.directive';
+import { translateTemplates } from './column/column-helper';
+import { TableColumn } from './table-column';
 
 @Component({
   selector: 'app-table',
@@ -24,13 +10,39 @@ export class CellInfo {
 })
 export class TableComponent {
   @Input()
-  columns: Column[] = [];
+  columns: TableColumn[] = [];
   @Input()
   data: any[] = [];
+  @Input()
+  selectable: false;
+  @Input()
+  paging: true;
   @Output()
   view = new EventEmitter<any>();
   @Output()
   edit = new EventEmitter<any>();
+  @Output()
+  select = new EventEmitter<any>();
+
+  _columnTemplates: QueryList<TableColumnDirective>;
+
+  @ContentChildren(TableColumnDirective)
+  set columnTemplates(val: QueryList<TableColumnDirective>) {
+    this._columnTemplates = val;
+
+    if (val) {
+      // only set this if results were brought back
+      const arr = val.toArray();
+
+      if (arr.length) {
+        // translate them to normal objects
+        this.columns = translateTemplates(arr);
+      }
+    }
+  }
+
+  selectedAll = false;
+  selected = [];
 
   constructor() { }
 

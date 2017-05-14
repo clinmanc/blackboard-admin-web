@@ -1,5 +1,6 @@
 .app-dialog-container {
   table {
+    width: 100%;
     td.app-table-index {
       text-align: right;
     }
@@ -13,9 +14,7 @@
   }
 
   .empty-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
   }
 }
 

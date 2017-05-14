@@ -11,17 +11,24 @@
     </label>
   </div>
   <div class="app-pagination-state">
-    <pre class="card card-block card-header">显示 {{page.totalElements}} 项中的 {{page.number + 1}}-{{page.number + page.size}} 项</pre>
+    显示 {{page.totalElements}} 项中的 {{page.number * page.size + (page.numberOfElements > 0 ? 1 : 0)}}-{{page.number *
+    page.size + page.numberOfElements}} 项
   </div>
   <div class="app-pagination-pager">
     <!--<button md-button (click)="onClick">-->
     <!--<md-icon>first_page</md-icon>-->
     <!--</button>-->
+    <button md-button [disabled]="page.first" (click)="goToFirstPage()">
+      <md-icon>first_page</md-icon>
+    </button>
     <button md-button [disabled]="page.first" (click)="goToPreviousPage()">
       <md-icon>chevron_left</md-icon>
     </button>
     <button md-button [disabled]="page.last" (click)="goToNextPage()">
       <md-icon>chevron_right</md-icon>
+    </button>
+    <button md-button [disabled]="page.last" (click)="goToLastPage()">
+      <md-icon>last_page</md-icon>
     </button>
     <!--<button md-button (click)="onClick">-->
     <!--<md-icon>last_page</md-icon>-->

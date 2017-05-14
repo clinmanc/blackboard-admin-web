@@ -1,11 +1,13 @@
 <md-card>
-  <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
-    <md-input-container>
-      <input mdInput formControlName="invitationCodes" type="text" placeholder="邀请码"
-             required minlength="6" autocomplete="off">
-    </md-input-container>
-    <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
-  </form>
+  <md-card-content>
+    <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+      <md-input-container>
+        <input mdInput formControlName="invitationCodes" type="text" placeholder="邀请码"
+               required minlength="6" autocomplete="off">
+      </md-input-container>
+      <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
+    </form>
+  </md-card-content>
 </md-card>
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
@@ -26,7 +28,16 @@
   <md-card-header>
   </md-card-header>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)"></app-table>
-    <app-pagination [page]="page" (change)="onSwitchPage($event)"></app-pagination>
+    <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)">
+      <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
+        <app-view [text]="value" [value]="{
+          value: value,
+          column: column,
+          row: row,
+          index: index
+        }" (view)="openViewDialog($event)"></app-view>
+      </ng-template>
+    </app-table>
   </md-card-content>
+  <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
 </md-card>

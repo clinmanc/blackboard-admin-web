@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { BasePage } from '../base-page';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
-import { CellInfo, Column } from '../../components/table/table.component';
-import { ViewComponent } from '../../components/table/view.component';
-import { BasePage } from '../base-page';
+import { TableColumn } from '../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { Observable } from 'rxjs/Observable';
@@ -18,10 +17,9 @@ import { SchoolService } from './school.service';
 export class SchoolComponent extends BasePage implements OnInit {
   page = new Page<any>();
   pageable = new Pageable();
-  columns: Column[] = [
-    { key: 'name', name: '学校', sortable: true },
-    { key: 'members', name: '注册用户', sortable: true, numeric: true, renderComponent: ViewComponent }
-  ];
+  columns: TableColumn[] = [];
+
+  @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
   constructor(protected snackBar: MdSnackBar,
     private schoolService: SchoolService,
@@ -31,6 +29,11 @@ export class SchoolComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.search();
+
+    this.columns = [
+      { key: 'name', name: '学校', sortable: true },
+      { key: 'members', name: '注册用户', sortable: true, numeric: true, cellTemplate: this.viewImpl }
+    ];
   }
 
   search() {
@@ -43,7 +46,7 @@ export class SchoolComponent extends BasePage implements OnInit {
       }, this.handleError.bind(this));
   }
 
-  openViewDialog(event: CellInfo) {
+  openViewDialog(event) {
     const type = event.column.key;
 
     let result: Observable<any>;

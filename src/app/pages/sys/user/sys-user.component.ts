@@ -2,11 +2,11 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { SysUserService } from './sys-user.service';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { SysUser } from './sys-user';
-import { Page } from '../../../shared/page';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
+import { Page } from '../../../shared/page';
+import { TableColumn } from '../../../components/table/table-column';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
-import { Column } from '../../../components/table/table.component';
 
 @Component({
   selector: 'app-sys-user',
@@ -17,7 +17,7 @@ export class SysUserComponent extends BasePage implements OnInit {
   // @HostBinding('@routeAnimation') routeAnimation = true;
   page = new Page<SysUser>();
   pageable = new Pageable();
-  columns: Column[] = [
+  columns: TableColumn[] = [
     { key: 'username', name: '用户', sortable: true },
     { key: 'role', name: '角色', sortable: true }
   ];

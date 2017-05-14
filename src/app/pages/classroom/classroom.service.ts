@@ -5,6 +5,7 @@ import { ResourceAction, ResourceParams, ResourceResult } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { AvatarHelper } from '../../helper/badge-helper';
+import {UserHelper} from "../../helper/user-helper";
 
 export class QueryInput extends Pageable {
   keyword: string
@@ -19,16 +20,16 @@ export class ClassroomService extends RestClient {
 
     return (page: Page<any>) => {
       page.content = page.content.map((item) => {
-        const classroom = type === 'active'? item : item.classroom;
+        const classroom = type === 'info'? item : item.classroom;
 
         return {
-          name: classroom.name,
-          code: classroom.code,
-          createBy: classroom.manager && `${classroom.manager.realname || classroom.manager.username}（${classroom.manager.mobile}）`,
-          createTime: new Date(classroom.createTime).toLocaleDateString(),
+          name: classroom && classroom.name || '',
+          code: classroom && classroom.code || '',
+          createBy: classroom && UserHelper.getDisplayName(classroom.manager) || '',
+          createTime: classroom && new Date(classroom.createTime).toLocaleDateString() || '',
           members: '查看成员',
-          messages: type == 'active'? '查看消息' : item.published,
-          avatar: AvatarHelper.parseFromSchool(classroom)
+          messages: type === 'info'? '查看消息' : item.published,
+          avatar: AvatarHelper.parseFromSchool(classroom || {})
         }
       });
       return page;
@@ -36,7 +37,7 @@ export class ClassroomService extends RestClient {
   }
 
   @ResourceAction({
-    map: ClassroomService.getResultMap('')
+    map: ClassroomService.getResultMap('info')
   })
   queryInfo: ResourceMethod<QueryInput, any>;
 

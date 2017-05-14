@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { BasePage } from '../../base-page';
+import { TableColumn } from '../../../components/table/table-column';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
-import { Observable } from 'rxjs/Observable';
-import { Column } from '../../../components/table/table.component';
-import {InvitationRecordService} from "./invitation-record.service";
+import { InvitationRecordService } from './invitation-record.service';
 
 @Component({
   selector: 'app-invitation-record',
@@ -20,12 +20,7 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
 
   page = new Page<any>();
   pageable = new Pageable();
-  columns: Column[] = [
-    { key: 'inviter', name: '邀请老师（电话）' },
-    { key: 'invitationCode', name: '邀请码', sortable: true },
-    { key: 'invitee', name: '被邀请老师（电话）', sortable: true },
-    { key: 'invitationTime', name: '邀请时间', sortable: true, numeric: true}
-  ];
+  columns: TableColumn[] = [];
 
   constructor(
     protected snackBar: MdSnackBar,
@@ -37,6 +32,13 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.buildForm();
+
+    this.columns = [
+      { key: 'inviter', name: '邀请老师（电话）' },
+      { key: 'invitationCode', name: '邀请码', sortable: true },
+      { key: 'invitee', name: '被邀请老师（电话）', sortable: true },
+      { key: 'invitationTime', name: '邀请时间', sortable: true, numeric: true }
+    ];
   }
 
   buildForm(): void {
