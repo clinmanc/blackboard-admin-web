@@ -8,7 +8,7 @@ import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
-import { ViewComponent } from '../../../components/table/view.component';
+import { ViewComponent } from '../../../components/table/cell/view.component';
 
 @Component({
   selector: 'app-invitation-statistics',

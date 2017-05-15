@@ -1,8 +1,8 @@
 import { MdSnackBar } from '@angular/material';
 
 export class BasePage {
-  protected inQuery: boolean = false;
-  protected completeQueryDelay: number = 1000;
+  protected inQuery = false;
+  protected completeQueryDelay = 1000;
 
   constructor(protected snackBar: MdSnackBar) { }
 

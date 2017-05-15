@@ -1,5 +1,5 @@
 import { Request, Response } from '@angular/http';
-import {Resource, ResourceActionBase, ResourceCRUD} from 'ngx-resource';
+import { Resource, ResourceActionBase, ResourceCRUD } from 'ngx-resource';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';

@@ -1,0 +1,51 @@
+<div style="display: flex;flex-wrap: wrap;">
+  <!--<md-list>-->
+  <!--<md-list-item>-->
+  <!--<md-slide-toggle>晓纸条</md-slide-toggle>-->
+  <!--</md-list-item>-->
+  <!--<md-list-item>-->
+  <!--<md-slide-toggle>晓讨论</md-slide-toggle>-->
+  <!--</md-list-item>-->
+  <!--</md-list>-->
+  <!--<md-list>-->
+  <!--<md-list-item>-->
+  <!--<md-slide-toggle>晓调查</md-slide-toggle>-->
+  <!--</md-list-item>-->
+  <!--<md-list-item>-->
+  <!--<md-slide-toggle>晓通知</md-slide-toggle>-->
+  <!--</md-list-item>-->
+  <!--</md-list>-->
+  <md-card *ngFor="let item of page.content">
+    <md-card-header>
+      <!--<img md-card-avatar src="http://admin.xiaoheiban.cn/static/image/touxiang.png">-->
+      <img md-card-avatar *ngIf="item.sender?.avatar; else avatarElseBlock"
+           src="http://file.xiaoheiban.cn/{{item.sender?.avatar}}">
+      <ng-template #avatarElseBlock>
+        <img md-card-avatar src="http://admin.xiaoheiban.cn/static/image/touxiang.png">
+      </ng-template>
+      <md-card-title>{{item.category | messageCategoryPipe: item.survey}}</md-card-title>
+      <md-card-subtitle>{{item.createTime | date:"MM/dd/yy hh:mm:ss"}}</md-card-subtitle>
+    </md-card-header>
+    <md-card-content>
+      <p *ngIf="item.content" class="app-line-limit-length" [attr.title]="item.content">{{item.content}}</p>
+      <p *ngIf="item.audio || item.topic || item.survey || item.video">
+        <span *ngIf="item.audio">
+        <md-icon>mic</md-icon>
+      </span>
+        <span *ngIf="item.topic">
+        <md-icon>chat</md-icon>
+      </span>
+        <span *ngIf="item.survey">
+        <md-icon>search</md-icon>
+      </span>
+        <span *ngIf="item.video">
+        <md-icon>videocam</md-icon>
+      </span>
+      </p>
+      <p *ngIf="item.images">
+        <img *ngFor="let image of item.images" width="24px" height="24px" src="http://file.xiaoheiban.cn/{{image.thumbnail}}">
+      </p>
+    </md-card-content>
+  </md-card>
+</div>
+<app-pagination [pageable]="pageable" [page]="page" (change)="loadPage($event)"></app-pagination>

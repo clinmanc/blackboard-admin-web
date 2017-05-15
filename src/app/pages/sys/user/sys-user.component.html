@@ -19,14 +19,13 @@
       </div>
       <div class="app-item-container">
         <button md-icon-button>
-          <md-icon>sort</md-icon>
+          <md-icon>refresh</md-icon>
         </button>
       </div>
     </div>
   </md-card-header>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content"></app-table>
+    <app-table [columns]="columns" [data]="page.content" [selectable]="true"></app-table>
     <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
   </md-card-content>
 </md-card>
-

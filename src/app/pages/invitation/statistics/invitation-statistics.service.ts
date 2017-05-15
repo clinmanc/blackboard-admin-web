@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Pageable } from '../../../shared/pageable';
 import { RestClient } from '../../../shared/rest-client';
-import { ResourceAction, ResourceParams} from 'ngx-resource';
+import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod, ResourceMethodStrict } from 'ngx-resource/src/Interfaces';
 import { RequestMethod } from '@angular/http';
 

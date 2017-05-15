@@ -1,4 +1,4 @@
-<mdl-layout mdl-layout-fixed-header mdl-layout-fixed-drawer mdl-layout-mode="waterfall">
+<mdl-layout mdl-layout-fixed-header mdl-layout-fixed-drawer>
   <mdl-layout-header class="mat-elevation-z2">
     <mdl-layout-header-row>
       <mdl-layout-title>{{selectedItem?.name}}</mdl-layout-title>
@@ -8,9 +8,9 @@
           <md-icon>search</md-icon>
         </button>
         <!--<md-input-container>-->
-          <!--<input type="search" mdInput placeholder="搜索">-->
+        <!--<input type="search" mdInput placeholder="搜索">-->
         <!--</md-input-container>-->
-        <button  class="nav-button" md-button [mdMenuTriggerFor]="menu">
+        <button class="nav-button" md-button [mdMenuTriggerFor]="menu">
           <span>{{authService.isLoggedIn}}</span>
           <md-icon class="arrow_down">keyboard_arrow_down</md-icon>
         </button>
@@ -47,16 +47,14 @@
         <md-list-item (click)="toggleExpanded(item)" [routerLink]="item.url" [routerLinkActive]="item.url ? 'active' : ''">
           <md-icon md-list-icon>{{item.icon}}</md-icon>
           <span md-line>{{item.name}}</span>
-          <md-icon *ngIf="item.children != null && item.children.length != 0"
-                   [@rotate180Animation]="allowExpandSubmenu && item === selectedItem ? 'expanded' : 'collapsed'">
+          <md-icon *ngIf="item.children != null && item.children.length != 0" [@rotate180Animation]="allowExpandSubmenu && item === selectedItem ? 'expanded' : 'collapsed'">
             expand_more
           </md-icon>
         </md-list-item>
 
-        <md-nav-list *ngIf="allowExpandSubmenu && item === selectedItem && item.children != null && item.children.length != 0"
-                     class="sub-nav-list" [@flyInOutAnimation]="'in'">
-          <md-list-item *ngFor="let child of item.children"
-                        [routerLink]="child.url" routerLinkActive="active">
+        <md-nav-list *ngIf="allowExpandSubmenu && item === selectedItem && item.children != null && item.children.length != 0" class="sub-nav-list"
+          [@flyInOutAnimation]="'in'">
+          <md-list-item *ngFor="let child of item.children" [routerLink]="child.url" routerLinkActive="active">
             <md-icon md-list-icon>{{child.icon}}</md-icon>
             <span md-line>{{child.name}}</span>
           </md-list-item>

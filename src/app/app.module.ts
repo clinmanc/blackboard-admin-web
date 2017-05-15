@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from '@angular/material';
 import 'hammerjs';
 import { MdlModule } from '@angular-mdl/core';
+import { CustomMaterialModule } from './custom-material';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { SysUserComponent } from './pages/sys/user/sys-user.component';
 import { SysRoleComponent } from './pages/sys/role/sys-role.component';
@@ -24,20 +25,33 @@ import { ItemListDialogComponent } from './components/dialog/item-list/item-list
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { AlertDialogComponent } from './components/dialog/alert/alert-dialog.component';
 import { ConfirmDialogComponent } from './components/dialog/confirm/confirm-dialog.component';
-import { ViewComponent } from 'app/components/table/view.component';
+import { ViewComponent } from 'app/components/table/cell/view.component';
 import { ClassroomComponent } from './pages/classroom/classroom.component';
 import { ResourceModule } from 'ngx-resource';
-import { AvatarPreviewComponent } from './components/table/preview.component';
+import { AvatarPreviewComponent } from './components/table/cell/preview.component';
 import { UserComponent } from './pages/user/user.component';
 import { SchoolComponent } from './pages/school/school.component';
 import { InvitationRecordComponent } from './pages/invitation/record/invitation-record.component';
-import { RenderComponent } from './components/table/render.component';
 
 import { TableComponent } from './components/table/table.component';
 import { TableColumnDirective } from './components/table/column/table-column.directive';
 import { TableColumnHeaderDirective } from './components/table/column/table-column-header.directive';
 import { TableColumnCellDirective } from './components/table/column/table-column-cell.directive';
 import { TableBodyCellComponent } from './components/table/body/table-body-cell.component';
+import { FeedbackComponent } from './pages/feedback/feedback.component';
+import { AnnouncementMessageComponent } from './pages/message/announcement/announcement-message.component';
+import { AnnouncementMessageCreateComponent } from './pages/message/announcement/create/announcement-message-create.component';
+import { WelcomeMessageComponent } from './pages/message/welcome/welcome-message.component';
+import { WelcomeMessageCreateComponent } from './pages/message/welcome/create/welcome-message-create.component';
+import { ClassroomAssociatedComponent } from './pages/classroom/associated/classroom-associated.component';
+import { BlackboardVersionComponent } from './pages/blackboard-version/blackboard-version.component';
+import { TipsComponent } from './pages/tips/tips.component';
+import { ServerDetectionComponent } from './pages/server-detection/server-detection.component';
+import { GrowthTagComponent } from './pages/growth/tag/growth-tag.component';
+import { CommonMessageComponent } from './pages/message/common/common-message.component';
+import { GrowthRecordComponent } from './pages/growth/record/growth-record.component';
+import { RegisteredUserStatisticsComponent } from './pages/user/registered-statistics/registered-user-statistics.component';
+import { MessageCategoryPipe } from './pages/message/message-category.pipe';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -58,7 +72,6 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TableColumnHeaderDirective,
     TableColumnCellDirective,
     TableBodyCellComponent,
-    RenderComponent,
     ViewComponent,
     AvatarPreviewComponent,
 
@@ -73,7 +86,21 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     InvitationRecordComponent,
     ClassroomComponent,
     UserComponent,
-    SchoolComponent
+    SchoolComponent,
+    FeedbackComponent,
+    AnnouncementMessageComponent,
+    AnnouncementMessageCreateComponent,
+    WelcomeMessageComponent,
+    WelcomeMessageCreateComponent,
+    ClassroomAssociatedComponent,
+    BlackboardVersionComponent,
+    TipsComponent,
+    ServerDetectionComponent,
+    GrowthTagComponent,
+    CommonMessageComponent,
+    GrowthRecordComponent,
+    RegisteredUserStatisticsComponent,
+    MessageCategoryPipe
   ],
   imports: [
     BrowserModule,
@@ -83,7 +110,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReactiveFormsModule,
 
     MdlModule,
-    MaterialModule.forRoot(),
+    CustomMaterialModule,
     ResourceModule.forRoot(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     AppRoutingModule

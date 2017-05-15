@@ -1,0 +1,16 @@
+<md-card>
+  <md-card-content>
+    <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+      <md-input-container floatPlaceholder="auto">
+        <input mdInput formControlName="month" type="month" required placeholder="月份">
+      </md-input-container>
+      <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
+    </form>
+  </md-card-content>
+</md-card>
+<md-card>
+  <md-card-content>
+    <div id="main" style="height: 600px;"></div>
+    <!--<app-table [columns]="columns" [data]="page.content"></app-table>-->
+  </md-card-content>
+</md-card>

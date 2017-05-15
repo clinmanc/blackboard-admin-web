@@ -6,6 +6,6 @@
 export const environment = {
   production: false,
   auth: false,
-  url: 'http://localhost:9124/api'
+  url: 'http://localhost:9124/api/v1'
   // url: 'http://localhost:8080/api/'
 };

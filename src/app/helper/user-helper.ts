@@ -1,8 +1,8 @@
 export class UserHelper {
-  static getDisplayName(user){
+  static getDisplayName(user) {
     let username = '';
     let mobile = '';
-    if(user){
+    if (user) {
       username = user.realname || user.username || username;
       mobile = user.mobile || mobile;
     }

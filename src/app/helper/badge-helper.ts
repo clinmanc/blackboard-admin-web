@@ -1,8 +1,8 @@
 export class AvatarHelper {
-  static BUILTIN_IMG_URL: string = 'http://www.xiaoheiban.cn/Public/banhui';
+  static BUILTIN_IMG_URL = 'http://www.xiaoheiban.cn/Public/banhui';
   static IMG_URL = 'http://file.xiaoheiban.cn';
 
-  static parseFromUser({avatar}) {
+  static parseFromUser({ avatar }) {
     let small: string;
     let big: string;
     if (avatar) {
@@ -16,7 +16,7 @@ export class AvatarHelper {
     };
   }
 
-  static parseFromSchool({badgeId, badgeType}) {
+  static parseFromClassroom({ badgeId, badgeType }) {
     let small: string;
     let big: string;
     if (badgeId) {

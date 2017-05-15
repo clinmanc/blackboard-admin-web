@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Pageable } from '../../../shared/pageable';
 import { RestClient } from '../../../shared/rest-client';
-import { ResourceAction, ResourceParams} from 'ngx-resource';
+import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
-import {Page} from "../../../shared/page";
-import {UserHelper} from "../../../helper/user-helper";
+import { Page } from '../../../shared/page';
+import { UserHelper } from '../../../helper/user-helper';
 
 export class QueryInput extends Pageable {
-  invitationCodes?: string;
+  keyword?: string;
 }
 
 @ResourceParams({

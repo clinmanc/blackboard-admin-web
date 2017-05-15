@@ -2,8 +2,7 @@
   <md-card-content>
     <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
       <md-input-container>
-        <input mdInput formControlName="invitationCodes" type="text" placeholder="邀请码"
-               required minlength="6" autocomplete="off">
+        <input mdInput formControlName="invitationCode" type="text" placeholder="邀请码" maxlength="6" autocomplete="off">
       </md-input-container>
       <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
     </form>
@@ -20,7 +19,7 @@
       </div>
       <div class="app-item-container">
         <button md-icon-button>
-          <md-icon>sort</md-icon>
+          <md-icon>refresh</md-icon>
         </button>
       </div>
     </div>

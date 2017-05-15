@@ -7,4 +7,7 @@ export class TableColumn {
   sortable?= false;
   pipe?: PipeTransform;
   cellTemplate?: TemplateRef<any>;
+  width?= 150;
+  minWidth?= 100;
+  maxWidth?: number;
 }

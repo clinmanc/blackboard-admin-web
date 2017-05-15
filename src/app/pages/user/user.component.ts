@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../base-page';
@@ -8,6 +9,7 @@ import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { UserService } from './user.service';
 import { TableColumn } from '../../components/table/table-column';
+import { generateRecentDateRange } from '../../helper/date-helper';
 
 @Component({
   selector: 'app-user',
@@ -22,10 +24,13 @@ export class UserComponent extends BasePage implements OnInit {
   pageable = new Pageable();
   columns: TableColumn[] = [];
 
+  queryType = 'info';
+
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
   constructor(protected snackBar: MdSnackBar,
+    private route: ActivatedRoute,
     private userService: UserService,
     private formBuilder: FormBuilder,
     private dialog: MdDialog) {
@@ -34,6 +39,16 @@ export class UserComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.buildForm();
+    this.route.params.subscribe((params: Params) => {
+      this.queryType = params && params['queryType'] || 'info';
+      if (this.queryType !== 'info') {
+        const formModel = this.searchForm.value;
+        if (!formModel.from && !formModel.to) {
+          const recentDateRange = generateRecentDateRange();
+          this.searchForm.patchValue(recentDateRange);
+        }
+      }
+    });
 
     this.columns = [
       { key: 'name', name: '姓名（电话）', sortable: true, cellTemplate: this.previewImpl },
@@ -46,24 +61,10 @@ export class UserComponent extends BasePage implements OnInit {
   }
 
   buildForm(): void {
-
-    const dateTo = new Date();
-    const yearTo = dateTo.getFullYear();
-    const monthTo = dateTo.getMonth() + 1 < 10 ? '0' + (dateTo.getMonth() + 1) : dateTo.getMonth();
-    const dayTo = dateTo.getDate() < 10 ? '0' + dateTo.getDate() : dateTo.getDate();
-
-    const dateFrom = new Date(dateTo.getTime() - 7 * 24 * 3600 * 1000);
-    const yearFrom = dateFrom.getFullYear();
-    const monthFrom = dateFrom.getMonth() + 1 < 10 ? '0' + (dateFrom.getMonth() + 1) : dateFrom.getMonth();
-    const dayFrom = dateFrom.getDate() < 10 ? '0' + dateFrom.getDate() : dateFrom.getDate();
-
-    const from = `${yearFrom}-${monthFrom}-${dayFrom}`;
-    const to = `${yearTo}-${monthTo}-${dayTo}`;
-
     this.searchForm = this.formBuilder.group({
-      from: [from],
-      to: [to],
-      keyword: ['']
+      keyword: [''],
+      from: [''],
+      to: ['']
     });
   }
 
@@ -71,10 +72,11 @@ export class UserComponent extends BasePage implements OnInit {
     const formModel = this.searchForm.value;
 
     this.startQuery();
-    return this.userService.query(Object.assign({
+    let method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1);
+    return this.userService[method](Object.assign({
+      keyword: formModel.keyword,
       from: formModel.from,
-      to: formModel.to,
-      keyword: formModel.keyword
+      to: formModel.to
     }, this.pageable)).$observable
       .subscribe((page) => {
         this.page = page;
@@ -89,10 +91,10 @@ export class UserComponent extends BasePage implements OnInit {
     let result: Observable<any>;
     let title;
     if (type === 'members') {
-      result = this.userService.query().$observable;
+      result = this.userService.queryInfo().$observable;
       title = '成员列表';
     } else if (type === 'messages') {
-      result = this.userService.query().$observable;
+      result = this.userService.queryInfo().$observable;
       title = '消息列表';
     } else {
       return;
@@ -118,7 +120,7 @@ export class UserComponent extends BasePage implements OnInit {
     })
   }
 
-  switchPage(pageable: Pageable) {
+  loadPage(pageable: Pageable) {
     this.pageable = pageable;
     this.search();
   }

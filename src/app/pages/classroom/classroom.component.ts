@@ -9,6 +9,7 @@ import { ItemListDialogComponent } from '../../components/dialog/item-list/item-
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TableColumn } from '../../components/table/table-column';
+import { generateRecentDateRange } from '../../helper/date-helper';
 
 @Component({
   selector: 'app-classroom',
@@ -39,7 +40,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.buildForm();
-    this.route.params.subscribe((params: Params) => this.queryType = params && params['queryType'] || '');
+    this.route.params.subscribe((params: Params) => this.queryType = params && params['queryType'] || 'info');
 
     this.columns = [
       { key: 'name', name: '班级', sortable: true, cellTemplate: this.previewImpl },
@@ -52,19 +53,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
   }
 
   buildForm(): void {
-
-    const dateTo = new Date();
-    const yearTo = dateTo.getFullYear();
-    const monthTo = dateTo.getMonth() + 1 < 10 ? '0' + (dateTo.getMonth() + 1) : dateTo.getMonth();
-    const dayTo = dateTo.getDate() < 10 ? '0' + dateTo.getDate() : dateTo.getDate();
-
-    const dateFrom = new Date(dateTo.getTime() - 7 * 24 * 3600 * 1000);
-    const yearFrom = dateFrom.getFullYear();
-    const monthFrom = dateFrom.getMonth() + 1 < 10 ? '0' + (dateFrom.getMonth() + 1) : dateFrom.getMonth();
-    const dayFrom = dateFrom.getDate() < 10 ? '0' + dateFrom.getDate() : dateFrom.getDate();
-
-    const from = `${yearFrom}-${monthFrom}-${dayFrom}`;
-    const to = `${yearTo}-${monthTo}-${dayTo}`;
+    const { from, to } = generateRecentDateRange();
 
     this.searchForm = this.formBuilder.group({
       from: [from],
@@ -77,7 +66,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
     const formModel = this.searchForm.value;
 
     this.startQuery();
-    let method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1)
+    let method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1);
     return this.classroomInfoService[method](Object.assign({
       from: formModel.from,
       to: formModel.to,

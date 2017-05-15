@@ -13,7 +13,8 @@ mdl-layout-drawer {
 .sub-nav-list {
   background-color: #262a34;
   padding-top: 0;
-  &:before, &:after {
+  &:before,
+  &:after {
     content: "";
     /*left: 0;*/
     /*position: absolute;*/
@@ -32,7 +33,8 @@ mdl-layout-drawer {
   }
 }
 
-mdl-layout-drawer md-nav-list md-list-item, [md-subheader] {
+mdl-layout-drawer md-nav-list md-list-item,
+[md-subheader] {
   color: #a7a9ae;
 }
 
@@ -58,7 +60,7 @@ mdl-layout-content {
   padding: 1%;
 }
 
-mdl-layout-content > * {
+mdl-layout-content>* {
   display: flex;
   flex: auto;
 }
@@ -79,7 +81,7 @@ mdl-layout-content > * {
   md-icon {
     font-size: 24px;
   }
-  .arrow_down{
+  .arrow_down {
     width: 16px;
     height: 16px;
     font-size: 16px;

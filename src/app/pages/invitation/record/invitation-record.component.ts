@@ -44,14 +44,15 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
   buildForm(): void {
 
     this.searchForm = this.formBuilder.group({
-      invitationCodes: ['150608', [Validators.required, Validators.minLength(6)]]
+      invitationCode: ['150608', [Validators.maxLength(6)]]
     });
   }
+
 
   search() {
     const formModel = this.searchForm.value;
     const queryInput = {
-      invitationCodes: formModel.invitationCodes
+      keyword: formModel.invitationCode
     };
 
     this.startQuery();

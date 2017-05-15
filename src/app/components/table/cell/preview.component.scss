@@ -2,10 +2,10 @@
   position: relative;
   width: 100%;
   z-index: 0;
-  &:hover {
+  .app-thumbnail:hover {
     background-color: transparent;
     z-index: 50;
-    > .app-preview { /*CSS for enlarged image on hover*/
+    + .app-preview { /*CSS for enlarged image on hover*/
       visibility: visible;
       top: 0;
       left: 80px; /*position where enlarged image should offset horizontally */

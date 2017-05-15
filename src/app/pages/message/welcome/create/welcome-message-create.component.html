@@ -1,0 +1,56 @@
+<md-card>
+  <md-card-content>
+    <form [formGroup]="createForm" novalidate (ngSubmit)="create()">
+      <table>
+        <tr>
+          <td>
+            <md-input-container>
+              <input mdInput formControlName="order" type="number" placeholder="序号" required minlength="6" autocomplete="off">
+            </md-input-container>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <textarea formControlName="content" cols="80" rows="10" placeholder="内容" required></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <md-input-container>
+              <input mdInput formControlName="linkTitle" type="text" placeholder="链接标题" minlength="6" autocomplete="off">
+            </md-input-container>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <md-input-container>
+              <input mdInput formControlName="link" type="url" placeholder="链接" required minlength="6" autocomplete="off">
+            </md-input-container>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <md-input-container>
+              <input mdInput formControlName="verificationCode" type="text" placeholder="验证码" required autocomplete="off">
+            </md-input-container>
+          </td>
+          <td>
+            <md-input-container>
+              <input mdInput formControlName="token" type="text" placeholder="令牌" required minlength="24" maxlength="24" autocomplete="off">
+            </md-input-container>
+          </td>
+          <td>
+            <md-select placeholder="接收类型" formControlName="receiverType" required>
+              <md-option *ngFor="let type of receiverTypes" [value]="type.value">{{ type.name }}</md-option>
+            </md-select>
+          </td>
+          <td>
+            <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid">
+              发送
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </md-card-content>
+</md-card>

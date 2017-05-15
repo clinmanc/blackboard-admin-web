@@ -1,75 +1,3 @@
-<!--<md-card>-->
-  <!--<md-card-header>-->
-  <!--<div class="app-row-reverse-container">-->
-    <!--<div class="app-item-container">-->
-      <!--<button md-icon-button [mdMenuTriggerFor]="moreMenu">-->
-        <!--<md-icon>more_vert</md-icon>-->
-      <!--</button>-->
-      <!--<md-menu #moreMenu>-->
-        <!--<button md-menu-item>-->
-          <!--<md-icon>person_add</md-icon>-->
-          <!--<span>添加</span>-->
-        <!--</button>-->
-        <!--<button md-menu-item>-->
-          <!--<md-icon>delete_sweep</md-icon>-->
-          <!--<span>清空</span>-->
-        <!--</button>-->
-      <!--</md-menu>-->
-    <!--</div>-->
-    <!--<div class="app-item-container">-->
-      <!--<button md-icon-button>-->
-        <!--<md-icon>sort</md-icon>-->
-      <!--</button>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</md-card-header>-->
-  <!--<md-card-content>-->
-    <!--<div>-->
-      <!--<ngx-datatable-->
-        <!--class="material striped"-->
-        <!--[messages]="{totalMessage:'项'}"-->
-        <!--[rows]="rows"-->
-        <!--[columnMode]="'force'"-->
-        <!--[headerHeight]="64"-->
-        <!--[footerHeight]="56"-->
-        <!--[rowHeight]="48"-->
-        <!--[externalPaging]="true"-->
-        <!--[count]="page.totalElements"-->
-        <!--[offset]="page.pageNumber"-->
-        <!--[limit]="page.size">-->
-        <!--<ngx-datatable-column-->
-          <!--[width]="56"-->
-          <!--[sortable]="false"-->
-          <!--[canAutoResize]="false"-->
-          <!--[draggable]="false"-->
-          <!--[resizeable]="false">-->
-          <!--<ng-template let-column="姓名" ngx-datatable-header-template ngx-datatable-cell-template>-->
-            <!--<md-checkbox></md-checkbox>-->
-          <!--</ng-template>-->
-        <!--</ngx-datatable-column>-->
-        <!--<ngx-datatable-column name="规划">-->
-          <!--<ng-template let-column="column" ngx-datatable-header-template>-->
-            <!--Holla! {{column.name}}-->
-          <!--</ng-template>-->
-          <!--<ng-template let-value="value" ngx-datatable-cell-template>-->
-            <!--Hi: <strong>{{value}}</strong>-->
-          <!--</ng-template>-->
-        <!--</ngx-datatable-column>-->
-        <!--<ngx-datatable-column name="阿哥">-->
-          <!--<ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>-->
-            <!--<span (click)="sort()">{{column.name}}</span>-->
-          <!--</ng-template>-->
-          <!--<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>-->
-            <!--My name is: <i [innerHTML]="row['name']"></i> and <i>{{value}}</i>-->
-            <!--<div>{{joke}}</div>-->
-          <!--</ng-template>-->
-        <!--</ngx-datatable-column>-->
-        <!--<ngx-datatable-column name="黑色">-->
-        <!--</ngx-datatable-column>-->
-      <!--</ngx-datatable>-->
-    <!--</div>-->
-  <!--</md-card-content>-->
-<!--</md-card>-->
 <md-card>
   <!--<md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>-->
   <md-card-header>
@@ -91,14 +19,13 @@
       </div>
       <div class="app-item-container">
         <button md-icon-button>
-          <md-icon>sort</md-icon>
+          <md-icon>refresh</md-icon>
         </button>
       </div>
     </div>
   </md-card-header>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content"></app-table>
+    <app-table [columns]="columns" [data]="page.content" [selectable]="true"></app-table>
     <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
   </md-card-content>
 </md-card>
-

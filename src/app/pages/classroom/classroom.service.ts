@@ -5,7 +5,7 @@ import { ResourceAction, ResourceParams, ResourceResult } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { AvatarHelper } from '../../helper/badge-helper';
-import {UserHelper} from "../../helper/user-helper";
+import { UserHelper } from '../../helper/user-helper';
 
 export class QueryInput extends Pageable {
   keyword: string
@@ -16,25 +16,6 @@ export class QueryInput extends Pageable {
   url: '/classrooms'
 })
 export class ClassroomService extends RestClient {
-  static getResultMap(type){
-
-    return (page: Page<any>) => {
-      page.content = page.content.map((item) => {
-        const classroom = type === 'info'? item : item.classroom;
-
-        return {
-          name: classroom && classroom.name || '',
-          code: classroom && classroom.code || '',
-          createBy: classroom && UserHelper.getDisplayName(classroom.manager) || '',
-          createTime: classroom && new Date(classroom.createTime).toLocaleDateString() || '',
-          members: '查看成员',
-          messages: type === 'info'? '查看消息' : item.published,
-          avatar: AvatarHelper.parseFromSchool(classroom || {})
-        }
-      });
-      return page;
-    }
-  }
 
   @ResourceAction({
     map: ClassroomService.getResultMap('info')
@@ -52,4 +33,24 @@ export class ClassroomService extends RestClient {
     map: ClassroomService.getResultMap('recent')
   })
   queryRecent: ResourceMethod<QueryInput, any>;
+
+  static getResultMap(type) {
+
+    return (page: Page<any>) => {
+      page.content = page.content.map((item) => {
+        const classroom = type === 'info' ? item : item.classroom;
+
+        return {
+          name: classroom && classroom.name || '',
+          code: classroom && classroom.code || '',
+          createBy: classroom && UserHelper.getDisplayName(classroom.manager) || '',
+          createTime: classroom && new Date(classroom.createTime).toLocaleDateString() || '',
+          members: '查看成员',
+          messages: type === 'info' ? '查看消息' : item.published,
+          avatar: AvatarHelper.parseFromClassroom(classroom || {})
+        }
+      });
+      return page;
+    }
+  }
 }

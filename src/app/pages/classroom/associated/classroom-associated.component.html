@@ -1,0 +1,58 @@
+<md-card>
+  <md-card-content>
+    <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+      <md-input-container>
+        <input mdInput formControlName="classroomCodes" type="text" placeholder="班级号" required minlength="6" autocomplete="off">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="from" type="date" placeholder="开始时间" required>
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="to" type="date" required placeholder="结束时间">
+      </md-input-container>
+      <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid">搜索</button>
+    </form>
+  </md-card-content>
+</md-card>
+<md-card>
+  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
+  <md-card-header>
+    <div class="app-row-container">
+      <div class="app-item-container">
+        <button md-icon-button mdTooltip="统计数据有一天的延迟" mdTooltipPosition="after">
+          <md-icon class="help">help_outline</md-icon>
+        </button>
+      </div>
+    </div>
+    <div class="app-row-reverse-container">
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>more_vert</md-icon>
+        </button>
+      </div>
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>refresh</md-icon>
+        </button>
+      </div>
+    </div>
+  </md-card-header>
+  <md-card-header>
+  </md-card-header>
+  <md-card-content>
+    <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)">
+      <ng-template #previewImpl let-value="value" let-row="row">
+        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
+      </ng-template>
+      <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
+        <app-view [text]="value" [value]="{
+          value: value,
+          column: column,
+          row: row,
+          index: index
+        }" (view)="openViewDialog($event)"></app-view>
+      </ng-template>
+    </app-table>
+    <app-pagination [page]="page" (change)="onSwitchPage($event)"></app-pagination>
+  </md-card-content>
+</md-card>

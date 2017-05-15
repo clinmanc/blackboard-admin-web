@@ -1,0 +1,45 @@
+<md-card>
+  <md-card-header>
+    <div class="app-row-reverse-container">
+      <div class="app-item-container">
+        <button md-icon-button [mdMenuTriggerFor]="moreMenu">
+          <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #moreMenu>
+          <button md-menu-item routerLink="/message/announcement/create">
+            <md-icon>add_circle</md-icon>
+            <span>添加</span>
+          </button>
+          <button md-menu-item>
+            <md-icon>delete_sweep</md-icon>
+            <span>清空</span>
+          </button>
+        </md-menu>
+      </div>
+      <div class="app-item-container">
+        <button md-icon-button>
+          <md-icon>refresh</md-icon>
+        </button>
+      </div>
+    </div>
+  </md-card-header>
+  <md-card-content>
+    <app-table [columns]="columns" [data]="page.content" [selectable]="true">
+      <ng-template #weightImpl let-value="value">
+        <md-slider min="0" max="10" step="1" [value]="value" thumbLabel></md-slider>
+      </ng-template>
+      <ng-template #previewImpl let-value="value" let-row="row">
+        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
+      </ng-template>
+      <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
+        <app-view [text]="value" [value]="{
+          value: value,
+          column: column,
+          row: row,
+          index: index
+        }" (view)="openViewDialog($event)"></app-view>
+      </ng-template>
+    </app-table>
+    <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
+  </md-card-content>
+</md-card>

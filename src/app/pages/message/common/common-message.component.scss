@@ -1,0 +1,27 @@
+md-card {
+  margin: 8px;
+  width: 240px;
+}
+
+md-icon {
+  color: rgba(0, 0, 0, .55);
+}
+
+.app-options-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.app-option-group-container{
+  display: flex;
+  flex-direction: column;
+}
+.app-option-container {
+  display: flex;
+}
+.app-line-limit-length {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; //文本不换行，这样超出一行的部分被截取，显示...
+}

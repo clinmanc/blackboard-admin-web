@@ -1,4 +1,6 @@
-import { Component, Input, OnDestroy, OnInit, PipeTransform, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component, HostBinding, Input, OnDestroy, OnInit, PipeTransform, ViewChild, ViewContainerRef
+} from '@angular/core';
 import { TableColumn } from '../table-column';
 
 @Component({
@@ -25,7 +27,6 @@ export class TableBodyCellComponent implements OnInit, OnDestroy {
   @Input() index: number;
   @Input() row: any;
 
-
   get value(): any {
     if (!this.row || !this.column || !this.column.key) { return ''; }
 
@@ -38,6 +39,21 @@ export class TableBodyCellComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild('cellTemplate', { read: ViewContainerRef }) cellTemplate: ViewContainerRef;
+
+  @HostBinding('style.width.px')
+  get width(): number {
+    return this.column.width;
+  }
+
+  @HostBinding('style.minWidth.px')
+  get minWidth(): number {
+    return this.column.width;
+  }
+
+  @HostBinding('style.maxWidth.px')
+  get maxWidth(): number {
+    return this.column.minWidth;
+  }
 
   constructor() { }
 

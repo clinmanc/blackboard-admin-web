@@ -5,10 +5,12 @@ import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { Page } from '../../shared/page';
 import { AvatarHelper } from '../../helper/badge-helper';
-import {UserHelper} from "../../helper/user-helper";
+import { UserHelper } from '../../helper/user-helper';
 
 export class QueryInput extends Pageable {
-  keyword: string
+  keyword?: string;
+  from?: string;
+  to?: string;
 }
 
 export class UseRoleMapper {
@@ -25,26 +27,49 @@ export class UseStatusMapper {
 
 @Injectable()
 @ResourceParams({
-  url: '/users'
+  url: '/users',
 })
 export class UserService extends RestClient {
+  static getResultMap(type) {
 
-  @ResourceAction({
-    map: (page: Page<any>) => {
+    return (page: Page<any>) => {
       page.content = page.content.map((item) => {
+        const teacher = type === 'info' ? item : item.teacher;
 
         return {
-          name: UserHelper.getDisplayName(item),
-          status: UseStatusMapper[item.status],
-          role: UseRoleMapper[item.role],
-          school: item.school,
-          messages: '查看消息',
-          createTime: new Date(item.createTime).toLocaleDateString(),
-          avatar: AvatarHelper.parseFromUser(item)
+          name: UserHelper.getDisplayName(teacher),
+          status: teacher && UseStatusMapper[teacher.status],
+          role: teacher && UseRoleMapper[teacher.role],
+          school: teacher && teacher.school,
+          messages: type === 'info' ? '查看消息' : item.published,
+          createTime: teacher && new Date(teacher.createTime).toLocaleDateString() || '',
+          avatar: AvatarHelper.parseFromUser(teacher || {})
         }
       });
       return page;
     }
+  }
+
+  @ResourceAction({
+    map: UserService.getResultMap('info')
   })
-  query: ResourceMethod<QueryInput, any>;
+  queryInfo: ResourceMethod<QueryInput, any>;
+
+  @ResourceAction({
+    path: '/active',
+    map: UserService.getResultMap('active')
+  })
+  queryActive: ResourceMethod<QueryInput, any>;
+
+  @ResourceAction({
+    path: '/registered_statistics',
+    isArray: true,
+    map: (item: any) => {
+      return {
+        date: item._id,
+        count: item.countNum
+      }
+    }
+  })
+  queryRegisteredStatistics: ResourceMethod<any, any>;
 }
