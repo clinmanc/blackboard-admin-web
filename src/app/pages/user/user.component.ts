@@ -86,16 +86,18 @@ export class UserComponent extends BasePage implements OnInit {
 
   openViewDialog(event) {
     const type = event.column.key;
-    const formModel = this.searchForm.value;
 
     let result: Observable<any>;
     let title;
-    if (type === 'members') {
-      result = this.userService.queryInfo().$observable;
-      title = '成员列表';
-    } else if (type === 'messages') {
-      result = this.userService.queryInfo().$observable;
-      title = '消息列表';
+    if (type === 'messages') {
+      if (!event.row.userId) {
+        alert('数据有误');
+      }
+      result = this.userService.queryTeacherMessages({
+        from: '2015-01-12',
+        ownerId: event.row.userId
+      }).$observable;
+      title = '用户消息列表';
     } else {
       return;
     }
@@ -104,14 +106,7 @@ export class UserComponent extends BasePage implements OnInit {
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.startQuery();
 
-    result.map((items) => {
-      let result = [];
-      items.forEach((item) => result.push([
-        item.inviteeId || item.classroomId || item.userId,
-        item.inviteeName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`) || item.userName
-      ]));
-      return result
-    }).subscribe((items) => {
+    result.subscribe((items) => {
       dialogRef.componentInstance.completeQuery();
       dialogRef.componentInstance.items = items;
     }, () => {

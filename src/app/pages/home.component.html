@@ -1,7 +1,7 @@
 <mdl-layout mdl-layout-fixed-header mdl-layout-fixed-drawer>
   <mdl-layout-header class="mat-elevation-z2">
     <mdl-layout-header-row>
-      <mdl-layout-title>{{selectedItem?.name}}</mdl-layout-title>
+      <mdl-layout-title>{{navTitle}}</mdl-layout-title>
       <mdl-layout-spacer></mdl-layout-spacer>
       <nav class="mdl-navigation">
         <button class="nav-button" md-button>
@@ -11,7 +11,7 @@
         <!--<input type="search" mdInput placeholder="搜索">-->
         <!--</md-input-container>-->
         <button class="nav-button" md-button [mdMenuTriggerFor]="menu">
-          <span>{{authService.isLoggedIn}}</span>
+          <span>{{auth.user?.username}}</span>
           <md-icon class="arrow_down">keyboard_arrow_down</md-icon>
         </button>
         <md-menu #menu>

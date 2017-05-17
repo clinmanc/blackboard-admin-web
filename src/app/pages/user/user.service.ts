@@ -26,9 +26,7 @@ export class UseStatusMapper {
 }
 
 @Injectable()
-@ResourceParams({
-  url: '/users',
-})
+@ResourceParams()
 export class UserService extends RestClient {
   static getResultMap(type) {
 
@@ -37,6 +35,7 @@ export class UserService extends RestClient {
         const teacher = type === 'info' ? item : item.teacher;
 
         return {
+          userId: teacher && teacher.id,
           name: UserHelper.getDisplayName(teacher),
           status: teacher && UseStatusMapper[teacher.status],
           role: teacher && UseRoleMapper[teacher.role],
@@ -51,18 +50,19 @@ export class UserService extends RestClient {
   }
 
   @ResourceAction({
+    path: '/users',
     map: UserService.getResultMap('info')
   })
   queryInfo: ResourceMethod<QueryInput, any>;
 
   @ResourceAction({
-    path: '/active',
+    path: '/users/active',
     map: UserService.getResultMap('active')
   })
   queryActive: ResourceMethod<QueryInput, any>;
 
   @ResourceAction({
-    path: '/registered_statistics',
+    path: '/users/registered_statistics',
     isArray: true,
     map: (item: any) => {
       return {
@@ -72,4 +72,20 @@ export class UserService extends RestClient {
     }
   })
   queryRegisteredStatistics: ResourceMethod<any, any>;
+
+  @ResourceAction({
+    path: '/messages/teacher',
+    isArray: true,
+    map: (history: any) => {
+      let message = history.message || {};
+      return {
+        createTime: message.createTime && new Date(message.createTime).toLocaleString(),
+        content: message.content
+      };
+    }
+  })
+  queryTeacherMessages: ResourceMethod<{
+    ownerId: string,
+    from: string
+  }, any>;
 }

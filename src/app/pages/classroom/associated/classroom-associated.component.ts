@@ -57,7 +57,7 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
     const to = `${year}-${month}-${day}`;
 
     this.searchForm = this.formBuilder.group({
-      classroomCodes: ['270577', [Validators.required, Validators.minLength(6)]],
+      classroomCodes: ['461973', [Validators.required, Validators.minLength(6)]],
       from: [from, [Validators.required]],
       to: [to, [Validators.required]]
     });
@@ -86,47 +86,47 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
   }
 
   openViewDialog(event) {
-    this.openDialog(event.column.key, event.row.invitationCode);
-  }
 
-  openDialog(type: string, classroomCode: string) {
-    const formModel = this.searchForm.value;
-    const queryInput = {
-      keyword: classroomCode,
-      from: formModel.from,
-      to: formModel.to
-    };
-    Object.assign(queryInput, this.pageable);
-
+    const type = event.column.key;
     let result: Observable<any>;
     let title;
+    if(!event.row.classroomId){
+      alert('数据有误');
+    }
     if (type === 'memberNum') {
-      result = this.classroomAssociatedService.queryClassroomMembers(queryInput).$observable;
+      result = this.classroomAssociatedService.queryClassroomMembers({
+        classroomId: event.row.classroomId,
+      }).$observable;
       title = '成员列表';
     } else if (type === 'associatedClassroomNum') {
-      result = this.classroomAssociatedService.queryAssociatedClassrooms(queryInput).$observable;
+      result = this.classroomAssociatedService.queryAssociatedClassrooms({
+        memberIds: event.row.memberIds
+      }, {
+        classroomId: event.row.classroomId,
+      }).$observable;
       title = '班级列表';
     } else {
       return;
     }
 
-    let dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
+    const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.startQuery();
 
     result.map((items) => {
-      let result = [];
-      items.forEach((item) => result.push([
-        item.inviteeId || item.classroomId || item.userId,
-        item.inviteeName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`) || item.userName
-      ]));
-      return result
+      return items.map(item => {
+        return {
+          id: item.classroomId || item.userId,
+          name: item.userName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`)
+        };
+      });
     }).subscribe((items) => {
       dialogRef.componentInstance.completeQuery();
       dialogRef.componentInstance.items = items;
-    }, () => {
+    }, (err) => {
       dialogRef.componentInstance.completeQuery();
-      this.handleError.bind(this);
+      this.handleError(err);
     })
+
   }
 }

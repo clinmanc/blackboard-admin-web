@@ -1,7 +1,7 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SysUserService } from './sys-user.service';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { SysUser } from './sys-user';
+import { SysUser } from '../../../shared/sys-user';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
@@ -15,12 +15,11 @@ import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confi
 })
 export class SysUserComponent extends BasePage implements OnInit {
   // @HostBinding('@routeAnimation') routeAnimation = true;
+  columns: TableColumn[] = [];
   page = new Page<SysUser>();
   pageable = new Pageable();
-  columns: TableColumn[] = [
-    { key: 'username', name: '用户', sortable: true },
-    { key: 'role', name: '角色', sortable: true }
-  ];
+
+  @ViewChild('chipListImpl') chipListImpl: TemplateRef<any>;
 
   constructor(private sysUserService: SysUserService, protected snackBar: MdSnackBar,
     private dialog: MdDialog) {
@@ -28,10 +27,15 @@ export class SysUserComponent extends BasePage implements OnInit {
   }
 
   ngOnInit() {
+    this.columns = [
+      { key: 'username', name: '用户', sortable: true },
+      { key: 'roles', name: '角色', sortable: true, cellTemplate: this.chipListImpl }
+    ];
+
     this.loadPage();
   }
 
-  loadPage(pageable: Pageable = new Pageable()) {
+  loadPage(pageable: Pageable = this.pageable) {
     this.pageable = pageable;
     this.startQuery();
     this.sysUserService.query(pageable).$observable
@@ -53,13 +57,5 @@ export class SysUserComponent extends BasePage implements OnInit {
           );
       }
     });
-  }
-
-  deleteOne() {
-
-  }
-
-  deleteAll() {
-
   }
 }

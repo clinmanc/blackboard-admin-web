@@ -37,7 +37,7 @@
   <md-card-header>
   </md-card-header>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)">
+    <app-table [columns]="columns" [data]="page.content">
       <ng-template #previewImpl let-value="value" let-row="row">
         <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
       </ng-template>
@@ -50,6 +50,6 @@
         }" (view)="openViewDialog($event)"></app-view>
       </ng-template>
     </app-table>
-    <app-pagination [page]="page" (change)="switchPage($event)"></app-pagination>
+    <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
   </md-card-content>
 </md-card>

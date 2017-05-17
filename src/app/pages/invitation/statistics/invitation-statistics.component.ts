@@ -8,7 +8,6 @@ import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
-import { ViewComponent } from '../../../components/table/cell/view.component';
 
 @Component({
   selector: 'app-invitation-statistics',
@@ -79,7 +78,7 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
       }, this.handleError.bind(this));
   }
 
-  onSwitchPage(pageable: Pageable = new Pageable()) {
+  loadPage(pageable: Pageable = new Pageable()) {
     this.pageable = pageable;
 
     this.search();
@@ -112,17 +111,17 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
       return;
     }
 
-    let dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
+    const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.startQuery();
 
     result.map((items) => {
-      let result = [];
-      items.forEach((item) => result.push([
-        item.inviteeId || item.classroomId || item.userId,
-        item.inviteeName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`) || item.userName
-      ]));
-      return result
+      return items.map(item => {
+        return {
+          id: item.inviteeId || item.classroomId || item.userId,
+          name: item.inviteeName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`) || item.userName
+        };
+      });
     }).subscribe((items) => {
       dialogRef.componentInstance.completeQuery();
       dialogRef.componentInstance.items = items;

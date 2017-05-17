@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  auth: false,
-  url: 'http://localhost:9124/api/v1'
-  // url: 'http://localhost:8080/api/'
+  noAuth: false,
+  url: 'http://localhost:9124/api/v1',
+  authUrl: 'http://localhost:9124/api/v1'
 };

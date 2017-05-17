@@ -25,7 +25,13 @@
     </div>
   </md-card-header>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content" [selectable]="true"></app-table>
+    <app-table [columns]="columns" [data]="page.content" [selectable]="true">
+      <ng-template #chipListImpl let-value="value" let-column="column" let-row="row" let-index="index">
+        <md-chip-list>
+          <md-chip *ngFor="let role of value">{{role.name}}</md-chip>
+        </md-chip-list>
+      </ng-template>
+    </app-table>
     <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
   </md-card-content>
 </md-card>

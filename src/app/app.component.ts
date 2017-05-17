@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { SysUserService } from './pages/sys/user/sys-user.service';
 import { flyInOutAnimation } from './animations/fly-in-out.animation';
 import { rotate180Animation } from './animations/rotate-180.animation';
-import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,17 +11,10 @@ import { AuthService } from './auth.service';
   animations: [rotate180Animation, flyInOutAnimation]
 })
 export class AppComponent implements OnInit {
-  private authService: AuthService;
 
-  constructor(authService: AuthService) {
-    this.authService = authService;
-  }
+  constructor() { }
 
-  ngOnInit(): void {
-    if (this.authService.isLoggedIn) {
-
-    }
-  }
+  ngOnInit(): void { }
 
   isWebkit(): boolean {
     let ua = navigator.userAgent;

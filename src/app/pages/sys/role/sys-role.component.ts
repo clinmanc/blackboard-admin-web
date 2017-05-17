@@ -14,10 +14,7 @@ import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confi
   providers: [SysRoleService]
 })
 export class SysRoleComponent extends BasePage implements OnInit {
-  columns: TableColumn[] = [
-    { key: 'name', name: '角色', sortable: true },
-    { key: 'code', name: '权限码', sortable: true }
-  ];
+  columns: TableColumn[] = [];
   page = new Page<any>();
   pageable = new Pageable();
 
@@ -26,6 +23,11 @@ export class SysRoleComponent extends BasePage implements OnInit {
   }
 
   ngOnInit() {
+    this.columns = [
+      { key: 'name', name: '角色', sortable: true },
+      { key: 'code', name: '权限码', sortable: true }
+    ];
+
     this.loadPage();
   }
 

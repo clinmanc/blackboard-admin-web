@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Pageable } from '../../../shared/pageable';
 import { RestClient } from '../../../shared/rest-client';
 import { ResourceAction, ResourceParams } from 'ngx-resource';
-import { ResourceMethod, ResourceMethodStrict } from 'ngx-resource/src/Interfaces';
+import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RequestMethod } from '@angular/http';
 
 export class QueryInput extends Pageable {
@@ -19,7 +19,7 @@ export class QueryInput extends Pageable {
 export class InvitationStatisticsService extends RestClient {
 
   @ResourceAction({
-    path: '/statistics'
+    path: '/statistics',
   })
   queryStatistics: ResourceMethod<QueryInput, any>;
 

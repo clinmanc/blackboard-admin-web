@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BasePage } from '../base-page';
+import { MdSnackBar } from '@angular/material';
+import { AuthHelper } from '../../helper/authorization-helper';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent extends BasePage implements OnInit {
   message: string;
   loginForm: FormGroup;
   formErrors = {
@@ -27,7 +30,13 @@ export class LoginComponent implements OnInit {
     }
   };
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    snackBar: MdSnackBar,
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private router: Router
+  ) {
+    super(snackBar);
     this.setMessage();
   }
 
@@ -47,21 +56,27 @@ export class LoginComponent implements OnInit {
   }
 
   setMessage() {
-    this.message = (this.authService.isLoggedIn ? '已' : '未') + '登录';
+    this.message = (AuthHelper.isLoggedIn ? '已' : '未') + '登录';
   }
 
   login() {
+    const formModel = this.loginForm.value;
+
     this.message = '登录中 ...';
-    this.authService.login().subscribe(() => {
+    this.authService.login({
+      username: formModel.username,
+      password: formModel.password,
+      rememberMe: formModel.rememberMe
+    }).subscribe(() => {
       this.setMessage();
-      if (this.authService.isLoggedIn) {
+      if (AuthHelper.isLoggedIn) {
         // Get the redirect URL from our auth service
         // If no redirect has been set, use the default
         let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/';
         // Redirect the user
         this.router.navigate([redirect]);
       }
-    });
+    }, this.handleError.bind(this));
   }
 
   logout() {

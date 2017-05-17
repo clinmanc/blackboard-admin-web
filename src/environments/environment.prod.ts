@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  url: ''
+  noAuth: false,
+  url: '/',
+  authUrl: '/'
 };

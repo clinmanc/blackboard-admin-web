@@ -14,25 +14,32 @@ import { SysPermissionService } from './sys-permission.service';
   providers: [SysPermissionService]
 })
 export class SysPermissionComponent extends BasePage implements OnInit {
-  columns: TableColumn[] = [
-    { key: 'name', name: '角色', sortable: true },
-    { key: 'code', name: '权限码', sortable: true }
-  ];
+
   page = new Page<any>();
   pageable = new Pageable();
+  columns: TableColumn[] = [];
 
-  constructor(protected snackBar: MdSnackBar, private sysPermissionService: SysPermissionService, private dialog: MdDialog) {
+  constructor(
+    snackBar: MdSnackBar,
+    private dialog: MdDialog,
+    private sysPermissionService: SysPermissionService
+  ) {
     super(snackBar);
   }
 
   ngOnInit() {
+    this.columns = [
+      { key: 'name', name: '权限', sortable: true },
+      { key: 'description', name: '描述', sortable: true },
+      { key: 'url', name: '地址', sortable: true }
+    ];
+
     this.loadPage();
   }
 
-  loadPage(pageable = new Pageable()) {
-    this.pageable = pageable;
+  loadPage(pageable = this.pageable) {
     this.startQuery();
-    this.sysPermissionService.query(pageable).$observable
+    this.sysPermissionService.query(this.pageable).$observable
       .subscribe((page) => {
         this.completeQuery();
         this.page = page;

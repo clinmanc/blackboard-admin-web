@@ -23,9 +23,11 @@ export class TipsComponent extends BasePage implements OnInit {
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
   @ViewChild('weightImpl') weightImpl: TemplateRef<any>;
 
-  constructor(protected snackBar: MdSnackBar,
+  constructor(
+    protected snackBar: MdSnackBar,
     private dialog: MdDialog,
-    private tipsService: TipsService) {
+    private tipsService: TipsService
+  ) {
     super(snackBar);
   }
 

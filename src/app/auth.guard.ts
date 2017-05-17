@@ -5,11 +5,11 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from './auth.service';
+import { AuthHelper } from './helper/authorization-helper';
 
 @Injectable()
 export class AuthGuard implements CanLoad, CanActivate, CanActivateChild {
-  constructor(private authService: AuthService, private router: Router) {
-  }
+  constructor(private authService: AuthService, private router: Router) { }
 
   canLoad(route: Route): boolean | Observable<boolean> | Promise<boolean> {
     let url = `/${route.path}`;
@@ -28,9 +28,17 @@ export class AuthGuard implements CanLoad, CanActivate, CanActivateChild {
     throw this.canActivate(childRoute, state);
   }
 
-  checkLogin(url: string): boolean {
-    if (this.authService.isLoggedIn) {
+  checkLogin(url: string): boolean | Observable<boolean> | Promise<boolean> {
+    if (AuthHelper.auth.user) {
       return true;
+    } else if (AuthHelper.auth.token) {
+      return this.authService.login().catch((err) => {
+        AuthHelper.clear();
+        this.authService.redirectUrl = url;
+        this.router.navigate(['/login']);
+
+        return Observable.throw(err);
+      });
     }
 
     // Store the attempted URL for redirecting

@@ -2,9 +2,6 @@
   <md-card-content>
     <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
       <md-input-container>
-        <input mdInput formControlName="invitationCodes" type="text" placeholder="邀请码" required minlength="6" autocomplete="off">
-      </md-input-container>
-      <md-input-container>
         <input mdInput formControlName="from" type="date" placeholder="开始时间" required>
       </md-input-container>
       <md-input-container>
@@ -15,20 +12,22 @@
   </md-card-content>
 </md-card>
 <md-card>
-  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <md-card-header>
-    <div class="app-row-container">
-      <div class="app-item-container">
-        <button md-icon-button mdTooltip="统计数据有一天的延迟" mdTooltipPosition="after">
-          <md-icon class="help">help_outline</md-icon>
-        </button>
-      </div>
-    </div>
     <div class="app-row-reverse-container">
       <div class="app-item-container">
-        <button md-icon-button>
+        <button md-icon-button [mdMenuTriggerFor]="moreMenu">
           <md-icon>more_vert</md-icon>
         </button>
+        <md-menu #moreMenu>
+          <button md-menu-item routerLink="/message/announcement/create">
+            <md-icon>create</md-icon>
+            <span>新建</span>
+          </button>
+          <button md-menu-item>
+            <md-icon>delete_sweep</md-icon>
+            <span>清空</span>
+          </button>
+        </md-menu>
       </div>
       <div class="app-item-container">
         <button md-icon-button>
@@ -38,9 +37,9 @@
     </div>
   </md-card-header>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content">
-      <ng-template #inviterDisplay let-row="row">
-        {{row.inviter}}（{{row.mobile}}）
+    <app-table [columns]="columns" [data]="page.content" [selectable]="true" class="app-line-limit-length">
+      <ng-template #previewImpl let-value="value" let-row="row">
+        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
       </ng-template>
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <app-view [text]="value" [value]="{
@@ -51,6 +50,6 @@
         }" (view)="openViewDialog($event)"></app-view>
       </ng-template>
     </app-table>
-    <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
+    <app-pagination [page]="page" (change)="onSwitchPage($event)"></app-pagination>
   </md-card-content>
 </md-card>

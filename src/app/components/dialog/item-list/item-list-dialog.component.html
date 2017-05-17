@@ -11,8 +11,8 @@
       <ng-container *ngIf="!inQuery && items != null && items.length !== 0">
         <tr *ngFor="let item of items; let i = index">
           <td class="app-table-index">{{i + 1}}</td>
-          <td *ngFor="let column of item">
-            <div>{{column}}</div>
+          <td *ngFor="let key of getKeys(item)">
+            <div [attr.title]="item[key]">{{item[key]}}</div>
           </td>
         </tr>
       </ng-container>

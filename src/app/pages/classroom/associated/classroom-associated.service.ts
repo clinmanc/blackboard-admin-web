@@ -26,6 +26,7 @@ export class ClassroomAssociatedService extends RestClient {
       page.content = page.content.map((item) => {
 
         return {
+          classroomId: item.id,
           name: item.name,
           code: item.code,
           createBy: UserHelper.getDisplayName(item.manager),
@@ -34,6 +35,7 @@ export class ClassroomAssociatedService extends RestClient {
           avatar: AvatarHelper.parseFromClassroom(item || {}),
           memberNum: item.attrs.memberNum,
           associatedClassroomNum: item.attrs.classrommNum,
+          memberIds: item.attrs.classroomShow.split('@').filter(memberId => memberId),
           associatedPeopleNum: item.attrs.allMemberNum
         }
       });
@@ -43,14 +45,28 @@ export class ClassroomAssociatedService extends RestClient {
   queryAssociatedStatistics: ResourceMethod<QueryInput, any>;
 
   @ResourceAction({
-    path: '{:classroomId}/members',
-    isArray: true
+    path: '/{:classroomId}/members',
+    isArray: true,
+    map: (member: any) => {
+      return {
+        userId: member.id,
+        userName: UserHelper.getDisplayName(member)
+      };
+    }
   })
-  queryClassroomMembers: ResourceMethod<QueryInput, any[]>;
+  queryClassroomMembers: ResourceMethod<{ classroomId: string }, any>;
 
   @ResourceAction({
     path: '{:classroomId}/associated/classrooms',
-    isArray: true
+    method: RequestMethod.Post,
+    isArray: true,
+    map: (classroom: any) => {
+      return {
+        classroomId: classroom.id,
+        classroomName: classroom.username,
+        membersCount: classroom.mobile
+      };
+    }
   })
-  queryAssociatedClassrooms: ResourceMethod<QueryInput, any[]>;
+  queryAssociatedClassrooms: ResourceMethodStrict<{ memberIds: string[] }, { classroomId: string }, any[]>;
 }

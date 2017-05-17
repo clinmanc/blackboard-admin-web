@@ -30,7 +30,6 @@ export class CommonMessageComponent extends BasePage implements OnInit {
   ngOnInit() {
     this.buildForm();
     this.search();
-    console.log(this.pageable);
   }
 
   buildForm(): void {
@@ -44,7 +43,6 @@ export class CommonMessageComponent extends BasePage implements OnInit {
     return this.commonMessageService.query(this.pageable).$observable
       .subscribe((page) => {
         this.page = page;
-        console.log(page.content);
         this.completeQuery();
       }, this.handleError.bind(this));
   }
