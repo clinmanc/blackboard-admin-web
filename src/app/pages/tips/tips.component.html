@@ -1,30 +1,8 @@
 <md-card>
-  <md-card-header>
-    <div class="app-row-reverse-container">
-      <div class="app-item-container">
-        <button md-icon-button [mdMenuTriggerFor]="moreMenu">
-          <md-icon>more_vert</md-icon>
-        </button>
-        <md-menu #moreMenu>
-          <button md-menu-item routerLink="/message/announcement/create">
-            <md-icon>add_circle</md-icon>
-            <span>添加</span>
-          </button>
-          <button md-menu-item>
-            <md-icon>delete_sweep</md-icon>
-            <span>清空</span>
-          </button>
-        </md-menu>
-      </div>
-      <div class="app-item-container">
-        <button md-icon-button>
-          <md-icon>refresh</md-icon>
-        </button>
-      </div>
-    </div>
-  </md-card-header>
+  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
+  <app-toolbar [selected]="selected" [toolbar]="toolbar"></app-toolbar>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content" [selectable]="true">
+    <app-table [columns]="columns" [data]="page.content" [selectable]="true" (select)="select($event)">
       <ng-template #weightImpl let-value="value">
         <md-slider min="0" max="10" step="1" [value]="value" thumbLabel></md-slider>
       </ng-template>

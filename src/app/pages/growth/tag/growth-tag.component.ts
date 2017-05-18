@@ -6,6 +6,7 @@ import { TableColumn } from '../../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
 import { GrowthTagService } from './growth-tag.service';
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-growth-tag',
@@ -17,7 +18,9 @@ export class GrowthTagComponent extends BasePage implements OnInit {
 
   page = new Page<any>();
   pageable = new Pageable();
-  columns: TableColumn[] = [];
+  columns: TableColumn[] = [];;
+  selected = [];
+  toolbar = {};
 
   @ViewChild('weightImpl') weightImpl: TemplateRef<any>;
 
@@ -34,22 +37,38 @@ export class GrowthTagComponent extends BasePage implements OnInit {
       { key: 'usages', name: '使用次数', numeric: true },
       { key: 'weight', name: '权重', sortable: true, numeric: true, cellTemplate: this.weightImpl }
     ];
+    this.toolbar = { persistentButtons: [{ name: '添加' }],  iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep'}]};
 
-    this.search();
+    this.subscribeQuery(this.load());
   }
 
-  search() {
-    this.startQuery();
-    return this.growthTagsService.query(this.pageable).$observable
-      .subscribe((page) => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
-  }
-
-  loadPage(pageable: Pageable) {
+  load(pageable = this.pageable): Observable<Page<any>> {
     this.pageable = pageable;
-    this.search();
+
+    const observable = this.growthTagsService.query(this.pageable).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
+  }
+
+  reload(): Observable<Page<any>>{
+    return this.subscribeQuery(this.load());
+  }
+  select(selected){
+    this.selected = selected;
+  }
+
+  add(){
+
+  }
+
+  remove(){
+
+  }
+  removeAll(){
+
   }
 
   openViewDialog(event) {

@@ -1,0 +1,43 @@
+$text-color-primary: rgb(255, 64, 129);
+
+.app-toolbar-normal {
+  background-color: transparent;
+}
+
+.app-toolbar-selected {
+  background-color: rgba($text-color-primary, .05);
+  //background-color: rgba(63, 81, 181, .1);
+}
+
+.app-toolbar-persistent-action {
+  font-size: 16px;
+  &:hover {
+    cursor: pointer;
+  }
+  &:first-child {
+    margin-left: 8px;
+  }
+  &:not(:first-child) {
+    margin-left: 36px;
+  }
+}
+.app-toolbar-icon-actions-container {
+  display: flex;
+  flex-direction: row-reverse;
+  flex: auto;
+  width: 100%;
+}
+.app-toolbar-icon-action {
+  color: rgba(0, 0, 0, .54);
+  &:first-child {
+    margin-right: 0;
+  }
+  &:not(:first-child) {
+    margin-right: 24px;
+  }
+}
+
+.app-toolbar-contextual-text {
+  margin-left: 8px;
+  font-size: 16px;
+}

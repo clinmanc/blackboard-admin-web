@@ -7,6 +7,7 @@ import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-sys-user',
@@ -18,6 +19,8 @@ export class SysUserComponent extends BasePage implements OnInit {
   columns: TableColumn[] = [];
   page = new Page<SysUser>();
   pageable = new Pageable();
+  selected = [];
+  toolbar = {};
 
   @ViewChild('chipListImpl') chipListImpl: TemplateRef<any>;
 
@@ -31,18 +34,24 @@ export class SysUserComponent extends BasePage implements OnInit {
       { key: 'username', name: '用户', sortable: true },
       { key: 'roles', name: '角色', sortable: true, cellTemplate: this.chipListImpl }
     ];
+    this.toolbar = { persistentButtons: [{ name: '添加' }],  iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep'}]};
 
-    this.loadPage();
+    this.subscribeQuery(this.load());
   }
 
-  loadPage(pageable: Pageable = this.pageable) {
+  load(pageable = this.pageable): Observable<Page<any>> {
     this.pageable = pageable;
-    this.startQuery();
-    this.sysUserService.query(pageable).$observable
-      .subscribe((page) => {
-        this.completeQuery();
-        this.page = page;
-      }, this.handleError.bind(this));
+
+    const observable = this.sysUserService.query(this.pageable).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
+  }
+
+  reload(): Observable<Page<any>>{
+    return this.subscribeQuery(this.load());
   }
 
   openConfirmDialog(action: string = '', options: any = {}) {
@@ -52,10 +61,24 @@ export class SysUserComponent extends BasePage implements OnInit {
       if (result === 'ok') {
         this.sysUserService.remove({ userId: options.userId }).$observable
           .subscribe(
-          () => this.loadPage(),
+          () => this.load(),
           (err) => this.handleError.bind(this)
           );
       }
     });
+  }
+
+  select(selected){
+    this.selected = selected;
+  }
+
+  add(){
+
+  }
+  remove(){
+
+  }
+  removeAll(){
+
   }
 }

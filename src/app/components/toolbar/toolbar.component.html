@@ -1,0 +1,36 @@
+<md-toolbar [ngClass]="{ 'app-toolbar-normal': !(selected?.length), 'app-toolbar-selected': selected?.length }">
+  <ng-container *ngIf="!(selected?.length); else persistentActionElseBlock">
+    <a *ngFor="let button of toolbar?.persistentButtons" class="app-toolbar-persistent-action"
+       (click)="(button?.action||noop)($event)">添加</a>
+  </ng-container>
+  <ng-template #persistentActionElseBlock>
+    <a class="app-toolbar-contextual-text">{{selected?.length}} 项已选择</a>
+  </ng-template>
+  <div class="app-toolbar-icon-actions-container">
+    <div class="app-toolbar-icon-action">
+      <button md-icon-button [mdMenuTriggerFor]="moreMenu">
+        <md-icon>more_vert</md-icon>
+      </button>
+      <md-menu #moreMenu>
+        <button *ngFor="let button of toolbar?.menus" md-menu-item (click)="(button?.action||noop)($event)">
+          <md-icon>{{button.icon}}</md-icon>
+          <span>{{button.name}}</span>
+        </button>
+      </md-menu>
+    </div>
+    <ng-container *ngIf="!(selected?.length)">
+      <div *ngFor="let button of toolbar?.iconButtons" class="app-toolbar-icon-action">
+        <button md-icon-button (click)="(button?.action||noop)($event)">
+          <md-icon>{{button.icon}}</md-icon>
+        </button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="selected?.length">
+      <div *ngFor="let button of toolbar?.contextualIconButtons" class="app-toolbar-icon-action">
+        <button md-icon-button (click)="(button?.action||noop)($event)">
+          <md-icon>{{button.icon}}</md-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</md-toolbar>

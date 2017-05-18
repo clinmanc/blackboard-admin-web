@@ -6,6 +6,7 @@ import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-sys-role',
@@ -14,9 +15,11 @@ import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confi
   providers: [SysRoleService]
 })
 export class SysRoleComponent extends BasePage implements OnInit {
-  columns: TableColumn[] = [];
   page = new Page<any>();
   pageable = new Pageable();
+  columns: TableColumn[] = [];
+  selected = [];
+  toolbar = {};
 
   constructor(protected snackBar: MdSnackBar, private sysRoleService: SysRoleService, private dialog: MdDialog) {
     super(snackBar);
@@ -27,18 +30,24 @@ export class SysRoleComponent extends BasePage implements OnInit {
       { key: 'name', name: '角色', sortable: true },
       { key: 'code', name: '权限码', sortable: true }
     ];
+    this.toolbar = { persistentButtons: [{ name: '添加' }],  iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep'}]};
 
-    this.loadPage();
+    this.subscribeQuery(this.load());
   }
 
-  loadPage(pageable = new Pageable()) {
-    this.pageable = pageable;
-    this.startQuery();
-    this.sysRoleService.query(pageable).$observable
-      .subscribe((page) => {
-        this.completeQuery();
-        this.page = page;
-      }, this.handleError.bind(this));
+  load(pageable = this.pageable): Observable<Page<any>> {
+  this.pageable = pageable;
+
+  const observable = this.sysRoleService.query(this.pageable).$observable;
+
+  observable.subscribe((page) => this.page = page);
+
+  return observable;
+}
+
+  reload(): Observable<Page<any>>{
+    return this.subscribeQuery(this.load());
   }
 
   openConfirmDialog(event?: any) {
@@ -49,5 +58,20 @@ export class SysRoleComponent extends BasePage implements OnInit {
         alert(result);
       }
     });
+  }
+
+  select(selected){
+    this.selected = selected;
+  }
+
+  add(){
+
+  }
+
+  remove(){
+
+  }
+  removeAll(){
+
   }
 }

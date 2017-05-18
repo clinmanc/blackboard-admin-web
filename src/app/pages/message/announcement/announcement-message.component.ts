@@ -4,6 +4,9 @@ import { TableColumn } from '../../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
 import { AnnouncementMessageService } from './announcement-message.service';
+import {Observable} from "rxjs/Observable";
+import {ConfirmDialogComponent} from "../../../components/dialog/confirm/confirm-dialog.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-announcement-message',
@@ -15,11 +18,15 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
 
   data = [];
   columns: TableColumn[] = [];
+  selected = [];
+  toolbar = {};
 
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
-  constructor(protected snackBar: MdSnackBar,
+  constructor(
+    snackBar: MdSnackBar,
+    private router: Router,
     private dialog: MdDialog,
     private announcementMessageService: AnnouncementMessageService) {
     super(snackBar);
@@ -32,21 +39,57 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
       { key: 'content', name: '内容', cellTemplate: this.viewImpl },
       { key: 'createTime', name: '创建时间', sortable: true, numeric: true }
     ];
+    this.toolbar = { persistentButtons: [{ name: '添加', action: this.add.bind(this) }],  iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep'}]};
 
-    this.search();
+    this.subscribeQuery(this.load());
   }
 
-  search() {
-    this.startQuery();
-    return this.announcementMessageService.query().$observable
-      .subscribe((data) => {
-        this.data = data;
-        this.completeQuery();
-      }, this.handleError.bind(this));
+  load(): Observable<any[]> {
+    const observable = this.announcementMessageService.query().$observable;
+
+    observable.subscribe((data) => this.data = data);
+
+    return observable;
+  }
+
+  reload(): Observable<any[]>{
+    return this.subscribeQuery(this.load());
   }
 
   openViewDialog(event) {
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
+
+  }
+
+  openRemoveAllConfirmDialog(event?: any) {
+    let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = '清空后不可恢复，确认清空吗？';
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        // alert(result);
+      }
+    });
+  }
+
+  select(selected){
+    this.selected = selected;
+  }
+
+  add(){
+    this.router.navigate(['/message/announcement/create']);
+  }
+  remove(){
+    let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        // this.announcementMessageService.remove({ permissionId: row.permissionId }).$observable
+        //   .subscribe(() => this.reload());
+      }
+    });
+  }
+  removeAll(){
 
   }
 }

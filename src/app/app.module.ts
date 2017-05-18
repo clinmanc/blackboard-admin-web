@@ -56,6 +56,7 @@ import { GrowthTagComponent } from './pages/growth/tag/growth-tag.component';
 import { CommonMessageComponent } from './pages/message/common/common-message.component';
 import { GrowthRecordComponent } from './pages/growth/record/growth-record.component';
 import { RegisteredUserStatisticsComponent } from './pages/user/registered-statistics/registered-user-statistics.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -107,7 +108,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonMessageComponent,
     GrowthRecordComponent,
     RegisteredUserStatisticsComponent,
-    UserLocationStatisticsComponent
+    UserLocationStatisticsComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,

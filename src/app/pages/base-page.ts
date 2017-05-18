@@ -1,4 +1,5 @@
 import { MdSnackBar } from '@angular/material';
+import {Observable} from "rxjs/Observable";
 
 export class BasePage {
   protected inQuery = false;
@@ -8,6 +9,15 @@ export class BasePage {
 
   public startQuery() {
     this.inQuery = true;
+  }
+
+  public subscribeQuery(observable: Observable<any>) {
+    this.startQuery();
+    observable.subscribe(this.completeQuery.bind(this), err => {
+      this.completeQuery();
+      this.handleError(err);
+    });
+    return observable;
   }
 
   public completeQuery() {

@@ -6,6 +6,7 @@ import { TableColumn } from '../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { TipsService } from './tips.service';
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-tips',
@@ -18,6 +19,8 @@ export class TipsComponent extends BasePage implements OnInit {
   page = new Page<any>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
+  selected = [];
+  toolbar = {};
 
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
@@ -38,26 +41,41 @@ export class TipsComponent extends BasePage implements OnInit {
       { key: 'priority', name: '权重', sortable: true, numeric: true, cellTemplate: this.weightImpl },
       { key: 'version', name: '版本号', sortable: true, numeric: true }
     ];
+    this.toolbar = { persistentButtons: [{ name: '添加' }],  iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep'}]};
 
-    this.search();
+    this.subscribeQuery(this.load());
   }
 
-  search() {
-    this.startQuery();
-    return this.tipsService.query(this.pageable).$observable
-      .subscribe((page) => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
-  }
-
-  loadPage(pageable: Pageable) {
+  load(pageable = this.pageable): Observable<Page<any>> {
     this.pageable = pageable;
-    this.search();
+
+    const observable = this.tipsService.query(this.pageable).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
   }
+  reload(): Observable<Page<any>>{
+  return this.subscribeQuery(this.load());
+}
 
   openViewDialog(event) {
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
+
+  }
+
+  select(selected){
+    this.selected = selected;
+  }
+
+  add(){
+
+  }
+  remove(){
+
+  }
+  removeAll(){
 
   }
 }

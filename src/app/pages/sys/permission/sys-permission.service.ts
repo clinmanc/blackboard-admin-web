@@ -5,6 +5,7 @@ import { RestClient } from '../../../shared/rest-client';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { environment } from '../../../../environments/environment';
+import {RequestMethod} from "@angular/http";
 
 class QueryInput extends Pageable { }
 
@@ -16,6 +17,11 @@ export class SysPermissionService extends RestClient {
 
   @ResourceAction()
   query: ResourceMethod<QueryInput, any>;
+
+  @ResourceAction({
+    method: RequestMethod.Delete
+  })
+  remove: ResourceMethod<{ permissionId: string }, any>;
 
   getUrl(methodOptions?: any): string | Promise<string> {
     return environment.authUrl + this.getResourcePath();

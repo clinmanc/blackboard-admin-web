@@ -1,30 +1,8 @@
 <md-card>
-  <md-card-header>
-    <div class="app-row-reverse-container">
-      <div class="app-item-container">
-        <button md-icon-button [mdMenuTriggerFor]="moreMenu">
-          <md-icon>more_vert</md-icon>
-        </button>
-        <md-menu #moreMenu>
-          <button md-menu-item routerLink="/message/announcement/create">
-            <md-icon>create</md-icon>
-            <span>新建</span>
-          </button>
-          <button md-menu-item>
-            <md-icon>delete_sweep</md-icon>
-            <span>清空</span>
-          </button>
-        </md-menu>
-      </div>
-      <div class="app-item-container">
-        <button md-icon-button>
-          <md-icon>refresh</md-icon>
-        </button>
-      </div>
-    </div>
-  </md-card-header>
+  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
+  <app-toolbar [selected]="selected" [toolbar]="toolbar"></app-toolbar>
   <md-card-content>
-    <app-table [columns]="columns" [data]="data" [selectable]="true" class="app-line-limit-length">
+    <app-table [columns]="columns" [data]="data" [selectable]="true" (select)="select($event)" class="app-line-limit-length">
       <ng-template #previewImpl let-value="value" let-row="row">
         <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
       </ng-template>
