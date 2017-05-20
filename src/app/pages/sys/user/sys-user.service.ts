@@ -19,10 +19,20 @@ export class SysUserService extends RestClient {
   query: ResourceMethod<QueryInput, Page<SysUser>>;
 
   @ResourceAction({
-    path: '/{:userId}',
-    method: RequestMethod.Delete
+    method: RequestMethod.Post
   })
-  remove: ResourceMethod<{ userId: string }, Page<SysUser>>;
+  save: ResourceMethod<SysUser, SysUser>;
+
+  @ResourceAction({
+    path: '/batch',
+    method: RequestMethod.Patch
+  })
+  removeInBatch: ResourceMethod<{ method: string, data: SysUser[] }, void>;
+
+  @ResourceAction({
+    method: RequestMethod.Patch
+  })
+  removeAll: ResourceMethod<void, void>;
 
   getUrl(methodOptions?: any): string | Promise<string> {
     return environment.authUrl + this.getResourcePath();

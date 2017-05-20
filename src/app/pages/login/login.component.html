@@ -15,9 +15,7 @@
           <md-checkbox class="form-row-item" formControlName="rememberMe">记住我</md-checkbox>
           <a routerLink="/dashboard">忘记密码</a>
         </div>
-        <button class="form-row-item" type="submit" md-raised-button color="primary" [disabled]="!loginForm.valid" *ngIf="!authService.isLoggedIn">登录
-        </button>
-        <button md-raised-button color="primary" (click)="logout()" *ngIf="authService.isLoggedIn">登出</button>
+        <button class="form-row-item" type="submit" md-raised-button color="primary" [disabled]="!loginForm.valid">登录</button>
       </form>
     </md-card-content>
   </md-card>

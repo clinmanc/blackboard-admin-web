@@ -6,7 +6,7 @@ import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
-import {Observable} from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-sys-role',
@@ -30,23 +30,25 @@ export class SysRoleComponent extends BasePage implements OnInit {
       { key: 'name', name: '角色', sortable: true },
       { key: 'code', name: '权限码', sortable: true }
     ];
-    this.toolbar = { persistentButtons: [{ name: '添加' }],  iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep'}]};
+    this.toolbar = {
+      persistentButtons: [{ name: '添加' }], iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep' }]
+    };
 
     this.subscribeQuery(this.load());
   }
 
   load(pageable = this.pageable): Observable<Page<any>> {
-  this.pageable = pageable;
+    this.pageable = pageable;
 
-  const observable = this.sysRoleService.query(this.pageable).$observable;
+    const observable = this.sysRoleService.query(this.pageable).$observable;
 
-  observable.subscribe((page) => this.page = page);
+    observable.subscribe((page) => this.page = page);
 
-  return observable;
-}
+    return observable;
+  }
 
-  reload(): Observable<Page<any>>{
+  reload(): Observable<Page<any>> {
     return this.subscribeQuery(this.load());
   }
 
@@ -60,18 +62,18 @@ export class SysRoleComponent extends BasePage implements OnInit {
     });
   }
 
-  select(selected){
+  select(selected) {
     this.selected = selected;
   }
 
-  add(){
+  add() {
 
   }
 
-  remove(){
+  remove() {
 
   }
-  removeAll(){
+  removeAll() {
 
   }
 }

@@ -28,10 +28,12 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
     name: '老师'
   }];
 
-  constructor(protected snackBar: MdSnackBar,
+  constructor(
+    snackBar: MdSnackBar,
+    private formBuilder: FormBuilder,
     private location: Location,
-    private announcementMessageService: AnnouncementMessageService,
-    private formBuilder: FormBuilder) {
+    private announcementMessageService: AnnouncementMessageService
+  ) {
     super(snackBar);
   }
 
@@ -53,7 +55,6 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
 
   create() {
     const formModel = this.createForm.value;
-
 
     this.startQuery();
     return this.announcementMessageService.save({

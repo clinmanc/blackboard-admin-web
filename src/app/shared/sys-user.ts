@@ -1,5 +1,6 @@
 export class SysUser {
-  userId: string;
+  userId?: string;
   username: string;
-  roles: any[];
+  plaintextPassword?: string;
+  roles?: any[];
 }

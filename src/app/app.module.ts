@@ -57,6 +57,7 @@ import { CommonMessageComponent } from './pages/message/common/common-message.co
 import { GrowthRecordComponent } from './pages/growth/record/growth-record.component';
 import { RegisteredUserStatisticsComponent } from './pages/user/registered-statistics/registered-user-statistics.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { SysUserCreateDialogComponent } from './pages/sys/user/create/sys-user-create-dialog.component';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -109,7 +110,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     GrowthRecordComponent,
     RegisteredUserStatisticsComponent,
     UserLocationStatisticsComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    SysUserCreateDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -132,7 +134,9 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
     AlertDialogComponent,
     ConfirmDialogComponent,
-    ItemListDialogComponent],
+    ItemListDialogComponent,
+    SysUserCreateDialogComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

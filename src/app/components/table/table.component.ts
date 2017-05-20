@@ -7,23 +7,28 @@ import { translateTemplates } from './column/column-helper';
 import { TableColumn } from './table-column';
 import * as _ from "lodash";
 
+const ADD_ROW = 'ADD_ROW';
+const REMOVE_ROW = 'REMOVE_ROW';
+const TOGGLE_SELECTED = 'TOGGLE_SELECTED';
+const TOGGLE_ALL = 'TOGGLE_ALL';
+const FETCH_FROM_API = 'FETCH_FROM_API';
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnChanges{
+export class TableComponent{
 
   @Input()
   columns: TableColumn[] = [];
-  @Input()
-  data: any[] = [];
   @Input()
   selectable: false;
   @Output()
   select = new EventEmitter<any>();
 
-  _selectAll = false;
+  _data: any[] = [];
+  store = [];
   selected = [];
 
   _columnTemplates: QueryList<TableColumnDirective>;
@@ -43,43 +48,40 @@ export class TableComponent implements OnChanges{
     }
   }
 
-  constructor() { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if(changes.data){
-      this.selectAll = false;
-    }
+  @Input()
+  set data(data: any[]){
+    this._data = data || [];
+    this.store = this._data.map(row => {
+      return {
+        selected: false,
+        reference: row
+      };
+    });
+    this.selected = [];
+    this.select.emit(this.selected);
   }
 
-  set selectAll(selectedAll: boolean){
-    this._selectAll = selectedAll;
-    if(selectedAll){
-      this.selected = (this.data || []).concat();
+  get data(){
+    return this._data;
+  }
+
+  constructor() { }
+
+  onSelectAll(event){
+    if(event.checked){
+      this.store.forEach(row => row.selected = true);
+      this.selected = this.store.filter(row => row.selected).map( row => row.reference);
     } else {
+      this.store.forEach(row => row.selected = false);
       this.selected = [];
     }
 
     this.select.emit(this.selected);
   }
 
-  get selectAll(): boolean{
-    return this._selectAll;
-  }
-
-  isRowSelected(row): boolean{
-    return this.selected.includes(row);
-  }
-
   onRowSelect(event, row){
-    if(event.checked){
-      this.selected.push(row);
-      if(this.selected.length === (this.data || []).length){
-        this._selectAll = true;
-      }
-    } else {
-      _.remove(this.selected, row);
-      this._selectAll = false;
-    }
+    row.selected = event.checked;
+    this.selected = this.store.filter(row => row.selected).map( row => row.reference);
 
     this.select.emit(this.selected);
   }

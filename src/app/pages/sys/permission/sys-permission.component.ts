@@ -6,7 +6,7 @@ import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
 import { SysPermissionService } from './sys-permission.service';
-import {Observable} from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-sys-permission',
@@ -36,8 +36,10 @@ export class SysPermissionComponent extends BasePage implements OnInit {
       { key: 'description', name: '描述', sortable: true },
       { key: 'url', name: '地址', sortable: true }
     ];
-    this.toolbar = { persistentButtons: [{ name: '添加' }],  iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep'}]};
+    this.toolbar = {
+      persistentButtons: [{ name: '添加' }], iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep' }]
+    };
 
     this.subscribeQuery(this.load());
   }
@@ -52,7 +54,7 @@ export class SysPermissionComponent extends BasePage implements OnInit {
     return observable;
   }
 
-  reload(): Observable<Page<any>>{
+  reload(): Observable<Page<any>> {
     return this.subscribeQuery(this.load());
   }
 
@@ -66,14 +68,14 @@ export class SysPermissionComponent extends BasePage implements OnInit {
     });
   }
 
-  select(selected){
+  select(selected) {
     this.selected = selected;
   }
 
-  add(){
+  add() {
 
   }
-  remove(row){
+  remove(row) {
     let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
     dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
     dialogRef.afterClosed().subscribe((result) => {
@@ -83,7 +85,7 @@ export class SysPermissionComponent extends BasePage implements OnInit {
       }
     });
   }
-  removeAll(){
+  removeAll() {
 
   }
 }

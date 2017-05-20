@@ -6,7 +6,7 @@ import { TableColumn } from '../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { TipsService } from './tips.service';
-import {Observable} from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-tips',
@@ -41,8 +41,10 @@ export class TipsComponent extends BasePage implements OnInit {
       { key: 'priority', name: '权重', sortable: true, numeric: true, cellTemplate: this.weightImpl },
       { key: 'version', name: '版本号', sortable: true, numeric: true }
     ];
-    this.toolbar = { persistentButtons: [{ name: '添加' }],  iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep'}]};
+    this.toolbar = {
+      persistentButtons: [{ name: '添加' }], iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep' }]
+    };
 
     this.subscribeQuery(this.load());
   }
@@ -56,26 +58,26 @@ export class TipsComponent extends BasePage implements OnInit {
 
     return observable;
   }
-  reload(): Observable<Page<any>>{
-  return this.subscribeQuery(this.load());
-}
+  reload(): Observable<Page<any>> {
+    return this.subscribeQuery(this.load());
+  }
 
   openViewDialog(event) {
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
 
   }
 
-  select(selected){
+  select(selected) {
     this.selected = selected;
   }
 
-  add(){
+  add() {
 
   }
-  remove(){
+  remove() {
 
   }
-  removeAll(){
+  removeAll() {
 
   }
 }

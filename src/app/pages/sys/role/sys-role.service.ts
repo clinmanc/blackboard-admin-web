@@ -5,6 +5,7 @@ import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../../shared/rest-client';
 import { Pageable } from '../../../shared/pageable';
 import { environment } from '../../../../environments/environment';
+import { Page } from '../../../shared/page';
 
 export class QueryInput extends Pageable { }
 
@@ -14,11 +15,18 @@ export class QueryInput extends Pageable { }
 @Injectable()
 export class SysRoleService extends RestClient {
   @ResourceAction()
-  query: ResourceMethod<QueryInput, any>;
+  query: ResourceMethod<QueryInput, Page<any>>;
+
+  @ResourceAction({
+    path: '/all',
+    isArray: true
+  })
+  queryAll: ResourceMethod<QueryInput, any[]>;
+
   @ResourceAction({
     method: RequestMethod.Delete
   })
-  remove: ResourceMethod<{ userId: string }, any>;
+  remove: ResourceMethod<{ userId: string }, void>;
 
   getUrl(methodOptions?: any): string | Promise<string> {
     return environment.authUrl + this.getResourcePath();

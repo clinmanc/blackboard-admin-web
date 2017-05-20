@@ -1,0 +1,24 @@
+<h1 md-dialog-title>添加用户</h1>
+<form md-dialog-content [formGroup]="createForm" novalidate (ngSubmit)="create()">
+  <md-error *ngFor="let error of errors">{{error}}</md-error>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="username" type="text" placeholder="用户名" autocomplete="off" required minlength="4" maxlength="16">
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="password" type="text" placeholder="密码" autocomplete="off" required minlength="4" maxlength="16">
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-select placeholder="角色" formControlName="role" fxFlex>
+      <md-option *ngFor="let role of roles" [value]="role.roleId">{{ role.name }}</md-option>
+    </md-select>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid" fxFlex>
+      创建
+    </button>
+  </div>
+</form>

@@ -14,7 +14,9 @@ interface ToolbarActionButton {
 })
 export class ToolbarComponent implements OnInit {
   @Input()
-  toolbar: { persistentButtons?: ToolbarActionButton [], iconButtons?: ToolbarActionButton [], contextualIconButtons?: ToolbarActionButton [], menus?: ToolbarActionButton []};
+  toolbar: {
+    persistentButtons?: ToolbarActionButton [], iconButtons?: ToolbarActionButton [],
+    contextualIconButtons?: ToolbarActionButton [], menus?: ToolbarActionButton []};
   @Input()
   selected: any[] = [];
 

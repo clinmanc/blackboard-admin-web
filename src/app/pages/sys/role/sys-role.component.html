@@ -1,8 +1,8 @@
 <md-card>
-  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
-  <app-toolbar [selected]="selected" [toolbar]="toolbar"></app-toolbar>
+  <md-progress-bar class='app-progress-bar-top' mode='query' *ngIf='inQuery'></md-progress-bar>
+  <app-toolbar [selected]='selected' [toolbar]='toolbar'></app-toolbar>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content" [selectable]="true" (select)="select($event)"></app-table>
-    <app-pagination [page]="page" (change)="load($event)"></app-pagination>
+    <app-table [columns]='columns' [data]='page.content' [selectable]='true' (select)='select($event)'></app-table>
+    <app-pagination [page]='page' (change)='load($event)'></app-pagination>
   </md-card-content>
 </md-card>

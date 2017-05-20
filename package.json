@@ -24,8 +24,6 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
-    "@types/bcryptjs": "^2.4.0",
-    "@types/lodash": "^4.14.64",
     "bcryptjs": "^2.4.3",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.4.1",
@@ -37,10 +35,12 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/cli": "1.0.2",
+    "@angular/cli": "^1.0.4",
     "@angular/compiler-cli": "^4.0.0",
+    "@types/bcryptjs": "^2.4.0",
     "@types/echarts": "0.0.6",
     "@types/jasmine": "2.5.38",
+    "@types/lodash": "^4.14.64",
     "@types/node": "~6.0.60",
     "codelyzer": "~2.0.0",
     "jasmine-core": "~2.5.2",
