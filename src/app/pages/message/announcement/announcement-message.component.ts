@@ -42,8 +42,8 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
       iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [{ name: '删除', icon: 'delete' }],
-      menus: [{ name: '清空', icon: 'delete_sweep' }]
+      contextualIconButtons: [{ name: '删除', icon: 'delete', action: this.remove.bind(this) }],
+      menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
     this.subscribeQuery(this.load());
@@ -66,16 +66,6 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
 
   }
 
-  openRemoveAllConfirmDialog(event?: any) {
-    let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
-    dialogRef.componentInstance.content = '清空后不可恢复，确认清空吗？';
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'ok') {
-        // alert(result);
-      }
-    });
-  }
-
   select(selected) {
     this.selected = selected;
   }
@@ -83,17 +73,28 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
   add() {
     this.router.navigate(['/message/announcement/create']);
   }
+
   remove() {
-    let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
     dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'ok') {
-        // this.announcementMessageService.remove({ permissionId: row.permissionId }).$observable
-        //   .subscribe(() => this.reload());
+        this.announcementMessageService.removeInBatch({
+          method: 'DELETE',
+          data: this.selected.map(message => message.messageId)
+        }).$observable
+          .subscribe(this.reload.bind(this), this.handleError.bind(this));
       }
     });
   }
   removeAll() {
-
+    const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = '清空后不可恢复，确认清空吗？';
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.announcementMessageService.removeAll().$observable
+          .subscribe(this.reload.bind(this), this.handleError.bind(this));
+      }
+    });
   }
 }

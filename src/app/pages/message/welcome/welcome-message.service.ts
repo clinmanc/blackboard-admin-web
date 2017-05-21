@@ -21,18 +21,29 @@ export class WelcomeMessageService extends RestClient {
     isArray: true,
     map: (item: any) => {
       return {
+        messageId: item.message.id,
         receiverType: ReceiverType[item.welcomeMessage.receiverType],
         title: item.message.title,
         content: item.message.content,
         createTime: new Date(item.welcomeMessage.createTime).toLocaleDateString()
-      }
+      };
     }
   })
   query: ResourceMethod<any, Page<any>>;
 
   @ResourceAction({
-    path: '/{:token}',
     method: RequestMethod.Post
   })
-  save: ResourceMethod<any, Page<any>>;
+  save: ResourceMethod<any, any>;
+
+  @ResourceAction({
+    path: '/batch',
+    method: RequestMethod.Patch
+  })
+  removeInBatch: ResourceMethod<{ method: string, data: string[] }, void>;
+
+  @ResourceAction({
+    method: RequestMethod.Delete
+  })
+  removeAll: ResourceMethod<void, void>;
 }

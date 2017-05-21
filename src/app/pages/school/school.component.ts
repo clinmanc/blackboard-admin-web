@@ -33,7 +33,7 @@ export class SchoolComponent extends BasePage implements OnInit {
   ngOnInit() {
     this.columns = [
       { key: 'name', name: '学校', sortable: true },
-      { key: 'members', name: '注册用户', sortable: true, numeric: true, cellTemplate: this.viewImpl }
+      { key: 'members', name: '注册人员', sortable: true, cellTemplate: this.viewImpl }
     ];
     this.toolbar = {
       persistentButtons: [],
@@ -60,6 +60,10 @@ export class SchoolComponent extends BasePage implements OnInit {
   }
 
   openViewDialog(event) {
-
+    const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
+    dialogRef.componentInstance.title = '人员列表';
+    dialogRef.componentInstance.subscribeQuery(this.schoolService.queryMembers({
+      school: event.row.name
+    }).$observable).subscribe(items => dialogRef.componentInstance.items = items);
   }
 }

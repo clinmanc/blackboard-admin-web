@@ -4,6 +4,7 @@ import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { Page } from '../../shared/page';
+import { UserHelper } from '../../helper/user-helper';
 
 export class QueryInput extends Pageable {
 
@@ -22,10 +23,22 @@ export class SchoolService extends RestClient {
         return {
           name: item,
           members: '注册人员'
-        }
+        };
       });
       return page;
     }
   })
-  query: ResourceMethod<QueryInput, any>;
+  query: ResourceMethod<QueryInput, Page<any>>;
+
+  @ResourceAction({
+    path: '/{:school}/members',
+    isArray: true,
+    map: (item: any) => {
+      return {
+        id: item.id,
+        name: UserHelper.getDisplayName(item)
+      };
+    }
+  })
+  queryMembers: ResourceMethod<{ school: string }, any[]>;
 }
