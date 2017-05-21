@@ -1,9 +1,10 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../base-page';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
 import { TableColumn } from '../../components/table/table-column';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { FeedbackService } from './feedback.service';
 
@@ -18,13 +19,16 @@ export class FeedbackComponent extends BasePage implements OnInit {
   page = new Page<any>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
+  toolbar = {};
 
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
-  constructor(protected snackBar: MdSnackBar,
+  constructor(
+    snackBar: MdSnackBar,
     private dialog: MdDialog,
-    private feedbackService: FeedbackService) {
+    private feedbackService: FeedbackService
+  ) {
     super(snackBar);
   }
 
@@ -35,22 +39,32 @@ export class FeedbackComponent extends BasePage implements OnInit {
       { key: 'advice', name: '反馈意见', cellTemplate: this.viewImpl, maxWidth: 160 },
       { key: 'createTime', name: '反馈时间', sortable: true, numeric: true }
     ];
+    this.toolbar = {
+      persistentButtons: [],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [],
+      menus: []
+    };
 
     this.search();
   }
 
   search() {
-    this.startQuery();
-    return this.feedbackService.query(this.pageable).$observable
-      .subscribe((page) => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
+    this.subscribeQuery(this.load(new Pageable()));
   }
 
-  loadPage(pageable: Pageable) {
+  load(pageable = this.pageable): Observable<Page<any>> {
     this.pageable = pageable;
-    this.search();
+
+    const observable = this.feedbackService.query(this.pageable).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
+  }
+
+  reload(): Observable<Page<any>> {
+    return this.subscribeQuery(this.load());
   }
 
   openViewDialog(event) {

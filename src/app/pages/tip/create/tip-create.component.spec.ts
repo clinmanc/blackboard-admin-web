@@ -1,25 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TipsComponent } from './tips.component';
+import { TipCreateComponent } from './tip-create.component';
 
-describe('TipsComponent', () => {
-  let component: TipsComponent;
-  let fixture: ComponentFixture<TipsComponent>;
+describe('TipCreateComponent', () => {
+  let component: TipCreateComponent;
+  let fixture: ComponentFixture<TipCreateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TipsComponent ]
+      declarations: [ TipCreateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TipsComponent);
+    fixture = TestBed.createComponent(TipCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 });

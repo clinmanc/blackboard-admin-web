@@ -6,6 +6,7 @@ import { RestClient } from '../../../shared/rest-client';
 import { Pageable } from '../../../shared/pageable';
 import { environment } from '../../../../environments/environment';
 import { Page } from '../../../shared/page';
+import { SysRole } from '../../../shared/sys-role';
 
 export class QueryInput extends Pageable { }
 
@@ -15,18 +16,35 @@ export class QueryInput extends Pageable { }
 @Injectable()
 export class SysRoleService extends RestClient {
   @ResourceAction()
-  query: ResourceMethod<QueryInput, Page<any>>;
+  query: ResourceMethod<QueryInput, Page<SysRole>>;
+
+  @ResourceAction({
+    method: RequestMethod.Post
+  })
+  save: ResourceMethod<SysRole, SysRole>;
 
   @ResourceAction({
     path: '/all',
     isArray: true
   })
-  queryAll: ResourceMethod<QueryInput, any[]>;
+  queryAll: ResourceMethod<QueryInput, SysRole[]>;
 
   @ResourceAction({
     method: RequestMethod.Delete
   })
   remove: ResourceMethod<{ userId: string }, void>;
+
+  @ResourceAction({
+    path: '/batch',
+    method: RequestMethod.Patch
+  })
+  removeInBatch: ResourceMethod<{ method: string, data: string[] }, void>;
+
+  @ResourceAction({
+    method: RequestMethod.Delete
+  })
+  removeAll: ResourceMethod<void, void>;
+
 
   getUrl(methodOptions?: any): string | Promise<string> {
     return environment.authUrl + this.getResourcePath();

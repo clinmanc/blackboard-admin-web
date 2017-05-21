@@ -1,6 +1,6 @@
 import { Http, Headers, Request, Response } from '@angular/http';
 import { Router } from '@angular/router';
-import {Resource, ResourceActionBase} from 'ngx-resource';
+import { Resource, ResourceActionBase } from 'ngx-resource';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
@@ -16,7 +16,7 @@ export class RestClient extends Resource {
   };
 
 
-  requestInterceptor(req: Request, methodOptions?: ResourceActionBase): Request{
+  requestInterceptor(req: Request, methodOptions?: ResourceActionBase): Request {
     req.withCredentials = true;
     return req;
   }

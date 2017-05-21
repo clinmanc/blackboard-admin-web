@@ -18,71 +18,48 @@ export class SchoolComponent extends BasePage implements OnInit {
   page = new Page<any>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
+  toolbar = {};
 
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
-  constructor(protected snackBar: MdSnackBar,
+  constructor(
+    snackBar: MdSnackBar,
     private schoolService: SchoolService,
-    private dialog: MdDialog) {
+    private dialog: MdDialog
+  ) {
     super(snackBar);
   }
 
   ngOnInit() {
-    this.search();
-
     this.columns = [
       { key: 'name', name: '学校', sortable: true },
       { key: 'members', name: '注册用户', sortable: true, numeric: true, cellTemplate: this.viewImpl }
     ];
+    this.toolbar = {
+      persistentButtons: [],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [],
+      menus: []
+    };
+
+    this.subscribeQuery(this.load());
   }
 
-  search() {
+  load(pageable = this.pageable): Observable<Page<any>> {
+    this.pageable = pageable;
 
-    this.startQuery();
-    return this.schoolService.query(this.pageable).$observable
-      .subscribe((page) => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
+    const observable = this.schoolService.query(this.pageable).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
+  }
+
+  reload(): Observable<Page<any>> {
+    return this.subscribeQuery(this.load());
   }
 
   openViewDialog(event) {
-    const type = event.column.key;
 
-    let result: Observable<any>;
-    let title;
-    if (type === 'members') {
-      result = this.schoolService.query().$observable;
-      title = '成员列表';
-    } else if (type === 'messages') {
-      result = this.schoolService.query().$observable;
-      title = '消息列表';
-    } else {
-      return;
-    }
-
-    let dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.startQuery();
-
-    result.map((items) => {
-      let result = [];
-      items.forEach((item) => result.push([
-        item.inviteeId || item.classroomId || item.userId,
-        item.inviteeName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`) || item.userName
-      ]));
-      return result
-    }).subscribe((items) => {
-      dialogRef.componentInstance.completeQuery();
-      dialogRef.componentInstance.items = items;
-    }, () => {
-      dialogRef.componentInstance.completeQuery();
-      this.handleError.bind(this);
-    })
-  }
-
-  switchPage(pageable: Pageable) {
-    this.pageable = pageable;
-    this.search();
   }
 }

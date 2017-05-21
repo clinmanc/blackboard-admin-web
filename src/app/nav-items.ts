@@ -50,9 +50,8 @@ export const NAV_ITEMS: NavItem[] = [
     {
         name: '系统管理', icon: 'settings', roles: ['ROLE_ADMIN'],
         children: [
-            { name: '系统用户管理', url: '/sys/user' },
             { name: 'APP版本管理', url: '/blackboard/version' },
-            { name: 'Tips管理', url: '/tips' },
+            { name: 'Tips管理', url: '/tip' },
             { name: '服务器检测', url: '/server/detection' },
             { name: '热门成长标签管理', url: '/growth/tag' }
         ]

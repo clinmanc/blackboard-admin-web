@@ -20,7 +20,7 @@ export class SysUserComponent extends BasePage implements OnInit {
   columns: TableColumn[] = [];
   page = new Page<SysUser>();
   pageable = new Pageable();
-  selected = [];
+  selected: SysUser[] = [];
   toolbar = {};
 
   @ViewChild('chipListImpl') chipListImpl: TemplateRef<any>;
@@ -80,8 +80,11 @@ export class SysUserComponent extends BasePage implements OnInit {
     dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'ok') {
-        this.sysUserService.removeInBatch({ method: 'DELETE', data: this.selected.map(user => user.userId) }).$observable
-          .subscribe(() => this.reload(), this.handleError.bind(this));
+        this.sysUserService.removeInBatch({
+          method: 'DELETE',
+          data: this.selected.map(user => user.userId)
+        }).$observable
+          .subscribe(this.reload.bind(this), this.handleError.bind(this));
       }
     });
   }
@@ -92,10 +95,7 @@ export class SysUserComponent extends BasePage implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'ok') {
         this.sysUserService.removeAll().$observable
-          .subscribe(
-          () => this.load(),
-          (err) => this.handleError.bind(this)
-          );
+          .subscribe(this.reload.bind(this), this.handleError.bind(this));
       }
     });
   }

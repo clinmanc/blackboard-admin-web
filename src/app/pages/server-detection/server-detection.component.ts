@@ -1,10 +1,8 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../base-page';
-import { Page } from '../../shared/page';
-import { Pageable } from '../../shared/pageable';
 import { TableColumn } from '../../components/table/table-column';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
+import { MdSnackBar } from '@angular/material';
 import { ServerDetectionService } from './server-detection.service';
 
 @Component({
@@ -17,9 +15,9 @@ export class ServerDetectionComponent extends BasePage implements OnInit {
 
   columns: TableColumn[] = [];
   data = [];
+  toolbar = {};
 
   constructor(protected snackBar: MdSnackBar,
-    private dialog: MdDialog,
     private serverDetectionService: ServerDetectionService) {
     super(snackBar);
   }
@@ -30,16 +28,26 @@ export class ServerDetectionComponent extends BasePage implements OnInit {
       { key: 'url', name: '访问链接' },
       { key: 'status', name: '状态', sortable: true }
     ];
+    this.toolbar = {
+      persistentButtons: [],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [],
+      menus: []
+    };
 
-    this.search();
+    this.subscribeQuery(this.load());
   }
 
-  search() {
-    this.startQuery();
-    return this.serverDetectionService.query().$observable
-      .subscribe((data) => {
-        this.data = data;
-        this.completeQuery();
-      }, this.handleError.bind(this));
+  load(): Observable<any[]> {
+
+    const observable = this.serverDetectionService.query().$observable;
+
+    observable.subscribe((data) => this.data = data);
+
+    return observable;
+  }
+
+  reload(): Observable<any[]> {
+    return this.subscribeQuery(this.load());
   }
 }

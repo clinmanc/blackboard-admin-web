@@ -40,8 +40,10 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
       { key: 'createTime', name: '创建时间', sortable: true, numeric: true }
     ];
     this.toolbar = {
-      persistentButtons: [{ name: '添加', action: this.add.bind(this) }], iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep' }]
+      persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete' }],
+      menus: [{ name: '清空', icon: 'delete_sweep' }]
     };
 
     this.subscribeQuery(this.load());

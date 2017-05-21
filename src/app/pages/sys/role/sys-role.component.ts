@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { SysRoleService } from './sys-role.service';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
+import { SysRole } from '../../../shared/sys-role';
+import { SysRoleService } from './sys-role.service';
+import { SysRoleCreateComponent } from './create/sys-role-create.component';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-sys-role',
@@ -15,10 +17,10 @@ import { Observable } from 'rxjs/Observable';
   providers: [SysRoleService]
 })
 export class SysRoleComponent extends BasePage implements OnInit {
-  page = new Page<any>();
+  page = new Page<SysRole>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
-  selected = [];
+  selected: SysRole[] = [];
   toolbar = {};
 
   constructor(protected snackBar: MdSnackBar, private sysRoleService: SysRoleService, private dialog: MdDialog) {
@@ -31,14 +33,16 @@ export class SysRoleComponent extends BasePage implements OnInit {
       { key: 'code', name: '权限码', sortable: true }
     ];
     this.toolbar = {
-      persistentButtons: [{ name: '添加' }], iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep' }]
+      persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete', action: this.remove.bind(this) }],
+      menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
     this.subscribeQuery(this.load());
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  load(pageable = this.pageable): Observable<Page<SysRole>> {
     this.pageable = pageable;
 
     const observable = this.sysRoleService.query(this.pageable).$observable;
@@ -52,28 +56,41 @@ export class SysRoleComponent extends BasePage implements OnInit {
     return this.subscribeQuery(this.load());
   }
 
-  openConfirmDialog(event?: any) {
-    let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
-    dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'ok') {
-        alert(result);
-      }
-    });
-  }
-
   select(selected) {
     this.selected = selected;
   }
 
   add() {
-
+    const dialogRef: MdDialogRef<SysRoleCreateComponent> = this.dialog.open(SysRoleCreateComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.reload();
+      }
+    });
   }
 
   remove() {
-
+    const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.sysRoleService.removeInBatch({
+          method: 'DELETE',
+          data: this.selected.map(role => role.roleId)
+        }).$observable
+          .subscribe(this.reload.bind(this), this.handleError.bind(this));
+      }
+    });
   }
-  removeAll() {
 
+  removeAll() {
+    const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = '清空后不可恢复，确认清空吗？';
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.sysRoleService.removeAll().$observable
+          .subscribe(this.reload.bind(this), this.handleError.bind(this));
+      }
+    });
   }
 }

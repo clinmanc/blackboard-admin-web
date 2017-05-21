@@ -1,0 +1,18 @@
+<h1 md-dialog-title>添加成长标签</h1>
+<form md-dialog-content [formGroup]="createForm" novalidate (ngSubmit)="create()">
+  <md-error>{{error}}</md-error>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="name" type="url" placeholder="标签名称" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <h6>权重</h6>
+  <div fxLayout="column" fxLayout="row">
+    <md-slider formControlName="weight" min="0" max="10" step="1" [value]="value" thumbLabel fxFlex></md-slider>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid" fxFlex>
+      创建
+    </button>
+  </div>
+</form>

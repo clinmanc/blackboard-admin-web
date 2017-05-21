@@ -18,7 +18,7 @@ import { WelcomeMessageComponent } from './message/welcome/welcome-message.compo
 import { WelcomeMessageCreateComponent } from './message/welcome/create/welcome-message-create.component';
 import { ClassroomAssociatedComponent } from './classroom/associated/classroom-associated.component';
 import { BlackboardVersionComponent } from './blackboard-version/blackboard-version.component';
-import { TipsComponent } from './tips/tips.component';
+import { TipComponent } from './tip/tip.component';
 import { ServerDetectionComponent } from './server-detection/server-detection.component';
 import { GrowthTagComponent } from './growth/tag/growth-tag.component';
 import { GrowthRecordComponent } from './growth/record/growth-record.component';
@@ -163,11 +163,11 @@ export const homeRoutes: Routes = [
     component: BlackboardVersionComponent
   },
   {
-    path: 'tips',
+    path: 'tip',
     data: {
       title: 'Tips管理'
     },
-    component: TipsComponent
+    component: TipComponent
   },
   {
     path: 'server/detection',

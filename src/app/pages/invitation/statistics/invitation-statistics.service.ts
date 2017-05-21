@@ -3,7 +3,6 @@ import { Pageable } from '../../../shared/pageable';
 import { RestClient } from '../../../shared/rest-client';
 import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
-import { RequestMethod } from '@angular/http';
 
 export class QueryInput extends Pageable {
   invitationCodes?: string;
@@ -41,9 +40,13 @@ export class InvitationStatisticsService extends RestClient {
   })
   queryMembers: ResourceMethod<QueryInput, any[]>;
 
-  @ResourceAction({
-    path: '/export',
-    method: RequestMethod.Post
-  })
-  exportRecords: ResourceMethod<QueryInput, any>;
+  exportRecords(params) {
+    let url = '';
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        url += (url && '&') + key + '=' + params[key];
+      }
+    }
+    window.open(super.getUrl() + '/invitation/export?' + url);
+  }
 }

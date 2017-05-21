@@ -21,6 +21,7 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
   page = new Page<any>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
+  toolbar = {};
 
   constructor(
     protected snackBar: MdSnackBar,
@@ -39,34 +40,43 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
       { key: 'invitee', name: '被邀请老师（电话）', sortable: true },
       { key: 'invitationTime', name: '邀请时间', sortable: true, numeric: true }
     ];
+    this.toolbar = {
+      persistentButtons: [],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [],
+      menus: []
+    };
+
+    this.search();
   }
 
   buildForm(): void {
 
     this.searchForm = this.formBuilder.group({
-      invitationCode: ['150608', [Validators.maxLength(6)]]
+      invitationCode: ['', [Validators.maxLength(6)]]
     });
   }
 
-
   search() {
+    this.subscribeQuery(this.load(new Pageable()));
+  }
+
+  load(pageable = this.pageable): Observable<Page<any>> {
+    this.pageable = pageable;
     const formModel = this.searchForm.value;
     const queryInput = {
       keyword: formModel.invitationCode
     };
 
-    this.startQuery();
-    this.invitationRecordService.query(Object.assign(queryInput, this.pageable)).$observable
-      .subscribe(page => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
+    const observable = this.invitationRecordService.query(Object.assign(queryInput, this.pageable)).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
   }
 
-  loadPage(pageable: Pageable = new Pageable()) {
-    this.pageable = pageable;
-
-    this.search();
+  reload(): Observable<Page<any>> {
+    return this.subscribeQuery(this.load());
   }
 
   openViewDialog(event) {

@@ -27,10 +27,10 @@ export class SysUserService extends RestClient {
     path: '/batch',
     method: RequestMethod.Patch
   })
-  removeInBatch: ResourceMethod<{ method: string, data: SysUser[] }, void>;
+  removeInBatch: ResourceMethod<{ method: string, data: string[] }, void>;
 
   @ResourceAction({
-    method: RequestMethod.Patch
+    method: RequestMethod.Delete
   })
   removeAll: ResourceMethod<void, void>;
 

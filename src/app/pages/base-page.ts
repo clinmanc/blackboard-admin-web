@@ -27,20 +27,9 @@ export class BasePage {
   handleError(err: any) {
     this.completeQuery();
 
-    let message;
+    const json: any = err._body && err.json();
+    const error = json && json.message || '操作失败';
 
-    if (err.status === 400) {
-      message = '错误请求';
-    } else if (err.status === 401) {
-      message = '需要授权';
-    } else if (err.status === 403) {
-      message = '禁止访问';
-    } else if (err.status === 500) {
-      message = '服务器错误';
-    } else {
-      message = err.message || `${err.status || ''} 查询失败`;
-    }
-
-    this.snackBar.open(message, '知道了', { duration: 5000 });
+    this.snackBar.open(error, '知道了', { duration: 5000 });
   }
 }

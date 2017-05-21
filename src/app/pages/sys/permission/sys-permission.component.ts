@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
-import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
 import { SysPermissionService } from './sys-permission.service';
-import { Observable } from 'rxjs/Observable';
+import { SysPermissionCreateComponent } from './create/sys-permission-create.component';
+import { SysPermission } from '../../../shared/sys-permission';
+import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
 
 @Component({
   selector: 'app-sys-permission',
@@ -16,10 +18,10 @@ import { Observable } from 'rxjs/Observable';
 })
 export class SysPermissionComponent extends BasePage implements OnInit {
 
-  page = new Page<any>();
-  pageable = new Pageable();
   columns: TableColumn[] = [];
-  selected = [];
+  page = new Page<SysPermission>();
+  pageable = new Pageable();
+  selected: SysPermission[] = [];
   toolbar = {};
 
   constructor(
@@ -37,14 +39,16 @@ export class SysPermissionComponent extends BasePage implements OnInit {
       { key: 'url', name: '地址', sortable: true }
     ];
     this.toolbar = {
-      persistentButtons: [{ name: '添加' }], iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [{ name: '删除', icon: 'delete' }], menus: [{ name: '清空', icon: 'delete_sweep' }]
+      persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '删除', icon: 'delete', action: this.remove.bind(this) }],
+      menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
     this.subscribeQuery(this.load());
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  load(pageable = this.pageable): Observable<Page<SysPermission>> {
     this.pageable = pageable;
 
     const observable = this.sysPermissionService.query(this.pageable).$observable;
@@ -54,18 +58,8 @@ export class SysPermissionComponent extends BasePage implements OnInit {
     return observable;
   }
 
-  reload(): Observable<Page<any>> {
+  reload(): Observable<Page<SysPermission>> {
     return this.subscribeQuery(this.load());
-  }
-
-  openRemoveAllConfirmDialog(event?: any) {
-    let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
-    dialogRef.componentInstance.content = '清空后不可恢复，确认清空吗？';
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'ok') {
-        // alert(result);
-      }
-    });
   }
 
   select(selected) {
@@ -73,19 +67,36 @@ export class SysPermissionComponent extends BasePage implements OnInit {
   }
 
   add() {
-
-  }
-  remove(row) {
-    let dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
-    dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
+    const dialogRef: MdDialogRef<SysPermissionCreateComponent> = this.dialog.open(SysPermissionCreateComponent);
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'ok') {
-        this.sysPermissionService.remove({ permissionId: row.permissionId }).$observable
-          .subscribe(() => this.reload());
+        this.reload();
       }
     });
   }
-  removeAll() {
 
+  remove() {
+    const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.sysPermissionService.removeInBatch({
+          method: 'DELETE',
+          data: this.selected.map(permission => permission.permissionId)
+        }).$observable
+          .subscribe(this.reload.bind(this), this.handleError.bind(this));
+      }
+    });
+  }
+
+  removeAll() {
+    const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = '清空后不可恢复，确认清空吗？';
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.sysPermissionService.removeAll().$observable
+          .subscribe(this.reload.bind(this), this.handleError.bind(this));
+      }
+    });
   }
 }

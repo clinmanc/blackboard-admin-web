@@ -20,11 +20,11 @@ export class AvatarHelper {
     let small: string;
     let big: string;
     if (badgeId) {
-      if (badgeType == 'BUILTIN') {
-        if (badgeId == 'defaultclass') {
+      if (badgeType === 'BUILTIN') {
+        if (badgeId === 'defaultclass') {
           small = big = `${AvatarHelper.BUILTIN_IMG_URL}/class_logo11.png`;
         } else {
-          small = big = `${AvatarHelper.IMG_URL}/${badgeId}.png`;
+          small = big = `${AvatarHelper.BUILTIN_IMG_URL}/${badgeId}.png`;
         }
       } else {
         small = big = `${AvatarHelper.IMG_URL}/${badgeId}`;

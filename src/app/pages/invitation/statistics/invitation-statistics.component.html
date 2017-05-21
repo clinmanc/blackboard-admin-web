@@ -16,27 +16,7 @@
 </md-card>
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
-  <md-card-header>
-    <div class="app-row-container">
-      <div class="app-item-container">
-        <button md-icon-button mdTooltip="统计数据有一天的延迟" mdTooltipPosition="after">
-          <md-icon class="help">help_outline</md-icon>
-        </button>
-      </div>
-    </div>
-    <div class="app-row-reverse-container">
-      <div class="app-item-container">
-        <button md-icon-button>
-          <md-icon>more_vert</md-icon>
-        </button>
-      </div>
-      <div class="app-item-container">
-        <button md-icon-button>
-          <md-icon>refresh</md-icon>
-        </button>
-      </div>
-    </div>
-  </md-card-header>
+  <app-toolbar [toolbar]="toolbar"></app-toolbar>
   <md-card-content>
     <app-table [columns]="columns" [data]="page.content">
       <ng-template #inviterDisplay let-row="row">

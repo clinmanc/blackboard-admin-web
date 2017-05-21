@@ -20,22 +20,7 @@
 </md-card>
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
-  <md-card-header>
-    <div class="app-row-reverse-container">
-      <div class="app-item-container">
-        <button md-icon-button>
-          <md-icon>more_vert</md-icon>
-        </button>
-      </div>
-      <div class="app-item-container">
-        <button md-icon-button>
-          <md-icon>refresh</md-icon>
-        </button>
-      </div>
-    </div>
-  </md-card-header>
-  <md-card-header>
-  </md-card-header>
+  <app-toolbar [toolbar]="toolbar"></app-toolbar>
   <md-card-content>
     <app-table [columns]="columns" [data]="page.content">
       <ng-template #previewImpl let-value="value" let-row="row">
@@ -50,6 +35,6 @@
         }" (view)="openViewDialog($event)"></app-view>
       </ng-template>
     </app-table>
-    <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
+    <app-pagination [page]="page" (change)="load($event)"></app-pagination>
   </md-card-content>
 </md-card>

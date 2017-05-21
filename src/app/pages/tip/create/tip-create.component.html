@@ -1,0 +1,28 @@
+<h1 md-dialog-title>添加Tip</h1>
+<form md-dialog-content [formGroup]="createForm" novalidate (ngSubmit)="create()">
+  <md-error>{{error}}</md-error>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="tipUrl" type="url" placeholder="图片地址" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <h6>权重</h6>
+  <div fxLayout="column" fxLayout="row">
+    <md-slider formControlName="priority" min="1" max="5" step="1" [value]="value" thumbLabel fxFlex></md-slider>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="version" type="url" placeholder="版本号" autocomplete="off">
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-select placeholder="设备类型" formControlName="deviceType" fxFlex required>
+      <md-option *ngFor="let type of deviceTypes" [value]="type.value">{{ type.name }}</md-option>
+    </md-select>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid" fxFlex>
+      创建
+    </button>
+  </div>
+</form>

@@ -1,11 +1,7 @@
-import {
-  Component, ContentChildren, EventEmitter, Input, OnChanges, Output, QueryList,
-  SimpleChanges
-} from '@angular/core';
+import { Component, ContentChildren, EventEmitter, Input, Output, QueryList } from '@angular/core';
 import { TableColumnDirective } from './column/table-column.directive';
 import { translateTemplates } from './column/column-helper';
 import { TableColumn } from './table-column';
-import * as _ from "lodash";
 
 const ADD_ROW = 'ADD_ROW';
 const REMOVE_ROW = 'REMOVE_ROW';
@@ -18,7 +14,7 @@ const FETCH_FROM_API = 'FETCH_FROM_API';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent{
+export class TableComponent {
 
   @Input()
   columns: TableColumn[] = [];
@@ -49,7 +45,7 @@ export class TableComponent{
   }
 
   @Input()
-  set data(data: any[]){
+  set data(data: any[]) {
     this._data = data || [];
     this.store = this._data.map(row => {
       return {
@@ -61,16 +57,16 @@ export class TableComponent{
     this.select.emit(this.selected);
   }
 
-  get data(){
+  get data() {
     return this._data;
   }
 
   constructor() { }
 
-  onSelectAll(event){
-    if(event.checked){
+  onSelectAll(event) {
+    if (event.checked) {
       this.store.forEach(row => row.selected = true);
-      this.selected = this.store.filter(row => row.selected).map( row => row.reference);
+      this.selected = this.store.filter(row => row.selected).map(row => row.reference);
     } else {
       this.store.forEach(row => row.selected = false);
       this.selected = [];
@@ -79,9 +75,9 @@ export class TableComponent{
     this.select.emit(this.selected);
   }
 
-  onRowSelect(event, row){
-    row.selected = event.checked;
-    this.selected = this.store.filter(row => row.selected).map( row => row.reference);
+  onRowSelect(event, changedRow) {
+    changedRow.selected = event.checked;
+    this.selected = this.store.filter(row => row.selected).map(row => row.reference);
 
     this.select.emit(this.selected);
   }

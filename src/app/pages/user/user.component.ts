@@ -23,17 +23,20 @@ export class UserComponent extends BasePage implements OnInit {
   page = new Page<any>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
+  toolbar = {};
 
   queryType = 'info';
 
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
-  constructor(protected snackBar: MdSnackBar,
+  constructor(
+    snackBar: MdSnackBar,
     private route: ActivatedRoute,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private dialog: MdDialog) {
+    private dialog: MdDialog
+  ) {
     super(snackBar);
   }
 
@@ -58,6 +61,14 @@ export class UserComponent extends BasePage implements OnInit {
       { key: 'messages', name: '用户消息', sortable: true, numeric: true, cellTemplate: this.viewImpl },
       { key: 'createTime', name: '注册时间', sortable: true, numeric: true }
     ];
+    this.toolbar = {
+      persistentButtons: [],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [],
+      menus: []
+    };
+
+    this.search();
   }
 
   buildForm(): void {
@@ -69,19 +80,27 @@ export class UserComponent extends BasePage implements OnInit {
   }
 
   search() {
+    this.subscribeQuery(this.load(new Pageable()));
+  }
+
+  load(pageable = this.pageable): Observable<Page<any>> {
+    this.pageable = pageable;
     const formModel = this.searchForm.value;
 
-    this.startQuery();
-    let method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1);
-    return this.userService[method](Object.assign({
+    const method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1);
+    const observable = this.userService[method](Object.assign({
       keyword: formModel.keyword,
       from: formModel.from,
       to: formModel.to
-    }, this.pageable)).$observable
-      .subscribe((page) => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
+    }, this.pageable)).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
+  }
+
+  reload(): Observable<Page<any>> {
+    return this.subscribeQuery(this.load());
   }
 
   openViewDialog(event) {
@@ -90,9 +109,8 @@ export class UserComponent extends BasePage implements OnInit {
     let result: Observable<any>;
     let title;
     if (type === 'messages') {
-      if (!event.row.userId) {
-        alert('数据有误');
-      }
+      if (!event.row.userId) { alert('数据有误'); }
+
       result = this.userService.queryTeacherMessages({
         from: '2015-01-12',
         ownerId: event.row.userId
@@ -102,21 +120,8 @@ export class UserComponent extends BasePage implements OnInit {
       return;
     }
 
-    let dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
+    const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.startQuery();
-
-    result.subscribe((items) => {
-      dialogRef.componentInstance.completeQuery();
-      dialogRef.componentInstance.items = items;
-    }, () => {
-      dialogRef.componentInstance.completeQuery();
-      this.handleError.bind(this);
-    })
-  }
-
-  loadPage(pageable: Pageable) {
-    this.pageable = pageable;
-    this.search();
+    dialogRef.componentInstance.subscribeQuery(result).subscribe(items => dialogRef.componentInstance.items = items);
   }
 }

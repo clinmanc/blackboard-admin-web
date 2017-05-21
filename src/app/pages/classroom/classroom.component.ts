@@ -22,19 +22,21 @@ export class ClassroomComponent extends BasePage implements OnInit {
 
   page = new Page<any>();
   pageable = new Pageable();
+  columns: TableColumn[] = [];
+  toolbar = {};
 
   queryType = 'info';
 
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
-  columns: TableColumn[] = [];
-
-  constructor(protected snackBar: MdSnackBar,
+  constructor(
+    snackBar: MdSnackBar,
     private route: ActivatedRoute,
     private classroomService: ClassroomService,
     private formBuilder: FormBuilder,
-    private dialog: MdDialog) {
+    private dialog: MdDialog
+  ) {
     super(snackBar);
   }
 
@@ -50,6 +52,14 @@ export class ClassroomComponent extends BasePage implements OnInit {
       { key: 'members', name: '班级成员', sortable: true, numeric: true, cellTemplate: this.viewImpl },
       { key: 'messages', name: '班级消息', sortable: true, numeric: true, cellTemplate: this.viewImpl }
     ];
+    this.toolbar = {
+      persistentButtons: [],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [],
+      menus: []
+    };
+
+    this.search();
   }
 
   buildForm(): void {
@@ -63,23 +73,31 @@ export class ClassroomComponent extends BasePage implements OnInit {
   }
 
   search() {
+    this.subscribeQuery(this.load(new Pageable()));
+  }
+
+  load(pageable = this.pageable): Observable<Page<any>> {
+    this.pageable = pageable;
     const formModel = this.searchForm.value;
 
-    this.startQuery();
-    let method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1);
-    return this.classroomService[method](Object.assign({
+    const method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1);
+    const observable = this.classroomService[method](Object.assign({
       from: formModel.from,
       to: formModel.to,
       keyword: formModel.keyword
-    }, this.pageable)).$observable
-      .subscribe((page) => {
-        this.completeQuery();
-        this.page = page;
-      }, this.handleError.bind(this));
+    }, this.pageable)).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
+  }
+
+  reload(): Observable<Page<any>> {
+    return this.subscribeQuery(this.load());
   }
 
   openViewDialog(event) {
-    if(!event.row.classroomId){
+    if (!event.row.classroomId) {
       alert('数据有误');
     }
 
@@ -88,10 +106,10 @@ export class ClassroomComponent extends BasePage implements OnInit {
     let result: Observable<any>;
     let title;
     if (type === 'members') {
-      result = this.classroomService.queryClassroomMembers({ classroomId: event.row.classroomId}).$observable;
+      result = this.classroomService.queryClassroomMembers({ classroomId: event.row.classroomId }).$observable;
       title = '成员列表';
     } else if (type === 'messages') {
-      if(!event.row.ownerId){
+      if (!event.row.ownerId) {
         alert('数据有误');
       }
       result = this.classroomService.queryClassroomMessages({
@@ -106,19 +124,6 @@ export class ClassroomComponent extends BasePage implements OnInit {
 
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.startQuery();
-
-    result.subscribe((items) => {
-      dialogRef.componentInstance.completeQuery();
-      dialogRef.componentInstance.items = items;
-    }, err => {
-      dialogRef.componentInstance.completeQuery();
-      this.handleError(err);
-    })
-  }
-
-  loadPage(pageable = this.pageable) {
-    this.pageable = pageable;
-    this.search();
+    dialogRef.componentInstance.subscribeQuery(result).subscribe(items => dialogRef.componentInstance.items = items);
   }
 }

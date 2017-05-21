@@ -21,12 +21,13 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
   page = new Page<any>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
+  toolbar = {};
 
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
   constructor(
-    protected snackBar: MdSnackBar,
+    snackBar: MdSnackBar,
     private classroomAssociatedService: ClassroomAssociatedService,
     private formBuilder: FormBuilder,
     private dialog: MdDialog) {
@@ -44,6 +45,12 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
       { key: 'associatedClassroomNum', name: '成员创建班级数量', sortable: true, numeric: true, cellTemplate: this.viewImpl },
       { key: 'associatedPeopleNum', name: '关联人员数量', sortable: true, numeric: true }
     ];
+    this.toolbar = {
+      persistentButtons: [],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [],
+      menus: []
+    };
   }
 
   buildForm(): void {
@@ -52,18 +59,22 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
     const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth();
     const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
 
-    // const from: string = `${year}-${month}-01`;
-    const from = `${year}-01-01`;
+    const from = `${year}-${month}-01`;
     const to = `${year}-${month}-${day}`;
 
     this.searchForm = this.formBuilder.group({
-      classroomCodes: ['461973', [Validators.required, Validators.minLength(6)]],
+      classroomCodes: ['', [Validators.required, Validators.minLength(6)]],
       from: [from, [Validators.required]],
       to: [to, [Validators.required]]
     });
   }
 
   search() {
+    this.subscribeQuery(this.load(new Pageable()));
+  }
+
+  load(pageable = this.pageable): Observable<Page<any>> {
+    this.pageable = pageable;
     const formModel = this.searchForm.value;
     const queryInput = {
       keyword: formModel.classroomCodes,
@@ -71,18 +82,15 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
       to: formModel.to
     };
 
-    this.startQuery();
-    this.classroomAssociatedService.queryAssociatedStatistics(Object.assign(queryInput, this.pageable)).$observable
-      .subscribe(page => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
+    const observable = this.classroomAssociatedService.queryAssociatedStatistics(Object.assign(queryInput, this.pageable)).$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
   }
 
-  onSwitchPage(pageable: Pageable = new Pageable()) {
-    this.pageable = pageable;
-
-    this.search();
+  reload(): Observable<Page<any>> {
+    return this.subscribeQuery(this.load());
   }
 
   openViewDialog(event) {
@@ -90,9 +98,7 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
     const type = event.column.key;
     let result: Observable<any>;
     let title;
-    if(!event.row.classroomId){
-      alert('数据有误');
-    }
+    if (!event.row.classroomId) { alert('数据有误'); }
     if (type === 'memberNum') {
       result = this.classroomAssociatedService.queryClassroomMembers({
         classroomId: event.row.classroomId,
@@ -102,8 +108,8 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
       result = this.classroomAssociatedService.queryAssociatedClassrooms({
         memberIds: event.row.memberIds
       }, {
-        classroomId: event.row.classroomId,
-      }).$observable;
+          classroomId: event.row.classroomId,
+        }).$observable;
       title = '班级列表';
     } else {
       return;
@@ -111,22 +117,13 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
 
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.startQuery();
-
-    result.map((items) => {
+    dialogRef.componentInstance.subscribeQuery(result).map((items) => {
       return items.map(item => {
         return {
           id: item.classroomId || item.userId,
           name: item.userName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`)
         };
       });
-    }).subscribe((items) => {
-      dialogRef.componentInstance.completeQuery();
-      dialogRef.componentInstance.items = items;
-    }, (err) => {
-      dialogRef.componentInstance.completeQuery();
-      this.handleError(err);
-    })
-
+    }).subscribe(items => dialogRef.componentInstance.items = items);
   }
 }

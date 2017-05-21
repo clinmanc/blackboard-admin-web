@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SysUserService } from '../sys-user.service';
 import { SysRoleService } from '../../role/sys-role.service';
 import { BasePage } from '../../../base-page';
+import { SysRole } from '../../../../shared/sys-role';
 
 @Component({
   selector: 'app-create-sys-user-dialog',
@@ -13,8 +14,8 @@ import { BasePage } from '../../../base-page';
 export class SysUserCreateDialogComponent extends BasePage implements OnInit {
 
   createForm: FormGroup;
-  errors: any[];
-  roles: any[];
+  error: string;
+  roles: SysRole[];
 
   constructor(
     public dialogRef: MdDialogRef<SysUserCreateDialogComponent>,
@@ -34,25 +35,30 @@ export class SysUserCreateDialogComponent extends BasePage implements OnInit {
   buildForm() {
     this.createForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(16)]],
-      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(16)]],
-      role: ['']
+      plaintextPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(16)]],
+      roles: []
     });
   }
 
   loadRoles() {
-    this.sysRoleService.queryAll().$observable.subscribe(roles => this.roles = roles, this.handleError.bind(this));
+    this.sysRoleService.queryAll().$observable.subscribe(roles => {
+      this.roles = roles.map(role => {
+        return {
+          roleId: role.roleId,
+          name: role.name,
+          code: role.code,
+          permissions: []
+        };
+      });
+    }, this.handleError.bind(this));
   }
 
   create() {
     const formModel = this.createForm.value;
 
-    this.sysUserService.save({
-      username: formModel.username,
-      plaintextPassword: formModel.password,
-      roles: [{ roleId: formModel.role }]
-    }).$observable.subscribe(() => this.dialogRef.close('ok'), (res) => {
+    this.sysUserService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), res => {
       const json: any = res._body && res.json();
-      this.errors = (json.errors && json.errors.length && json.errors.map(error => error.defaultMessage)) || ['创建失败'];
+      this.error = json && json.message || '创建失败';
     });
   }
 }

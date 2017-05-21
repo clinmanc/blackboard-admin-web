@@ -1,0 +1,24 @@
+<h1 md-dialog-title>添加角色</h1>
+<form md-dialog-content [formGroup]="createForm" novalidate (ngSubmit)="create()">
+  <md-error>{{error}}</md-error>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="name" type="text" placeholder="角色名" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="code" type="text" placeholder="角色代码" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-select placeholder="权限" multiple formControlName="permissions" fxFlex>
+      <md-option *ngFor="let permission of permissions" [value]="permission">{{ permission.name }}</md-option>
+    </md-select>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid" fxFlex>
+      创建
+    </button>
+  </div>
+</form>

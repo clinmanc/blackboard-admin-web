@@ -1,30 +1,18 @@
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
-  <md-card-header>
-    <div class="app-row-reverse-container">
-      <div class="app-item-container">
-        <button md-icon-button>
-          <md-icon>more_vert</md-icon>
-        </button>
-      </div>
-      <div class="app-item-container">
-        <button md-icon-button>
-          <md-icon>refresh</md-icon>
-        </button>
-      </div>
-    </div>
-  </md-card-header>
-  <md-card-header>
-  </md-card-header>
+  <app-toolbar [selected]="selected" [toolbar]="toolbar"></app-toolbar>
   <md-card-content>
     <app-table [columns]="columns" [data]="data" (view)="openViewDialog($event)">
+      <ng-template #statusImpl let-value="value">
+        <md-slide-toggle [checked]="value"></md-slide-toggle>
+      </ng-template>
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <app-view [text]="value" [value]="{
           value: value,
           column: column,
           row: row,
           index: index
-        }" (view)="openViewDialog($event)"></app-view>
+        }" (view)="download($event)"></app-view>
       </ng-template>
     </app-table>
   </md-card-content>

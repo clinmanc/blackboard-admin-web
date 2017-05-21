@@ -4,8 +4,8 @@ import { Component, Input } from '@angular/core';
   selector: 'app-preview',
   template: `
     <div class="app-preview-container">
-      <img class="app-thumbnail" width="24px" height="24px" [src]="thumbnail"/>
-      <img class="app-preview" width="160px" height="160px" [src]="preview"/>
+      <img class="app-thumbnail" width="24px" [src]="thumbnail"/>
+      <img class="app-preview" width="160px" [src]="preview"/>
       <span>{{text}}</span>
     </div>
   `,

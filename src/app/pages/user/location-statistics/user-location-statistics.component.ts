@@ -6,6 +6,7 @@ import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
 import { MdSnackBar } from '@angular/material';
 import { UserLocationStatisticsService } from './user-location-statistics.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-user-location-statistics',
@@ -19,6 +20,8 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
   page = new Page<any>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
+  selected: any[] = [];
+  toolbar = {};
 
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
@@ -37,7 +40,14 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
     ];
 
     this.buildForm();
-    this.search();
+    this.toolbar = {
+      persistentButtons: [],
+      iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
+      contextualIconButtons: [{ name: '重新生成', icon: 'autorenew' }],
+      menus: []
+    };
+
+    this.subscribeQuery(this.load());
   }
 
   buildForm(): void {
@@ -46,7 +56,6 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
     const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth();
     const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
 
-    // const from: string = `${year}-${month}-01`;
     const from = `${year}-01-01`;
     const to = `${year}-${month}-${day}`;
 
@@ -56,18 +65,21 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
     });
   }
 
-  search() {
-    this.startQuery();
-    return this.userLocationStatisticsService.query().$observable
-      .subscribe((page) => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
-  }
-
-  onSwitchPage(pageable: Pageable = new Pageable()) {
+  load(pageable = this.pageable): Observable<Page<any>> {
     this.pageable = pageable;
 
-    this.search();
+    const observable = this.userLocationStatisticsService.query().$observable;
+
+    observable.subscribe((page) => this.page = page);
+
+    return observable;
+  }
+
+  reload(): Observable<Page<any>> {
+    return this.subscribeQuery(this.load());
+  }
+
+  select(selected) {
+    this.selected = selected;
   }
 }

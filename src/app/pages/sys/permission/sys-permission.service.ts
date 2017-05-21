@@ -6,6 +6,7 @@ import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { environment } from '../../../../environments/environment';
 import { RequestMethod } from '@angular/http';
+import { SysPermission } from '../../../shared/sys-permission';
 
 class QueryInput extends Pageable { }
 
@@ -16,12 +17,34 @@ class QueryInput extends Pageable { }
 export class SysPermissionService extends RestClient {
 
   @ResourceAction()
-  query: ResourceMethod<QueryInput, any>;
+  query: ResourceMethod<QueryInput, Page<SysPermission>>;
+
+  @ResourceAction({
+    path: '/all',
+    isArray: true
+  })
+  queryAll: ResourceMethod<QueryInput, SysPermission[]>;
+
+  @ResourceAction({
+    method: RequestMethod.Post
+  })
+  save: ResourceMethod<SysPermission, SysPermission>;
 
   @ResourceAction({
     method: RequestMethod.Delete
   })
-  remove: ResourceMethod<{ permissionId: string }, any>;
+  remove: ResourceMethod<{ permissionId: string }, void>;
+
+  @ResourceAction({
+    path: '/batch',
+    method: RequestMethod.Patch
+  })
+  removeInBatch: ResourceMethod<{ method: string, data: string[] }, void>;
+
+  @ResourceAction({
+    method: RequestMethod.Delete
+  })
+  removeAll: ResourceMethod<void, void>;
 
   getUrl(methodOptions?: any): string | Promise<string> {
     return environment.authUrl + this.getResourcePath();
