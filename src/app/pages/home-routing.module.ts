@@ -22,6 +22,7 @@ import { TipComponent } from './tip/tip.component';
 import { ServerDetectionComponent } from './server-detection/server-detection.component';
 import { GrowthTagComponent } from './growth/tag/growth-tag.component';
 import { GrowthRecordComponent } from './growth/record/growth-record.component';
+import { ExportComponent } from './export/export.component';
 
 export const homeRoutes: Routes = [
   {
@@ -189,5 +190,12 @@ export const homeRoutes: Routes = [
       title: '成长记录列表'
     },
     component: GrowthRecordComponent
+  },
+  {
+    path: 'export',
+    data: {
+      title: '数据导出'
+    },
+    component: ExportComponent
   }
 ];

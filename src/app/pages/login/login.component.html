@@ -1,4 +1,4 @@
-<div class="login-container">
+<div class="login-container" [ngStyle]="{ 'background-color': randomColor }">
   <md-card>
     <md-card-title><img alt="晓黑板" title="晓黑板" src="/assets/img/logo-brown.png">管理系统</md-card-title>
     <md-card-subtitle>登录后继续</md-card-subtitle>
@@ -13,7 +13,7 @@
         </md-input-container>
         <div class="form-row">
           <md-checkbox class="form-row-item" formControlName="rememberMe">记住我</md-checkbox>
-          <a routerLink="/dashboard">忘记密码</a>
+          <a routerLink="/dashboard" md-tooltip="我也不知道">忘记密码</a>
         </div>
         <button class="form-row-item" type="submit" md-raised-button color="primary" [disabled]="!loginForm.valid">登录</button>
       </form>

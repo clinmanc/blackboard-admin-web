@@ -53,7 +53,7 @@ export class WelcomeMessageComponent extends BasePage implements OnInit {
   load(): Observable<any[]> {
     const observable = this.welcomeMessageService.query().$observable;
 
-    observable.subscribe((data) => this.data = data);
+    observable.subscribe(data => this.data = data, () => {});
 
     return observable;
   }

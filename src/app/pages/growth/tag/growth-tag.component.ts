@@ -54,7 +54,7 @@ export class GrowthTagComponent extends BasePage implements OnInit {
 
     const observable = this.growthTagsService.query(this.pageable).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

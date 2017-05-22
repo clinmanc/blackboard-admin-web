@@ -42,7 +42,7 @@ export class ServerDetectionComponent extends BasePage implements OnInit {
 
     const observable = this.serverDetectionService.query().$observable;
 
-    observable.subscribe((data) => this.data = data);
+    observable.subscribe(data => this.data = data, () => {});
 
     return observable;
   }

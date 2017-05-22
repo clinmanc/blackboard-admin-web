@@ -16,8 +16,8 @@ export class TipCreateComponent extends BasePage implements OnInit {
   deviceTypes = [];
 
   constructor(
-    public dialogRef: MdDialogRef<TipCreateComponent>,
     snackBar: MdSnackBar,
+    public dialogRef: MdDialogRef<TipCreateComponent>,
     private formBuilder: FormBuilder,
     private tipService: TipService
   ) {
@@ -47,9 +47,6 @@ export class TipCreateComponent extends BasePage implements OnInit {
   create() {
     const formModel = this.createForm.value;
 
-    this.tipService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), res => {
-      const json: any = res._body && res.json();
-      this.error = json && json.message || '创建失败';
-    });
+    this.tipService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), this.handleError.bind(this));
   }
 }

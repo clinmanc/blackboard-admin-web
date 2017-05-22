@@ -94,7 +94,7 @@ export class UserComponent extends BasePage implements OnInit {
       to: formModel.to
     }, this.pageable)).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

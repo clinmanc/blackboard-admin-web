@@ -52,7 +52,7 @@ export class BlackboardVersionComponent extends BasePage implements OnInit {
 
     const observable = this.blackboardVersionService.query().$observable;
 
-    observable.subscribe((data) => this.data = [data]);
+    observable.subscribe(data => this.data = [data], () => {});
 
     return observable;
   }

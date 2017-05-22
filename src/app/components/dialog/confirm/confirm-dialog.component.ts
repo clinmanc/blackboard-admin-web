@@ -8,7 +8,7 @@ import { MdDialogRef } from '@angular/material';
 })
 export class ConfirmDialogComponent {
   title: string;
-  content: string = '确认执行操作?';
+  content = '确认执行操作?';
   affirmativeAction = {
     text: '确认',
     disabled: false

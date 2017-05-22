@@ -53,7 +53,7 @@ export class SysUserComponent extends BasePage implements OnInit {
 
     const observable = this.sysUserService.query(this.pageable).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

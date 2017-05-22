@@ -13,10 +13,7 @@ export class BasePage {
 
   public subscribeQuery(observable: Observable<any>) {
     this.startQuery();
-    observable.subscribe(this.completeQuery.bind(this), err => {
-      this.completeQuery();
-      this.handleError(err);
-    });
+    observable.subscribe(this.completeQuery.bind(this), this.handleError.bind(this));
     return observable;
   }
 

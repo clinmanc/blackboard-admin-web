@@ -4,7 +4,7 @@
   <md-card-content>
     <app-table [columns]="columns" [data]="page.content" [selectable]="true" (select)="select($event)">
       <ng-template #weightImpl let-value="value">
-        <md-slider min="0" max="10" step="1" [value]="value" thumbLabel></md-slider>
+        <md-slider min="0" max="10" step="1" [value]="value" thumbLabel disabled></md-slider>
       </ng-template>
     </app-table>
     <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>

@@ -1,6 +1,6 @@
 # BlackboardAdminWeb
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.2.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.4.
 
 ## Development server
 
@@ -26,3 +26,28 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+# 生产部署
+## 1. 安装Apache服务器
+修改`/etc/httpd/conf/httpd.conf`文件中的如下配置:
+
+```
+Listen 80
+```
+端口自定
+
+```xml
+<Directory "/var/www/html">
+    AllowOverride None
+    # Allow open access:
+    Require all granted
+</Directory>
+```
+`None`修改为`All`
+
+## 2. 部署命令
+```bash
+sudo rm -rf /var/www/html/*
+sudo cp -r /home/用户名/dist/*  /var/www/html
+```
+目录按照实际修改

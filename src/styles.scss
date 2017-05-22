@@ -38,6 +38,11 @@ $screen-lg-min: 1200px !global;
   width: 100%;
 }
 
+.app-table.condensed td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 .app-table, .app-table td {
   border-collapse: collapse;
   border-width: 0;

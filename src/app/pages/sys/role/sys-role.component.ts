@@ -39,7 +39,7 @@ export class SysRoleComponent extends BasePage implements OnInit {
       menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
-    this.subscribeQuery(this.load());
+    this.subscribeQuery(this.load(new Pageable()));
   }
 
   load(pageable = this.pageable): Observable<Page<SysRole>> {
@@ -47,7 +47,7 @@ export class SysRoleComponent extends BasePage implements OnInit {
 
     const observable = this.sysRoleService.query(this.pageable).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

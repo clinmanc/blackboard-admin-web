@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
-import { ResourceAction, ResourceParams, ResourceResult } from 'ngx-resource';
+import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { AvatarHelper } from '../../helper/badge-helper';
@@ -49,7 +49,7 @@ export class ClassroomService extends RestClient {
     path: '/messages/classroom',
     isArray: true,
     map: (history: any) => {
-      let message = history.message || {};
+      const message = history.message || {};
       return {
         createTime: message.createTime && new Date(message.createTime).toLocaleString(),
         content: message.content
@@ -78,9 +78,9 @@ export class ClassroomService extends RestClient {
           members: '查看成员',
           messages: type === 'info' ? '查看消息' : item.published,
           avatar: AvatarHelper.parseFromClassroom(classroom || {})
-        }
+        };
       });
       return page;
-    }
+    };
   }
 }

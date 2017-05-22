@@ -42,7 +42,7 @@ export class SchoolComponent extends BasePage implements OnInit {
       menus: []
     };
 
-    this.subscribeQuery(this.load());
+    this.subscribeQuery(this.load(new Pageable()));
   }
 
   load(pageable = this.pageable): Observable<Page<any>> {
@@ -50,7 +50,7 @@ export class SchoolComponent extends BasePage implements OnInit {
 
     const observable = this.schoolService.query(this.pageable).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>晓黑板管理系统</title>
@@ -7,7 +8,77 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .loading-center {
+      display: flex;
+      width: 122px;
+    }
+
+    .loading-center > div {
+      height: 20px;
+      width: 20px;
+      position: absolute;
+      border-radius: 50%;
+      background: #000;
+      display: inline-block;
+    }
+
+    .loading-center > div:first-child {
+      animation: move 1s ease-in-out infinite alternate;
+      background: #4285f4;
+      margin-left: 0;
+    }
+
+    .loading-center > div:nth-child(2) {
+      animation: move 1s ease-in-out -0.25s infinite alternate;
+      margin-left: 35px;
+      background: #db4437;
+    }
+
+    .loading-center > div:nth-child(3) {
+      animation: move 1s ease-in-out -0.5s infinite alternate;
+      margin-left: 70px;
+      background: #f4b400;
+    }
+
+    .loading-center > div:nth-child(4) {
+      animation: move 1s ease-in-out -0.75s infinite alternate;
+      margin-left: 105px;
+      background: #0f9d58;
+    }
+
+    @keyframes move {
+      0% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(5px);
+      }
+    }
+
+  </style>
 </head>
+
 <body>
-<app-root>Loading...</app-root></body>
+<app-root>
+  <div class="loading">
+    <div class="loading-center">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</app-root>
+</body>
+
 </html>

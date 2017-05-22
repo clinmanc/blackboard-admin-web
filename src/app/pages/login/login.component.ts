@@ -29,6 +29,9 @@ export class LoginComponent extends BasePage implements OnInit {
       'required': 'Password is required.'
     }
   };
+  colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688',
+    '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b'];
+  randomColor = '#03a9f4';
 
   constructor(
     snackBar: MdSnackBar,
@@ -41,6 +44,7 @@ export class LoginComponent extends BasePage implements OnInit {
   }
 
   ngOnInit() {
+    this.randomColor = this.colors[parseInt(String(Math.random() * this.colors.length), 0)];
     this.buildForm();
   }
 
@@ -72,7 +76,7 @@ export class LoginComponent extends BasePage implements OnInit {
       if (AuthHelper.isLoggedIn) {
         // Get the redirect URL from our auth service
         // If no redirect has been set, use the default
-        let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/';
+        const redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/';
         // Redirect the user
         this.router.navigate([redirect]);
       }

@@ -62,6 +62,7 @@ import { RegisteredUserStatisticsComponent } from './pages/user/registered-stati
 import { SysUserCreateDialogComponent } from './pages/sys/user/create/sys-user-create-dialog.component';
 import { SysRoleCreateComponent } from './pages/sys/role/create/sys-role-create.component';
 import { SysPermissionCreateComponent } from './pages/sys/permission/create/sys-permission-create.component';
+import { ExportComponent } from './pages/export/export.component';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -119,7 +120,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToolbarComponent,
     SysUserCreateDialogComponent,
     SysRoleCreateComponent,
-    SysPermissionCreateComponent
+    SysPermissionCreateComponent,
+    ExportComponent
   ],
   imports: [
     BrowserModule,

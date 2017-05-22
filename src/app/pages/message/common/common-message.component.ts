@@ -21,9 +21,11 @@ export class CommonMessageComponent extends BasePage implements OnInit {
   pageable: Pageable = Object.assign(new Pageable(), { size: 50 });
   columns: TableColumn[] = [];
 
-  constructor(protected snackBar: MdSnackBar,
+  constructor(
+    snackBar: MdSnackBar,
     private commonMessageService: CommonMessageService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder
+  ) {
     super(snackBar);
   }
 
@@ -37,8 +39,6 @@ export class CommonMessageComponent extends BasePage implements OnInit {
   }
 
   search() {
-    const formModel = this.searchForm.value;
-
     this.startQuery();
     return this.commonMessageService.query(this.pageable).$observable
       .subscribe((page) => {

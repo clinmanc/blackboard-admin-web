@@ -70,7 +70,7 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
 
     const observable = this.invitationRecordService.query(Object.assign(queryInput, this.pageable)).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

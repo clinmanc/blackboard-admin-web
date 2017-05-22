@@ -86,7 +86,7 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
 
     const observable = this.invitationStatisticsService.queryStatistics(Object.assign(queryInput, this.pageable)).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

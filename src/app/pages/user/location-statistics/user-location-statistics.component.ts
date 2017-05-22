@@ -27,7 +27,7 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
   constructor(
-    protected snackBar: MdSnackBar,
+    snackBar: MdSnackBar,
     private formBuilder: FormBuilder,
     private userLocationStatisticsService: UserLocationStatisticsService
   ) {
@@ -36,18 +36,17 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '时间范围', sortable: true }
+      { key: 'name', name: '日期范围', sortable: true }
     ];
-
-    this.buildForm();
     this.toolbar = {
       persistentButtons: [],
       iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
       contextualIconButtons: [{ name: '重新生成', icon: 'autorenew' }],
       menus: []
     };
+    this.buildForm();
 
-    this.subscribeQuery(this.load());
+    this.subscribeQuery(this.load(new Pageable()));
   }
 
   buildForm(): void {
@@ -70,7 +69,7 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
 
     const observable = this.userLocationStatisticsService.query().$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

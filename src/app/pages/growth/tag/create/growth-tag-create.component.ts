@@ -37,9 +37,6 @@ export class GrowthTagCreateComponent extends BasePage implements OnInit {
   create() {
     const formModel = this.createForm.value;
 
-    this.growthTagService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), res => {
-      const json: any = res._body && res.json();
-      this.error = json && json.message || '创建失败';
-    });
+    this.growthTagService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), this.handleError.bind(this));
   }
 }

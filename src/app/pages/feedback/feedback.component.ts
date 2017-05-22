@@ -58,7 +58,7 @@ export class FeedbackComponent extends BasePage implements OnInit {
 
     const observable = this.feedbackService.query(this.pageable).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

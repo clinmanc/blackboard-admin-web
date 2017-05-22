@@ -84,7 +84,7 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
 
     const observable = this.classroomAssociatedService.queryAssociatedStatistics(Object.assign(queryInput, this.pageable)).$observable;
 
-    observable.subscribe((page) => this.page = page);
+    observable.subscribe(page => this.page = page, () => {});
 
     return observable;
   }

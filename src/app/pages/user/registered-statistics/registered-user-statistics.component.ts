@@ -35,8 +35,8 @@ export class RegisteredUserStatisticsComponent extends BasePage implements OnIni
   }
 
   buildForm(): void {
-    let now = new Date();
-    let year = now.getFullYear();
+    const now = new Date();
+    const year = now.getFullYear();
     const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth();
 
     this.searchForm = this.formBuilder.group({
@@ -131,7 +131,7 @@ export class RegisteredUserStatisticsComponent extends BasePage implements OnIni
 
     this.xAxis = [];
     this.yAxis = [];
-    for (let item of items) {
+    for (const item of items) {
       this.xAxis.push(item.date);
       this.yAxis.push(item.count);
     }

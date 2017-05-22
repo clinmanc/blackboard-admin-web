@@ -1,3 +1,9 @@
-<p>
-  alert-dialog works!
-</p>
+<div class="app-dialog-container">
+  <h3 md-dialog-title *ngIf="title">{{title}}</h3>
+  <p md-dialog-content>{{content}}</p>
+  <div md-dialog-actions class="app-row-reverse-container">
+    <div class="app-item-container">
+      <button md-button color="primary" [disabled]="affirmativeAction.disabled" (click)="dialogRef.close('ok')">{{affirmativeAction.text}}</button>
+    </div>
+  </div>
+</div>

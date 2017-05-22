@@ -47,6 +47,6 @@ export class InvitationStatisticsService extends RestClient {
         url += (url && '&') + key + '=' + params[key];
       }
     }
-    window.open(super.getUrl() + '/invitation/export?' + url);
+    window.open(super.getUrl() + '/export?' + url);
   }
 }

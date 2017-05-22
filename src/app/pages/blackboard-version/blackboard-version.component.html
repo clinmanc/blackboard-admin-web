@@ -4,7 +4,7 @@
   <md-card-content>
     <app-table [columns]="columns" [data]="data" (view)="openViewDialog($event)">
       <ng-template #statusImpl let-value="value">
-        <md-slide-toggle [checked]="value"></md-slide-toggle>
+        <md-slide-toggle [checked]="value" disabled></md-slide-toggle>
       </ng-template>
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <app-view [text]="value" [value]="{
