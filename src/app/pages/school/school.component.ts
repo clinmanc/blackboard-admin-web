@@ -5,7 +5,6 @@ import { Pageable } from '../../shared/pageable';
 import { TableColumn } from '../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
-import { Observable } from 'rxjs/Observable';
 import { SchoolService } from './school.service';
 
 @Component({
@@ -42,28 +41,31 @@ export class SchoolComponent extends BasePage implements OnInit {
       menus: []
     };
 
-    this.subscribeQuery(this.load(new Pageable()));
+    this.search();
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  search() {
+    this.load(new Pageable());
+  }
+
+  load(pageable = this.pageable) {
     this.pageable = pageable;
 
-    const observable = this.schoolService.query(this.pageable).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.schoolService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   openViewDialog(event) {
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = '人员列表';
-    dialogRef.componentInstance.subscribeQuery(this.schoolService.queryMembers({
-      school: event.row.name
-    }).$observable).subscribe(items => dialogRef.componentInstance.items = items);
+    dialogRef.componentInstance
+      .withHandler(this.schoolService.queryMembers({
+        school: event.row.name
+      }).$observable)
+      .subscribe(items => dialogRef.componentInstance.items = items);
   }
 }

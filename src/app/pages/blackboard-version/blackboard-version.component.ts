@@ -1,6 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MdSnackBar } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../base-page';
 import { TableColumn } from '../../components/table/table-column';
 import { BlackboardVersionService } from './blackboard-version.service';
@@ -41,24 +40,24 @@ export class BlackboardVersionComponent extends BasePage implements OnInit {
       menus: []
     };
 
-    this.subscribeQuery(this.load());
+    this.search();
+  }
+
+  search() {
+    this.load();
+  }
+
+  load() {
+    this.withHandler(this.blackboardVersionService.query().$observable)
+      .subscribe(data => this.data = [data]);
+  }
+
+  reload() {
+    this.load();
   }
 
   download(event) {
     window.open(event.value);
-  }
-
-  load(): Observable<any[]> {
-
-    const observable = this.blackboardVersionService.query().$observable;
-
-    observable.subscribe(data => this.data = [data], () => {});
-
-    return observable;
-  }
-
-  reload(): Observable<any[]> {
-    return this.subscribeQuery(this.load());
   }
 }
 

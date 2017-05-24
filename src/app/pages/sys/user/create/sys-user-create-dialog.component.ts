@@ -18,8 +18,8 @@ export class SysUserCreateDialogComponent extends BasePage implements OnInit {
   roles: SysRole[];
 
   constructor(
-    public dialogRef: MdDialogRef<SysUserCreateDialogComponent>,
     snackBar: MdSnackBar,
+    public dialogRef: MdDialogRef<SysUserCreateDialogComponent>,
     private formBuilder: FormBuilder,
     private sysUserService: SysUserService,
     private sysRoleService: SysRoleService
@@ -41,21 +41,23 @@ export class SysUserCreateDialogComponent extends BasePage implements OnInit {
   }
 
   loadRoles() {
-    this.sysRoleService.queryAll().$observable.subscribe(roles => {
-      this.roles = roles.map(role => {
-        return {
-          roleId: role.roleId,
-          name: role.name,
-          code: role.code,
-          permissions: []
-        };
-      });
-    }, this.handleError.bind(this));
+    this.withHandler(this.sysRoleService.queryAll().$observable)
+      .map(roles => {
+        return roles.map(role => {
+          return {
+            roleId: role.roleId,
+            name: role.name,
+            code: role.code,
+            permissions: []
+          };
+        });
+      }).subscribe(roles => this.roles = roles);
   }
 
   create() {
     const formModel = this.createForm.value;
 
-    this.sysUserService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), this.handleError.bind(this));
+    this.withHandler(this.sysUserService.save(formModel).$observable)
+      .subscribe(() => this.dialogRef.close('ok'));
   }
 }

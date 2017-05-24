@@ -1,12 +1,10 @@
+import { environment } from '../../environments/environment';
 export class AvatarHelper {
-  static BUILTIN_IMG_URL = 'http://www.xiaoheiban.cn/Public/banhui';
-  static IMG_URL = 'http://file.xiaoheiban.cn';
-
   static parseFromUser({ avatar }) {
     let small: string;
     let big: string;
     if (avatar) {
-      small = big = `${AvatarHelper.IMG_URL}/${avatar}`;
+      small = big = `${environment.imgProxyUrl}?url=${environment.fileUrl}/${avatar}`;
     } else {
       small = big = `/assets/img/avatar.png`;
     }
@@ -22,12 +20,12 @@ export class AvatarHelper {
     if (badgeId) {
       if (badgeType === 'BUILTIN') {
         if (badgeId === 'defaultclass') {
-          small = big = `${AvatarHelper.BUILTIN_IMG_URL}/class_logo11.png`;
+          small = big = `${environment.imgProxyUrl}?url=${environment.builtinImgUrl}/class_logo11.png?defaultImage=banji.jpg`;
         } else {
-          small = big = `${AvatarHelper.BUILTIN_IMG_URL}/${badgeId}.png`;
+          small = big = `${environment.imgProxyUrl}?url=${environment.builtinImgUrl}/${badgeId}.png?defaultImage=banji.jpg`;
         }
       } else {
-        small = big = `${AvatarHelper.IMG_URL}/${badgeId}`;
+        small = big = `${environment.imgProxyUrl}?url=${environment.fileUrl}/${badgeId}.png&defaultImage=banji.jpg`;
       }
     } else {
       small = big = `/assets/img/classroom.jpg`;

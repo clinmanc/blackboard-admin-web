@@ -54,8 +54,7 @@ export class WelcomeMessageCreateComponent extends BasePage implements OnInit {
   create() {
     const formModel = this.createForm.value;
 
-    this.startQuery();
-    return this.welcomeMessageService.save({
+    const input = {
       token: formModel.token, // 56e2406a2767c26553ab9dec
       url: `http://127.0.0.1:9123/api/welcomeMessage/${formModel.token}/${formModel.verificationCode}`,
       data: {
@@ -65,10 +64,9 @@ export class WelcomeMessageCreateComponent extends BasePage implements OnInit {
         url: formModel.link,
         reciverType: formModel.receiverType
       }
-    }).$observable
-      .subscribe(() => {
-        this.completeQuery();
-        this.location.back();
-      }, this.handleError.bind(this));
+    };
+
+    this.withHandler(this.welcomeMessageService.save(input).$observable)
+      .subscribe(this.location.back.bind(this));
   }
 }

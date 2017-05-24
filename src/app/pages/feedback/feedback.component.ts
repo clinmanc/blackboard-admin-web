@@ -1,6 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../base-page';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
@@ -50,21 +49,18 @@ export class FeedbackComponent extends BasePage implements OnInit {
   }
 
   search() {
-    this.subscribeQuery(this.load(new Pageable()));
+    this.load(new Pageable());
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  load(pageable = this.pageable) {
     this.pageable = pageable;
 
-    const observable = this.feedbackService.query(this.pageable).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.feedbackService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    return this.load();
   }
 
   openViewDialog(event) {

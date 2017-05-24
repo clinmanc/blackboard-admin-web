@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
@@ -23,6 +22,8 @@ export class SysRoleComponent extends BasePage implements OnInit {
   selected: SysRole[] = [];
   toolbar = {};
 
+  @ViewChild('chipListImpl') chipListImpl: TemplateRef<any>;
+
   constructor(protected snackBar: MdSnackBar, private sysRoleService: SysRoleService, private dialog: MdDialog) {
     super(snackBar);
   }
@@ -30,7 +31,8 @@ export class SysRoleComponent extends BasePage implements OnInit {
   ngOnInit() {
     this.columns = [
       { key: 'name', name: '角色', sortable: true },
-      { key: 'code', name: '权限码', sortable: true }
+      { key: 'code', name: '权限码', sortable: true },
+      { key: 'permissions', name: '权限', cellTemplate: this.chipListImpl }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
@@ -39,21 +41,22 @@ export class SysRoleComponent extends BasePage implements OnInit {
       menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
-    this.subscribeQuery(this.load(new Pageable()));
+    this.search();
   }
 
-  load(pageable = this.pageable): Observable<Page<SysRole>> {
+  search() {
+    this.load(new Pageable());
+  }
+
+  load(pageable = this.pageable) {
     this.pageable = pageable;
 
-    const observable = this.sysRoleService.query(this.pageable).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.sysRoleService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   select(selected) {

@@ -47,10 +47,7 @@ export class RegisteredUserStatisticsComponent extends BasePage implements OnIni
   search() {
     const formModel = this.searchForm.value;
 
-    this.startQuery();
-    return this.userService.queryRegisteredStatistics({
-      month: formModel.month + '-01'
-    }).$observable
+    this.withHandler(this.userService.queryRegisteredStatistics({ month: formModel.month + '-01' }).$observable)
       .subscribe((items: any[]) => {
         this.completeQuery();
         this.updateChart(items);

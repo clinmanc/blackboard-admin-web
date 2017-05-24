@@ -56,8 +56,7 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
   create() {
     const formModel = this.createForm.value;
 
-    this.startQuery();
-    return this.announcementMessageService.save({
+    const input = {
       token: formModel.token, // 56e2406a2767c26553ab9dec
       url: `http://127.0.0.1:9123/api/public/message/${formModel.token}/${formModel.receiverType}/${formModel.verificationCode}`,
       data: {
@@ -71,10 +70,9 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
         },
         reciverType: formModel.receiverType
       }
-    }).$observable
-      .subscribe(() => {
-        this.completeQuery();
-        this.location.back();
-      }, this.handleError.bind(this));
+    };
+
+    this.withHandler(this.announcementMessageService.save(input).$observable)
+      .subscribe(this.location.back.bind(this));
   }
 }

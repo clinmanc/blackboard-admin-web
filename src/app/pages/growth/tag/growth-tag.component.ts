@@ -4,9 +4,7 @@ import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
 import { GrowthTagService } from './growth-tag.service';
-import {Observable} from "rxjs/Observable";
 import { GrowthTagCreateComponent } from './create/growth-tag-create.component';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
 
@@ -43,26 +41,26 @@ export class GrowthTagComponent extends BasePage implements OnInit {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
       iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
       contextualIconButtons: [{ name: '删除', icon: 'delete' }],
-      menus: [{ name: '清空', icon: 'delete_sweep'}]
+      menus: [{ name: '清空', icon: 'delete_sweep' }]
     };
-
-    this.subscribeQuery(this.load());
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  search() {
+    this.load();
+  }
+
+  load(pageable = this.pageable) {
     this.pageable = pageable;
 
-    const observable = this.growthTagsService.query(this.pageable).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.growthTagsService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>>{
-    return this.subscribeQuery(this.load());
+  reload() {
+    return this.load();
   }
-  select(selected){
+
+  select(selected) {
     this.selected = selected;
   }
 

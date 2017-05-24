@@ -47,6 +47,7 @@ export class TipCreateComponent extends BasePage implements OnInit {
   create() {
     const formModel = this.createForm.value;
 
-    this.tipService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), this.handleError.bind(this));
+    this.withHandler(this.tipService.save(formModel).$observable)
+      .subscribe(() => this.dialogRef.close('ok'));
   }
 }

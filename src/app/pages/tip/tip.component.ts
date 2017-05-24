@@ -4,9 +4,7 @@ import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
 import { TableColumn } from '../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { TipService } from './tip.service';
-import { Observable } from 'rxjs/Observable';
 import { TipCreateComponent } from './create/tip-create.component';
 import { ConfirmDialogComponent } from '../../components/dialog/confirm/confirm-dialog.component';
 
@@ -50,21 +48,22 @@ export class TipComponent extends BasePage implements OnInit {
       menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
-    this.subscribeQuery(this.load());
+    this.search();
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  search() {
+    this.load();
+  }
+
+  load(pageable = this.pageable) {
     this.pageable = pageable;
 
-    const observable = this.tipService.query(this.pageable).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.tipService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   select(selected) {

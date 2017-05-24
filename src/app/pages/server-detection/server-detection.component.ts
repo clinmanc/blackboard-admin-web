@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../base-page';
 import { TableColumn } from '../../components/table/table-column';
 import { MdSnackBar } from '@angular/material';
@@ -35,19 +34,19 @@ export class ServerDetectionComponent extends BasePage implements OnInit {
       menus: []
     };
 
-    this.subscribeQuery(this.load());
+    this.search();
   }
 
-  load(): Observable<any[]> {
-
-    const observable = this.serverDetectionService.query().$observable;
-
-    observable.subscribe(data => this.data = data, () => {});
-
-    return observable;
+  search() {
+    this.load();
   }
 
-  reload(): Observable<any[]> {
-    return this.subscribeQuery(this.load());
+  load() {
+    this.withHandler(this.serverDetectionService.query().$observable)
+      .subscribe(data => this.data = data);
+  }
+
+  reload() {
+    this.load();
   }
 }

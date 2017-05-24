@@ -36,8 +36,9 @@ export class SysPermissionCreateComponent extends BasePage implements OnInit {
   }
 
   create() {
-    const formModel =  this.createForm.value;
+    const formModel = this.createForm.value;
 
-    this.sysPermissionService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), this.handleError.bind(this));
+    this.withHandler(this.sysPermissionService.save(formModel).$observable)
+      .subscribe(() => this.dialogRef.close('ok'));
   }
 }

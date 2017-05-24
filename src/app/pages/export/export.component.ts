@@ -70,6 +70,17 @@ export class ExportComponent extends BasePage implements OnInit {
     this.load(new Pageable());
   }
 
+  load(pageable = this.pageable) {
+    this.pageable = pageable;
+
+    this.withHandler(this.exportService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
+  }
+
+  reload() {
+    this.load();
+  }
+
   generate() {
     const formModel = this.searchForm.value;
 
@@ -115,19 +126,5 @@ export class ExportComponent extends BasePage implements OnInit {
     //     type: formModel.exportType
     //   });
     // }
-  }
-
-  load(pageable = this.pageable): Observable<Page<any>> {
-    this.pageable = pageable;
-
-    const observable = this.exportService.query(this.pageable).$observable;
-
-    observable.subscribe(page => this.page = page, () => { });
-
-    return observable;
-  }
-
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
   }
 }

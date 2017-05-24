@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
@@ -45,21 +44,22 @@ export class SysPermissionComponent extends BasePage implements OnInit {
       menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
-    this.subscribeQuery(this.load());
+    this.search();
   }
 
-  load(pageable = this.pageable): Observable<Page<SysPermission>> {
+  search() {
+    this.load(new Pageable());
+  }
+
+  load(pageable = this.pageable) {
     this.pageable = pageable;
 
-    const observable = this.sysPermissionService.query(this.pageable).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.sysPermissionService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<SysPermission>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   select(selected) {

@@ -37,6 +37,7 @@ export class GrowthTagCreateComponent extends BasePage implements OnInit {
   create() {
     const formModel = this.createForm.value;
 
-    this.growthTagService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), this.handleError.bind(this));
+    this.growthTagService.save(formModel).$observable
+      .subscribe(() => this.dialogRef.close('ok'), this.handleError.bind(this));
   }
 }

@@ -1,5 +1,6 @@
+import { Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 import { MdSnackBar } from '@angular/material';
-import {Observable} from "rxjs/Observable";
 
 export class BasePage {
   protected inQuery = false;
@@ -7,26 +8,25 @@ export class BasePage {
 
   constructor(protected snackBar: MdSnackBar) { }
 
-  public startQuery() {
-    this.inQuery = true;
+  public withHandler<T>(observable: Observable<T>): Observable<T> {
+    this.startQuery();
+    return observable.do(this.completeQuery.bind(this)).catch(this.handleError.bind(this));
   }
 
-  public subscribeQuery(observable: Observable<any>) {
-    this.startQuery();
-    observable.subscribe(this.completeQuery.bind(this), this.handleError.bind(this));
-    return observable;
+  public startQuery() {
+    this.inQuery = true;
   }
 
   public completeQuery() {
     setTimeout(() => this.inQuery = false, this.completeQueryDelay);
   }
 
-  handleError(err: any) {
+  public handleError(err: Response) {
     this.completeQuery();
 
-    const json: any = err._body && err.json();
-    const error = json && json.message || '操作失败';
+    const message = err.json().message || '操作失败';
+    this.snackBar.open(message, '知道了', { duration: 5000 });
 
-    this.snackBar.open(error, '知道了', { duration: 5000 });
+    return Observable.throw(err);
   }
 }

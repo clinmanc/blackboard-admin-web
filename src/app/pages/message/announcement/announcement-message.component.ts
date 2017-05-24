@@ -4,7 +4,6 @@ import { TableColumn } from '../../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
 import { AnnouncementMessageService } from './announcement-message.service';
-import { Observable } from 'rxjs/Observable';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
 import { Router } from '@angular/router';
 
@@ -46,19 +45,20 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
       menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
-    this.subscribeQuery(this.load());
+    this.search();
   }
 
-  load(): Observable<any[]> {
-    const observable = this.announcementMessageService.query().$observable;
-
-    observable.subscribe(data => this.data = data, () => {});
-
-    return observable;
+  search() {
+    this.load();
   }
 
-  reload(): Observable<any[]> {
-    return this.subscribeQuery(this.load());
+  load() {
+    this.withHandler(this.announcementMessageService.query().$observable)
+      .subscribe(data => this.data = data, () => { });
+  }
+
+  reload() {
+    this.load();
   }
 
   openViewDialog(event) {
@@ -87,6 +87,7 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
       }
     });
   }
+
   removeAll() {
     const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
     dialogRef.componentInstance.content = '清空后不可恢复，确认清空吗？';

@@ -41,8 +41,8 @@ export class SysRoleCreateComponent extends BasePage implements OnInit {
   }
 
   loadPermissions() {
-    this.sysPermissionService.queryAll().$observable.subscribe(permissions => {
-      this.permissions = permissions.map(permission => {
+    this.withHandler(this.sysPermissionService.queryAll().$observable).map(permissions => {
+      return permissions.map(permission => {
         return {
           permissionId: permission.permissionId,
           name: permission.name,
@@ -50,12 +50,13 @@ export class SysRoleCreateComponent extends BasePage implements OnInit {
           url: permission.url
         };
       });
-    }, this.handleError.bind(this));
+    }).subscribe(permissions => this.permissions = permissions);
   }
 
   create() {
     const formModel = this.createForm.value;
 
-    this.sysRoleService.save(formModel).$observable.subscribe(() => this.dialogRef.close('ok'), this.handleError.bind(this));
+    this.withHandler(this.sysRoleService.save(formModel).$observable)
+      .subscribe(() => this.dialogRef.close('ok'));
   }
 }

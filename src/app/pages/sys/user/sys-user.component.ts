@@ -24,6 +24,7 @@ export class SysUserComponent extends BasePage implements OnInit {
   toolbar = {};
 
   @ViewChild('chipListImpl') chipListImpl: TemplateRef<any>;
+  @ViewChild('editImpl') editImpl: TemplateRef<any>;
 
   constructor(
     snackBar: MdSnackBar,
@@ -45,21 +46,22 @@ export class SysUserComponent extends BasePage implements OnInit {
       menus: [{ name: '清空', icon: 'delete_sweep', action: this.removeAll.bind(this) }]
     };
 
-    this.subscribeQuery(this.load());
+    this.search();
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  search() {
+    this.load();
+  }
+
+  load(pageable = this.pageable) {
     this.pageable = pageable;
 
-    const observable = this.sysUserService.query(this.pageable).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.sysUserService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   select(selected) {

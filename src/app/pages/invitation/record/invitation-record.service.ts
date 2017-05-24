@@ -26,10 +26,10 @@ export class InvitationRecordService extends RestClient {
           invitee: UserHelper.getDisplayName(item.invitedTeacher),
           invitationCode: item.number,
           invitationTime: new Date(item.createTime).toLocaleDateString()
-        }
+        };
       });
       return page;
     }
   })
-  query: ResourceMethod<QueryInput, any>;
+  query: ResourceMethod<QueryInput, Page<any>>;
 }

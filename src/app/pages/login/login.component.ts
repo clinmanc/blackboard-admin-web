@@ -14,23 +14,10 @@ import { AuthHelper } from '../../helper/authorization-helper';
 export class LoginComponent extends BasePage implements OnInit {
   message: string;
   loginForm: FormGroup;
-  formErrors = {
-    'username': '',
-    'password': ''
-  };
-  validationMessages = {
-    'username': {
-      'required': 'Username is required.',
-      'minlength': 'Username must be at least 4 characters long.',
-      'maxlength': 'Username cannot be more than 24 characters long.',
-      'forbiddenName': 'Someone named "Bob" cannot be a hero.'
-    },
-    'password': {
-      'required': 'Password is required.'
-    }
-  };
-  colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688',
-    '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b'];
+  colors = [
+    '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50',
+    '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b'
+  ];
   randomColor = '#03a9f4';
 
   constructor(
@@ -54,9 +41,6 @@ export class LoginComponent extends BasePage implements OnInit {
       password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(24)]],
       rememberMe: false
     });
-    // this.loginFrom.valueChanges
-    //   .subscribe(data => this.onValueChanged(data));
-    // this.onValueChanged(); // (re)set validation messages now
   }
 
   setMessage() {
@@ -86,22 +70,5 @@ export class LoginComponent extends BasePage implements OnInit {
   logout() {
     this.authService.logout();
     this.setMessage();
-  }
-
-  onValueChanged(data?: any) {
-    if (!this.loginForm) { return; }
-
-    const form = this.loginForm;
-    for (const field in this.formErrors) {
-      // clear previous error message (if any)
-      this.formErrors[field] = '';
-      const control = form.get(field);
-      if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
-        for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
   }
 }

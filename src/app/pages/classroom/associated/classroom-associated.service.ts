@@ -37,12 +37,12 @@ export class ClassroomAssociatedService extends RestClient {
           associatedClassroomNum: item.attrs.classrommNum,
           memberIds: item.attrs.classroomShow.split('@').filter(memberId => memberId),
           associatedPeopleNum: item.attrs.allMemberNum
-        }
+        };
       });
       return page;
     }
   })
-  queryAssociatedStatistics: ResourceMethod<QueryInput, any>;
+  queryAssociatedStatistics: ResourceMethod<QueryInput, Page<any>>;
 
   @ResourceAction({
     path: '/{:classroomId}/members',

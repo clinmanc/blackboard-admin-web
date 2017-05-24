@@ -8,6 +8,7 @@ import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-classroom-associated',
@@ -54,13 +55,8 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
   }
 
   buildForm(): void {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth();
-    const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
-
-    const from = `${year}-${month}-01`;
-    const to = `${year}-${month}-${day}`;
+    const from = moment().startOf('month').format('YYYY-MM-DD');
+    const to = moment().format('YYYY-MM-DD');
 
     this.searchForm = this.formBuilder.group({
       classroomCodes: ['', [Validators.required, Validators.minLength(6)]],
@@ -70,27 +66,25 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
   }
 
   search() {
-    this.subscribeQuery(this.load(new Pageable()));
+    this.load(new Pageable());
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  load(pageable = this.pageable) {
     this.pageable = pageable;
     const formModel = this.searchForm.value;
-    const queryInput = {
+
+    const input = Object.assign({
       keyword: formModel.classroomCodes,
       from: formModel.from,
       to: formModel.to
-    };
+    }, this.pageable);
 
-    const observable = this.classroomAssociatedService.queryAssociatedStatistics(Object.assign(queryInput, this.pageable)).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.classroomAssociatedService.queryAssociatedStatistics(input).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   openViewDialog(event) {
@@ -117,7 +111,7 @@ export class ClassroomAssociatedComponent extends BasePage implements OnInit {
 
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.subscribeQuery(result).map((items) => {
+    dialogRef.componentInstance.withHandler(result).map((items) => {
       return items.map(item => {
         return {
           id: item.classroomId || item.userId,

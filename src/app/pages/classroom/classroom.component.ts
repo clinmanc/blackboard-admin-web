@@ -9,7 +9,7 @@ import { ItemListDialogComponent } from '../../components/dialog/item-list/item-
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TableColumn } from '../../components/table/table-column';
-import { generateRecentDateRange } from '../../helper/date-helper';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-classroom',
@@ -63,7 +63,8 @@ export class ClassroomComponent extends BasePage implements OnInit {
   }
 
   buildForm(): void {
-    const { from, to } = generateRecentDateRange();
+    const from = moment().subtract(7, 'days').format('YYYY-MM-DD');
+    const to = moment().format('YYYY-MM-DD');
 
     this.searchForm = this.formBuilder.group({
       from: [from],
@@ -73,27 +74,27 @@ export class ClassroomComponent extends BasePage implements OnInit {
   }
 
   search() {
-    this.subscribeQuery(this.load(new Pageable()));
+    this.load(new Pageable());
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  load(pageable = this.pageable) {
     this.pageable = pageable;
     const formModel = this.searchForm.value;
 
     const method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1);
-    const observable = this.classroomService[method](Object.assign({
+    const input = Object.assign({
       from: formModel.from,
       to: formModel.to,
       keyword: formModel.keyword
-    }, this.pageable)).$observable;
+    }, this.pageable);
 
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.classroomService[method](input).$observable)
+      .map(res => res as Page<any>)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   openViewDialog(event) {
@@ -124,6 +125,6 @@ export class ClassroomComponent extends BasePage implements OnInit {
 
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.subscribeQuery(result).subscribe(items => dialogRef.componentInstance.items = items);
+    dialogRef.componentInstance.withHandler(result).subscribe(items => dialogRef.componentInstance.items = items);
   }
 }

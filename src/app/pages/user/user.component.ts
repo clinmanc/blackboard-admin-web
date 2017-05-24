@@ -9,7 +9,7 @@ import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { UserService } from './user.service';
 import { TableColumn } from '../../components/table/table-column';
-import { generateRecentDateRange } from '../../helper/date-helper';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-user',
@@ -41,18 +41,6 @@ export class UserComponent extends BasePage implements OnInit {
   }
 
   ngOnInit() {
-    this.buildForm();
-    this.route.params.subscribe((params: Params) => {
-      this.queryType = params && params['queryType'] || 'info';
-      if (this.queryType !== 'info') {
-        const formModel = this.searchForm.value;
-        if (!formModel.from && !formModel.to) {
-          const recentDateRange = generateRecentDateRange();
-          this.searchForm.patchValue(recentDateRange);
-        }
-      }
-    });
-
     this.columns = [
       { key: 'name', name: '姓名（电话）', sortable: true, cellTemplate: this.previewImpl },
       { key: 'status', name: '状态', sortable: true },
@@ -68,10 +56,14 @@ export class UserComponent extends BasePage implements OnInit {
       menus: []
     };
 
+    this.buildForm();
+
+    this.initForm();
+
     this.search();
   }
 
-  buildForm(): void {
+  buildForm() {
     this.searchForm = this.formBuilder.group({
       keyword: [''],
       from: [''],
@@ -79,28 +71,43 @@ export class UserComponent extends BasePage implements OnInit {
     });
   }
 
-  search() {
-    this.subscribeQuery(this.load(new Pageable()));
+  initForm() {
+    this.route.params.subscribe((params: Params) => {
+      this.queryType = params && params['queryType'] || 'info';
+      if (this.queryType !== 'info') {
+        const formModel = this.searchForm.value;
+        if (!formModel.from && !formModel.to) {
+          const from = moment().subtract(7, 'days').format('YYYY-MM-DD');
+          const to = moment().format('YYYY-MM-DD');
+          this.searchForm.patchValue({
+            from: from,
+            to: to
+          });
+        }
+      }
+    });
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  search() {
+    this.load(new Pageable());
+  }
+
+  load(pageable = this.pageable) {
     this.pageable = pageable;
     const formModel = this.searchForm.value;
 
     const method = 'query' + this.queryType.slice(0, 1).toUpperCase() + this.queryType.slice(1);
-    const observable = this.userService[method](Object.assign({
+    this.withHandler(this.userService[method](Object.assign({
       keyword: formModel.keyword,
       from: formModel.from,
       to: formModel.to
-    }, this.pageable)).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    }, this.pageable)).$observable)
+      .map(res => res as Page<any>)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   openViewDialog(event) {
@@ -122,6 +129,6 @@ export class UserComponent extends BasePage implements OnInit {
 
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.subscribeQuery(result).subscribe(items => dialogRef.componentInstance.items = items);
+    dialogRef.componentInstance.withHandler(result).subscribe(items => dialogRef.componentInstance.items = items);
   }
 }

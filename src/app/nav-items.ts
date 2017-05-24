@@ -42,8 +42,8 @@ export const NAV_ITEMS: NavItem[] = [
     {
         name: '权限管理', icon: 'security', roles: ['ROLE_ADMIN'],
         children: [
-            { name: '角色管理', url: '/sys/role' },
             { name: '用户管理', url: '/sys/user' },
+            { name: '角色管理', url: '/sys/role' },
             { name: '权限管理', url: '/sys/permission' }
         ]
     },

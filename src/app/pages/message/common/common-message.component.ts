@@ -39,16 +39,17 @@ export class CommonMessageComponent extends BasePage implements OnInit {
   }
 
   search() {
-    this.startQuery();
-    return this.commonMessageService.query(this.pageable).$observable
-      .subscribe((page) => {
-        this.page = page;
-        this.completeQuery();
-      }, this.handleError.bind(this));
+    this.load();
   }
 
-  loadPage(pageable = new Pageable()) {
+  load(pageable = new Pageable()) {
     this.pageable = pageable;
-    this.search();
+
+    this.withHandler(this.commonMessageService.query(this.pageable).$observable)
+      .subscribe(page => this.page = page);
+  }
+
+  reload() {
+    this.load(new Pageable());
   }
 }

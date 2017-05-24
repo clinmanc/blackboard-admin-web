@@ -8,6 +8,9 @@
           <md-chip *ngFor="let role of value">{{role.name}}</md-chip>
         </md-chip-list>
       </ng-template>
+      <ng-template #editImpl let-value="value" let-column="column" let-row="row" let-index="index">
+        <a><md-icon style="size: 18px; color: rgba(0, 0, 0, .54)">mode_edit</md-icon></a>
+      </ng-template>
     </app-table>
     <app-pagination [page]="page" (change)="load($event)"></app-pagination>
   </md-card-content>

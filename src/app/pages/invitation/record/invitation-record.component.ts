@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MdSnackBar } from '@angular/material';
 import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { BasePage } from '../../base-page';
 import { TableColumn } from '../../../components/table/table-column';
-import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
 import { InvitationRecordService } from './invitation-record.service';
 
 @Component({
@@ -24,10 +22,10 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
   toolbar = {};
 
   constructor(
-    protected snackBar: MdSnackBar,
+    snackBar: MdSnackBar,
     private invitationRecordService: InvitationRecordService,
-    private formBuilder: FormBuilder,
-    private dialog: MdDialog) {
+    private formBuilder: FormBuilder
+  ) {
     super(snackBar);
   }
 
@@ -50,7 +48,7 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
     this.search();
   }
 
-  buildForm(): void {
+  buildForm() {
 
     this.searchForm = this.formBuilder.group({
       invitationCode: ['', [Validators.maxLength(6)]]
@@ -58,71 +56,22 @@ export class InvitationRecordComponent extends BasePage implements OnInit {
   }
 
   search() {
-    this.subscribeQuery(this.load(new Pageable()));
+    this.load(new Pageable());
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  load(pageable = this.pageable) {
     this.pageable = pageable;
     const formModel = this.searchForm.value;
-    const queryInput = {
+
+    const input = Object.assign({
       keyword: formModel.invitationCode
-    };
+    }, this.pageable);
 
-    const observable = this.invitationRecordService.query(Object.assign(queryInput, this.pageable)).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.invitationRecordService.query(input).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
-  }
-
-  openViewDialog(event) {
-    this.openDialog(event.column.key, event.row.invitationCode);
-  }
-
-  openDialog(type: string, invitationCode: string) {
-    const formModel = this.searchForm.value;
-    const queryInput = {
-      invitationCode: invitationCode,
-      from: formModel.from,
-      to: formModel.to
-    };
-
-    let result: Observable<any>;
-    let title;
-    if (type === 'inviteeNum') {
-      result = this.invitationRecordService.query(queryInput).$observable;
-      title = '老师列表';
-    } else if (type === 'classroomNum') {
-      result = this.invitationRecordService.query(queryInput).$observable;
-      title = '班级列表';
-    } else if (type === 'userNum') {
-      result = this.invitationRecordService.query(queryInput).$observable;
-      title = '用户列表';
-    } else {
-      return;
-    }
-
-    const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.startQuery();
-
-    result.map((items) => {
-      return items.map(item => {
-        return {
-          id: item.inviteeId || item.classroomId || item.userId,
-          name: item.inviteeName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`) || item.userName
-        };
-      });
-    }).subscribe((items) => {
-      dialogRef.componentInstance.completeQuery();
-      dialogRef.componentInstance.items = items;
-    }, () => {
-      dialogRef.componentInstance.completeQuery();
-      this.handleError.bind(this);
-    })
+  reload() {
+    this.load();
   }
 }

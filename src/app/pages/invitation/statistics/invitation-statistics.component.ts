@@ -8,6 +8,7 @@ import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
 import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-invitation-statistics',
@@ -56,13 +57,8 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
   }
 
   buildForm(): void {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth();
-    const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
-
-    const from = `${year}-${month}-01`;
-    const to = `${year}-${month}-${day}`;
+    const from = moment().startOf('month').format('YYYY-MM-DD');
+    const to = moment().format('YYYY-MM-DD');
 
     this.searchForm = this.formBuilder.group({
       invitationCodes: ['', [Validators.required, Validators.minLength(6)]],
@@ -72,27 +68,25 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
   }
 
   search() {
-    this.subscribeQuery(this.load(new Pageable()));
+    this.load(new Pageable());
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
+  load(pageable = this.pageable) {
     this.pageable = pageable;
     const formModel = this.searchForm.value;
-    const queryInput = {
+
+    const input = Object.assign({
       invitationCodes: formModel.invitationCodes,
       from: formModel.from,
       to: formModel.to
-    };
+    }, this.pageable);
 
-    const observable = this.invitationStatisticsService.queryStatistics(Object.assign(queryInput, this.pageable)).$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+    this.withHandler(this.invitationStatisticsService.queryStatistics(input).$observable)
+      .subscribe(page => this.page = page);
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  reload() {
+    this.load();
   }
 
   exportStatistics() {
@@ -146,13 +140,14 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
 
     const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
     dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.subscribeQuery(result).map((items) => {
-      return items.map(item => {
-        return {
-          id: item.inviteeId || item.classroomId || item.userId,
-          name: item.inviteeName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`) || item.userName
-        };
-      });
-    }).subscribe(items => dialogRef.componentInstance.items = items);
+    dialogRef.componentInstance.withHandler(result)
+      .map((items) => {
+        return items.map(item => {
+          return {
+            id: item.inviteeId || item.classroomId || item.userId,
+            name: item.inviteeName || (item.classroomName && `(${item.membersCount}人) ${item.classroomName}`) || item.userName
+          };
+        });
+      }).subscribe(items => dialogRef.componentInstance.items = items);
   }
 }

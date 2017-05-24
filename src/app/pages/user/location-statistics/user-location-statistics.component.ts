@@ -6,7 +6,7 @@ import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
 import { MdSnackBar } from '@angular/material';
 import { UserLocationStatisticsService } from './user-location-statistics.service';
-import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-user-location-statistics',
@@ -46,17 +46,12 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
     };
     this.buildForm();
 
-    this.subscribeQuery(this.load(new Pageable()));
+    this.search();
   }
 
-  buildForm(): void {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth();
-    const day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
-
-    const from = `${year}-01-01`;
-    const to = `${year}-${month}-${day}`;
+  buildForm() {
+    const from = moment().startOf('year').format('YYYY-MM-DD');
+    const to = moment().format('YYYY-MM-DD');
 
     this.searchForm = this.formBuilder.group({
       from: [from, [Validators.required]],
@@ -64,18 +59,19 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
     });
   }
 
-  load(pageable = this.pageable): Observable<Page<any>> {
-    this.pageable = pageable;
-
-    const observable = this.userLocationStatisticsService.query().$observable;
-
-    observable.subscribe(page => this.page = page, () => {});
-
-    return observable;
+  search() {
+    this.load(new Pageable());
   }
 
-  reload(): Observable<Page<any>> {
-    return this.subscribeQuery(this.load());
+  load(pageable = this.pageable) {
+    this.pageable = pageable;
+
+    this.withHandler(this.userLocationStatisticsService.query().$observable)
+      .subscribe(page => this.page = page);
+  }
+
+  reload() {
+    this.load();
   }
 
   select(selected) {
