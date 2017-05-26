@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
   noAuth: false,
-  url: 'http://admin.xiaoheiban.cn/api/v1',
-  authUrl: 'http://admin.xiaoheiban.cn/api/v1',
-  imgProxyUrl: 'http://admin.xiaoheiban.cn/proxy/image',
+  url: 'http://121.40.116.244:9124/api/v1',
+  authUrl: 'http://121.40.116.244:9124/api/v1',
+  imgProxyUrl: 'http://121.40.116.244:9124/proxy/image',
   builtinImgUrl: 'http://www.xiaoheiban.cn/Public/banhui',
-  fileUrl: 'http://testfile.xiaoheiban.cn'
+  fileUrl: 'http://file.xiaoheiban.cn'
 };

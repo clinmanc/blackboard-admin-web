@@ -1,12 +1,16 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { BasePage } from '../../base-page';
 import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
-import { MdSnackBar } from '@angular/material';
 import { UserLocationStatisticsService } from './user-location-statistics.service';
 import * as moment from 'moment';
+import { Observable } from 'rxjs/Observable';
+import { AlertDialogComponent } from '../../../components/dialog/alert/alert-dialog.component';
+import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
+import { LocalDateTimePipe } from 'app/pipes/local-date-time.pipe';
 
 @Component({
   selector: 'app-user-location-statistics',
@@ -20,14 +24,14 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
   page = new Page<any>();
   pageable = new Pageable();
   columns: TableColumn[] = [];
-  selected: any[] = [];
   toolbar = {};
 
-  @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
+  @ViewChild('actionImpl') actionImpl: TemplateRef<any>;
   @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
   constructor(
     snackBar: MdSnackBar,
+    private dialog: MdDialog,
     private formBuilder: FormBuilder,
     private userLocationStatisticsService: UserLocationStatisticsService
   ) {
@@ -36,12 +40,14 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '日期范围', sortable: true }
+      { key: 'name', name: '日期范围', sortable: true, cellTemplate: this.viewImpl },
+      { key: 'createTime', name: '创建时间', pipe: new LocalDateTimePipe() },
+      { key: 'action', name: '操作', numeric: true, cellTemplate: this.actionImpl }
     ];
     this.toolbar = {
       persistentButtons: [],
       iconButtons: [{ icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [{ name: '重新生成', icon: 'autorenew' }],
+      contextualIconButtons: [],
       menus: []
     };
     this.buildForm();
@@ -74,7 +80,38 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
     this.load();
   }
 
-  select(selected) {
-    this.selected = selected;
+  generate(range?: { from: string, to: string }) {
+    range = range || this.searchForm.value;
+
+    this.userLocationStatisticsService.queryStatus(range).$observable
+      .switchMap(ret => {
+        if (ret.status === '1') { // 正在生成数据
+          const dialogRef: MdDialogRef<AlertDialogComponent> = this.dialog.open(AlertDialogComponent);
+          dialogRef.componentInstance.content = ret.msg;
+
+          return dialogRef.afterClosed();
+
+        } else if (ret.status === '2') { // 生成数据
+          const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+          dialogRef.componentInstance.content = ret.msg;
+
+          return dialogRef.afterClosed()
+            .filter(result => result === 'ok')
+            .switchMap(() => this.userLocationStatisticsService.generate(range).$observable);
+        }
+
+        return Observable.of('ok');
+      })
+      .subscribe(this.reload.bind(this), this.handleError.bind(this));
+  }
+
+  regenerate(name: string) {
+    const rangeArray: string[] = name.split('_');
+
+    this.generate({ from: rangeArray[0], to: rangeArray[1] });
+  }
+
+  openViewDialog() {
+
   }
 }

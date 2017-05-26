@@ -1,4 +1,4 @@
-import { animate, state, style, transition, trigger } from "@angular/animations";
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export const scaleAnimation = trigger('scaleAnimation', [
   state('in', style({ transform: 'scale(1, 1)', opacity: 1 })),

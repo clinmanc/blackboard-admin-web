@@ -1,11 +1,11 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { BasePage } from '../base-page';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
 import { TableColumn } from '../../components/table/table-column';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ExportService } from './export.service';
 import { ConfirmDialogComponent } from '../../components/dialog/confirm/confirm-dialog.component';
 import { AlertDialogComponent } from '../../components/dialog/alert/alert-dialog.component';
@@ -30,9 +30,9 @@ export class ExportComponent extends BasePage implements OnInit {
 
   constructor(
     snackBar: MdSnackBar,
+    private dialog: MdDialog,
     private formBuilder: FormBuilder,
-    private exportService: ExportService,
-    private dialog: MdDialog
+    private exportService: ExportService
   ) {
     super(snackBar);
   }
@@ -117,14 +117,7 @@ export class ExportComponent extends BasePage implements OnInit {
     }).subscribe(this.reload.bind(this), err => console.log(err));
   }
 
-  regenerate() {
-    // for (const item of this.selected) {
-    //   this.exportService.generate({
-    //     startTime: formModel.from,
-    //     endTime: formModel.to,
-    //     name: ret.data.msg,
-    //     type: formModel.exportType
-    //   });
-    // }
+  regenerate(name: string) {
+    this.generate();
   }
 }

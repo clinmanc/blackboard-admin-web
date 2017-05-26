@@ -1,4 +1,4 @@
-import { animate, state, style, transition, trigger } from "@angular/animations";
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export const shrinkInOutAnimation = trigger('shrinkInOutAnimation', [
   state('out', style({ height: '*' })), // 默认元素不展开

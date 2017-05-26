@@ -25,7 +25,8 @@ import { TableBodyCellComponent } from './components/table/body/table-body-cell.
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { ViewComponent } from 'app/components/table/cell/view.component';
 import { AvatarPreviewComponent } from './components/table/cell/preview.component';
-import { LocalDatePipe } from './shared/local-date.pipe';
+import { LocalDatePipe } from './pipes/local-date.pipe';
+import { LocalDateTimePipe } from './pipes/local-date-time.pipe';
 import { MessageCategoryPipe } from './pages/message/message-category.pipe';
 
 import { LoginComponent } from './pages/login/login.component';
@@ -87,6 +88,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AvatarPreviewComponent,
 
     LocalDatePipe,
+    LocalDateTimePipe,
     MessageCategoryPipe,
 
     HomeComponent,

@@ -1,4 +1,4 @@
-import { animate, state, style, transition, trigger } from "@angular/animations";
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export const smoothAnimation = trigger('smoothAnimation', [
   state('in', style({ height: '*', transform: 'translateX(0)', opacity: 1 })),

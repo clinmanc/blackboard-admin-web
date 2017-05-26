@@ -1,10 +1,16 @@
 import { environment } from '../../environments/environment';
+import * as _ from 'lodash';
+
 export class AvatarHelper {
   static parseFromUser({ avatar }) {
     let small: string;
     let big: string;
     if (avatar) {
-      small = big = `${environment.imgProxyUrl}?url=${environment.fileUrl}/${avatar}`;
+      if (_.startsWith(avatar, 'http://')) {
+        small = big = `${environment.imgProxyUrl}?url=${avatar}?defaultImage=touxiang.jpg`;
+      } else {
+        small = big = `${environment.imgProxyUrl}?url=${environment.fileUrl}/${avatar}`;
+      }
     } else {
       small = big = `/assets/img/avatar.png`;
     }
@@ -18,7 +24,9 @@ export class AvatarHelper {
     let small: string;
     let big: string;
     if (badgeId) {
-      if (badgeType === 'BUILTIN') {
+      if (_.startsWith(badgeId, 'http://')) {
+        small = big = `${environment.imgProxyUrl}?url=${badgeId}?defaultImage=banji.jpg`;
+      } else if (badgeType === 'BUILTIN') {
         if (badgeId === 'defaultclass') {
           small = big = `${environment.imgProxyUrl}?url=${environment.builtinImgUrl}/class_logo11.png?defaultImage=banji.jpg`;
         } else {

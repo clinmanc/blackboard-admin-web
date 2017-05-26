@@ -1,32 +1,41 @@
 <md-card>
   <md-card-content>
-    <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+    <form [formGroup]="searchForm" novalidate (ngSubmit)="generate()">
       <md-input-container>
         <input mdInput formControlName="from" type="date" placeholder="开始时间" required>
       </md-input-container>
       <md-input-container>
         <input mdInput formControlName="to" type="date" placeholder="结束时间" required>
       </md-input-container>
-      <button md-raised-button type="submit" color="accent" disabled>Coming soon</button>
-      <!--<button md-raised-button type="submit" color="accent" [disabled]="!searchForm.valid">生成数据</button>-->
+      <button md-raised-button type="submit" color="accent" [disabled]="!searchForm.valid">生成数据</button>
     </form>
   </md-card-content>
 </md-card>
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
-  <app-toolbar [selected]="selected" [toolbar]="toolbar"></app-toolbar>
+  <app-toolbar [toolbar]="toolbar"></app-toolbar>
   <md-card-content>
-    <app-table [columns]="columns" [data]="page.content" [selectable]="true" (select)="select($event)" class="app-line-limit-length">
-      <ng-template #previewImpl let-value="value" let-row="row">
-        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
+    <app-table [columns]="columns" [data]="page.content" class="app-line-limit-length">
+      <ng-template #actionImpl let-row="row">
+        <button *ngIf="row.isDoing !== 'true'; else redoElseBlock" md-icon-button md-tooltip="重新生成" (click)="regenerate(row.name)">
+          <md-icon class="app-table-cell-icon">autorenew</md-icon>
+        </button>
+        <ng-template #redoElseBlock>
+          <button md-icon-button md-tooltip="正在生成...">
+            <md-icon class="app-table-cell-icon">hourglass_empty</md-icon>
+          </button>
+        </ng-template>
       </ng-template>
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
-        <app-view [text]="value" [value]="{
-          value: value,
-          column: column,
-          row: row,
-          index: index
-        }" (view)="openViewDialog($event)"></app-view>
+        <ng-container *ngIf="row.isDoing === 'true'; else existElseBlock">{{value}}</ng-container>
+        <ng-template #existElseBlock>
+          <a (click)="openViewDialog({
+              value: value,
+              column: column,
+              row: row,
+              index: index
+            })">{{value}}</a>
+        </ng-template>
       </ng-template>
     </app-table>
     <app-pagination [page]="page" (change)="load($event)"></app-pagination>

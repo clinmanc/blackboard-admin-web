@@ -7,13 +7,12 @@ import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
-import { Observable } from 'rxjs/Observable';
 import { SysUserCreateDialogComponent } from './create/sys-user-create-dialog.component';
 
 @Component({
   selector: 'app-sys-user',
   templateUrl: './sys-user.component.html',
-  styleUrls: ['./sys-user.component.scss'],
+  styleUrls: ['./sys-user.component.scss']
 })
 export class SysUserComponent extends BasePage implements OnInit {
   // @HostBinding('@routeAnimation') routeAnimation = true;
