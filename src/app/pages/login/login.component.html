@@ -4,7 +4,7 @@
     <md-card-subtitle>登录后继续</md-card-subtitle>
     <md-card-content>
       <form class="login-from" [formGroup]="loginForm" novalidate (ngSubmit)="login()">
-        <!--<p>{{message}}</p>-->
+        <p>{{message}}</p>
         <md-input-container>
           <input mdInput type="text" formControlName="username" required name="username" placeholder="用户名" minlength="1" maxlength="24">
         </md-input-container>

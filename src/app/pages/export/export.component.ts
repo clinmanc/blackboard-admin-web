@@ -90,7 +90,6 @@ export class ExportComponent extends BasePage implements OnInit {
       type: formModel.exportType
     }).$observable.switchMap((ret) => {
 
-      console.log(ret);
       if (ret.status === '1') { // 正在生成数据
         const dialogRef: MdDialogRef<AlertDialogComponent> = this.dialog.open(AlertDialogComponent);
         dialogRef.componentInstance.content = ret.msg;

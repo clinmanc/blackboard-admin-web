@@ -38,7 +38,7 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/cli": "^1.0.4",
+    "@angular/cli": "^1.0.6",
     "@angular/compiler-cli": "^4.0.0",
     "@types/bcryptjs": "^2.4.0",
     "@types/echarts": "0.0.6",
@@ -55,6 +55,7 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "ngx-perfect-scrollbar": "^4.0.0",
+    "node-sass": "^4.5.3",
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",

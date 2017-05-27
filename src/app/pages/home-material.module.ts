@@ -18,4 +18,4 @@ import {
   ],
   declarations: []
 })
-export class CustomMaterialModule { }
+export class HomeMaterialModule { }
