@@ -6,6 +6,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from './auth.service';
 import { AuthHelper } from './helper/authorization-helper';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class AuthGuard implements CanLoad, CanActivate, CanActivateChild {

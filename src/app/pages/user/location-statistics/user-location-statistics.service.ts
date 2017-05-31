@@ -5,6 +5,7 @@ import { RestClient } from '../../../shared/rest-client';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { RequestMethod } from '@angular/http';
+import { environment } from '../../../../environments/environment';
 
 export class QueryInput extends Pageable {
   keyword?: string;
@@ -31,9 +32,7 @@ export class UserLocationStatisticsService extends RestClient {
   })
   generate: ResourceMethod<QueryInput, any[]>;
 
-  @ResourceAction({
-    path: '/preview',
-    isArray: true
-  })
-  preview: ResourceMethod<QueryInput, any[]>;
+  preview(input: { name: string }) {
+    window.open(`${environment.baseUrl}/location/preView/${input.name}`);
+  }
 }

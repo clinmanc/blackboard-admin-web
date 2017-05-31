@@ -111,7 +111,7 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
     this.generate({ from: rangeArray[0], to: rangeArray[1] });
   }
 
-  openViewDialog() {
-
+  openViewDialog({ row }) {
+    this.userLocationStatisticsService.preview({ name: row.name });
   }
 }

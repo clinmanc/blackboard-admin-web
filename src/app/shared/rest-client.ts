@@ -36,7 +36,7 @@ export class RestClient extends Resource {
     return environment.url + this.resourcePath;
   }
 
-  getResourcePath(methodOptions?: any): string | Promise<string> {
+  getResourcePath(): string | Promise<string> {
     return super.getUrl();
   }
 

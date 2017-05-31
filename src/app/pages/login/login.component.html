@@ -1,10 +1,9 @@
 <div class="login-container" [ngStyle]="{ 'background-color': randomColor }">
   <md-card>
     <md-card-title><img alt="晓黑板" title="晓黑板" src="/assets/img/logo-brown.png">管理系统</md-card-title>
-    <md-card-subtitle>登录后继续</md-card-subtitle>
+    <md-card-subtitle>{{message}}</md-card-subtitle>
     <md-card-content>
       <form class="login-from" [formGroup]="loginForm" novalidate (ngSubmit)="login()">
-        <p>{{message}}</p>
         <md-input-container>
           <input mdInput type="text" formControlName="username" required name="username" placeholder="用户名" minlength="1" maxlength="24">
         </md-input-container>

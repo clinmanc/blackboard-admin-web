@@ -7,6 +7,6 @@
         <md-slider min="0" max="10" step="1" [value]="value" thumbLabel disabled></md-slider>
       </ng-template>
     </app-table>
-    <app-pagination [page]="page" (change)="loadPage($event)"></app-pagination>
+    <app-pagination [page]="page" (change)="load($event)"></app-pagination>
   </md-card-content>
 </md-card>

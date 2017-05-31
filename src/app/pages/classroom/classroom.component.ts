@@ -42,7 +42,11 @@ export class ClassroomComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.buildForm();
-    this.route.params.subscribe((params: Params) => this.queryType = params && params['queryType'] || 'info');
+    this.route.params.subscribe((params: Params) => {
+      this.queryType = params && params['queryType'] || 'info';
+      this.page = new Page<any>();
+      this.pageable = new Pageable();
+    });
 
     this.columns = [
       { key: 'name', name: '班级', sortable: true, cellTemplate: this.previewImpl },

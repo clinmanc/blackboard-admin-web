@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
+import { RequestMethod } from '@angular/http';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { RestClient } from '../../../shared/rest-client';
 import { ResourceAction, ResourceParams } from 'ngx-resource';
-import { ResourceMethod } from 'ngx-resource/src/Interfaces';
+import { ResourceMethod, ResourceMethodStrict } from 'ngx-resource/src/Interfaces';
+import { environment } from '../../../../environments/environment';
 
 export class QueryInput extends Pageable {
-  invitationCodes?: string;
+  invitationCodes?: string[];
   invitationCode?: string;
   from: string;
   to: string;
@@ -19,9 +21,10 @@ export class QueryInput extends Pageable {
 export class InvitationStatisticsService extends RestClient {
 
   @ResourceAction({
-    path: '/statistics',
+    path: '/statistics?size={:size}&page={:page}&sort={:sort}&direction={:direction}',
+    method: RequestMethod.Post
   })
-  queryStatistics: ResourceMethod<QueryInput, Page<any>>;
+  queryStatistics: ResourceMethodStrict<QueryInput, Pageable, Page<any>>;
 
   @ResourceAction({
     path: '/teachers',
@@ -48,6 +51,6 @@ export class InvitationStatisticsService extends RestClient {
         url += (url && '&') + key + '=' + params[key];
       }
     }
-    window.open(super.getUrl() + '/export?' + url);
+    window.location.href = environment.baseUrl + '/invitation/exportV2?' + url;
   }
 }

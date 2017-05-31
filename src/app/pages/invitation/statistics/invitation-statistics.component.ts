@@ -74,14 +74,15 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
   load(pageable = this.pageable) {
     this.pageable = pageable;
     const formModel = this.searchForm.value;
+    const invitationCodes = formModel.invitationCodes.split(',');
 
     const input = Object.assign({
-      invitationCodes: formModel.invitationCodes,
+      invitationCodes: invitationCodes,
       from: formModel.from,
       to: formModel.to
     }, this.pageable);
 
-    this.withHandler(this.invitationStatisticsService.queryStatistics(input).$observable)
+    this.withHandler(this.invitationStatisticsService.queryStatistics(input, pageable).$observable)
       .subscribe(page => this.page = page);
   }
 

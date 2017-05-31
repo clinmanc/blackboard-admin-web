@@ -55,6 +55,11 @@ export class UserComponent extends BasePage implements OnInit {
       contextualIconButtons: [],
       menus: []
     };
+    this.route.params.subscribe((params: Params) => {
+      this.queryType = params && params['queryType'] || 'info';
+      this.page = new Page<any>();
+      this.pageable = new Pageable();
+    });
 
     this.buildForm();
 

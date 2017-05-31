@@ -44,7 +44,7 @@ export class LoginComponent extends BasePage implements OnInit {
   }
 
   setMessage() {
-    this.message = (AuthHelper.isLoggedIn ? '已' : '未') + '登录';
+    this.message = AuthHelper.isLoggedIn ? '登录成功。请稍后 ...' : '登录后继续';
   }
 
   login() {
@@ -64,7 +64,10 @@ export class LoginComponent extends BasePage implements OnInit {
         // Redirect the user
         this.router.navigate([redirect]);
       }
-    }, this.handleError.bind(this));
+    }, (err) => {
+      this.setMessage();
+      this.handleError(err);
+    });
   }
 
   logout() {

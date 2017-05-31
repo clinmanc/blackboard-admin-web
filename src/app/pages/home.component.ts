@@ -9,6 +9,7 @@ import { AuthService } from '../auth.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { AuthHelper } from '../helper/authorization-helper';
+import 'rxjs/add/operator/switchMapTo';
 
 @Component({
   selector: 'app-home',

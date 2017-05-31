@@ -43,6 +43,7 @@ export class GrowthTagComponent extends BasePage implements OnInit {
       contextualIconButtons: [{ name: '删除', icon: 'delete' }],
       menus: [{ name: '清空', icon: 'delete_sweep' }]
     };
+    this.search();
   }
 
   search() {

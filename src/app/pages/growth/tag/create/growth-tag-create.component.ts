@@ -7,7 +7,8 @@ import { GrowthTagService } from '../growth-tag.service';
 @Component({
   selector: 'app-growth-tag-create',
   templateUrl: './growth-tag-create.component.html',
-  styleUrls: ['./growth-tag-create.component.scss']
+  styleUrls: ['./growth-tag-create.component.scss'],
+  providers: [GrowthTagService]
 })
 export class GrowthTagCreateComponent extends BasePage implements OnInit {
 

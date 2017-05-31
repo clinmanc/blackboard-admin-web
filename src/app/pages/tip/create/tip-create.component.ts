@@ -7,7 +7,8 @@ import { TipService } from '../tip.service';
 @Component({
   selector: 'app-tip-create',
   templateUrl: './tip-create.component.html',
-  styleUrls: ['./tip-create.component.scss']
+  styleUrls: ['./tip-create.component.scss'],
+  providers: [TipService]
 })
 export class TipCreateComponent extends BasePage implements OnInit {
 
