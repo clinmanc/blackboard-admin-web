@@ -1,8 +1,8 @@
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
-  <app-toolbar [selected]="selected" [toolbar]="toolbar"></app-toolbar>
-  <md-card-content>
-    <app-table [columns]="columns" [data]="data" (view)="openViewDialog($event)">
+  <app-toolbar [toolbar]="toolbar"></app-toolbar>
+  <md-card-content perfect-scrollbar>
+    <app-table [columns]="columns" [data]="data">
       <ng-template #statusImpl let-value="value">
         <md-slide-toggle [checked]="value" disabled></md-slide-toggle>
       </ng-template>

@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import url("//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css");
+//@import url("http://fonts.googleapis.com/css?family=Roboto");
 @import url("//cdn.bootcss.com/material-design-lite/1.3.0/material.indigo-pink.min.css");
 @import url("//cdn.bootcss.com/jquery.perfect-scrollbar/0.7.0/css/perfect-scrollbar.min.css");
 
@@ -19,19 +20,31 @@ $screen-lg-min: 1200px !global;
 }
 
 .material-icons.md-18 {
+  vertical-align: middle;
   font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .material-icons.md-24 {
+  vertical-align: middle;
   font-size: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 .material-icons.md-36 {
+  vertical-align: middle;
   font-size: 36px;
+  width: 36px;
+  height: 36px;
 }
 
 .material-icons.md-48 {
+  vertical-align: middle;
   font-size: 48px;
+  width: 48px;
+  height: 48px;
 }
 
 .app-table {

@@ -4,6 +4,7 @@ import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../../shared/rest-client';
 import { Page } from '../../../shared/page';
 import { RequestMethod } from '@angular/http';
+import { environment } from '../../../../environments/environment';
 
 export class ReceiveType {
   static ALL = '所有';
@@ -13,7 +14,7 @@ export class ReceiveType {
 }
 
 @ResourceParams({
-  url: '/messages/announcement'
+  url: `${environment.url}/messages/announcement`
 })
 @Injectable()
 export class AnnouncementMessageService extends RestClient {

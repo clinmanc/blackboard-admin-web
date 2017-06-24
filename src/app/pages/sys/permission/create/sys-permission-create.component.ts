@@ -7,7 +7,8 @@ import { BasePage } from '../../../base-page';
 @Component({
   selector: 'app-sys-permission-create',
   templateUrl: './sys-permission-create.component.html',
-  styleUrls: ['./sys-permission-create.component.scss']
+  styleUrls: ['./sys-permission-create.component.scss'],
+  providers: [SysPermissionService]
 })
 export class SysPermissionCreateComponent extends BasePage implements OnInit {
 

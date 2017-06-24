@@ -15,7 +15,7 @@ export class QueryInput extends Pageable {
 }
 
 @ResourceParams({
-  url: '/invitation'
+  url: `${environment.url}/invitation`
 })
 @Injectable()
 export class InvitationStatisticsService extends RestClient {

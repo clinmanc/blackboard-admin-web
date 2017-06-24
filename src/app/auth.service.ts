@@ -19,7 +19,7 @@ interface LoginInfo {
 
 @Injectable()
 @ResourceParams({
-  url: '/auth'
+  url: `${environment.authUrl}/auth`
 })
 export class AuthService extends RestClient {
 
@@ -57,9 +57,5 @@ export class AuthService extends RestClient {
   })
   logout(): void {
     AuthHelper.clear();
-  }
-
-  getUrl(methodOptions?: any): string | Promise<string> {
-    return environment.authUrl + this.getResourcePath();
   }
 }

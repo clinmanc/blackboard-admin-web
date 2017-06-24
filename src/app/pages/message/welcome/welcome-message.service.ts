@@ -4,6 +4,7 @@ import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../../shared/rest-client';
 import { Page } from '../../../shared/page';
 import { RequestMethod } from '@angular/http';
+import { environment } from '../../../../environments/environment';
 
 export class ReceiverType {
   static ALL = '所有';
@@ -13,7 +14,7 @@ export class ReceiverType {
 }
 
 @ResourceParams({
-  url: '/messages/welcome'
+  url: `${environment.url}/messages/welcome`
 })
 @Injectable()
 export class WelcomeMessageService extends RestClient {

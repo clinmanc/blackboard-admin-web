@@ -5,6 +5,7 @@ import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { Page } from '../../shared/page';
 import { RequestMethod } from '@angular/http';
+import { environment } from '../../../environments/environment';
 
 export class QueryInput extends Pageable {
 
@@ -12,7 +13,7 @@ export class QueryInput extends Pageable {
 
 @Injectable()
 @ResourceParams({
-  url: '/exports'
+  url: `${environment.url}/exports`
 })
 export class ExportService extends RestClient {
 

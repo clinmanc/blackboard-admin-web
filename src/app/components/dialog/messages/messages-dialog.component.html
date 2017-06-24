@@ -1,0 +1,93 @@
+<div class="app-dialog-container">
+  <h3 md-dialog-title *ngIf="title">
+    {{title}}
+  </h3>
+  <perfect-scrollbar md-dialog-content>
+    <p *ngIf="!inQuery && (page?.content?.length === 0)" class="empty-message">
+      列表为空
+    </p>
+    <md-card *ngFor="let item of page.content">
+      <md-card-header>
+        <img md-card-avatar src="{{item.senderAvatar.small}}">
+        <md-card-title>
+          {{item.title}}
+          <small *ngIf="item.direction === 'OUTGOING'">（发）</small>
+          <small *ngIf="item.direction === 'INCOMING'">（收）</small>
+        </md-card-title>
+        <md-card-subtitle>{{item.createTime | date:"MM/dd/yy hh:mm:ss"}}</md-card-subtitle>
+      </md-card-header>
+      <md-card-content>
+        <p *ngIf="item.content" class="app-line-limit-length" md-tooltip="消息" appLimitedLine [maxWidth]="496">
+          {{item.content | blackboardMessage}}
+        </p>
+        <div *ngIf="item.audio || item.topic || item.survey || item.video || item.images">
+
+          <!-- 晓讨论 -->
+          <p *ngIf="item.topic" class="app-content" md-tooltip="晓讨论" appLimitedLine [maxWidth]="496">
+            <md-icon>chat</md-icon>
+            {{item.topic.content | blackboardMessage}}
+            <!-- 图片 -->
+            <app-preview *ngFor="let image of item.topic.images"
+                         thumbnail="{{environment.imgProxyUrl}}?url={{image.thumbnail}}&defaultImage=wen.png"
+                         original="{{environment.imgProxyUrl}}?url={{image.original}}&defaultImage=wen.png">
+            </app-preview>
+          </p>
+
+          <!-- 晓活动 -->
+          <p *ngIf="item.activity">{{item.activity.tag}}</p>
+          <p *ngIf="item.activity" class="app-content" md-tooltip="晓活动" appLimitedLine [maxWidth]="496">
+            <md-icon>chat</md-icon>
+            {{item.activity.content | blackboardMessage}}
+          </p>
+
+          <!-- 晓调查 -->
+          <div *ngIf="item.survey">
+            <p *ngIf="item.survey" class="app-content" md-tooltip="晓调查" appLimitedLine [maxWidth]="496">
+              <md-icon>insert_chart</md-icon>
+              {{item.survey.subject | blackboardMessage}}
+            </p>
+            <md-list class="survey" dense>
+              <md-list-item *ngFor="let key of getSortedKeys(item.survey.surveyOptions)"
+                            appLimitedLine
+                            [maxWidth]="496">
+                <span class="survey-counter">{{key}}.</span>
+                <app-preview *ngIf="item.survey.surveyOptions[key].image"
+                             thumbnail="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{item.survey.surveyOptions[key].image.thumbnail}}&defaultImage=wen.png"
+                             original="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{item.survey.surveyOptions[key].image.original}}&defaultImage=wen.png">
+                </app-preview>
+                <!--<img class="opt-img app-thumbnail" *ngIf="item.survey.surveyOptions[key].image" height="28" alt="图片"-->
+                     <!--src="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{item.survey.surveyOptions[key].image.original}}&defaultImage=wen.png">-->
+                {{item.survey.surveyOptions[key].value | blackboardMessage}}
+              </md-list-item>
+            </md-list>
+          </div>
+
+          <!-- 语音 -->
+          <p *ngIf="item.audio" class="app-content" md-tooltip="语音">
+            <md-icon>mic</md-icon>
+          </p>
+          <audio *ngIf="item.audio" src="{{environment.audioFileUrl}}/{{item.audio.id}}/mp3" controls="controls"></audio>
+
+          <!-- 视频 -->
+          <p *ngIf="item.video" class="app-content" md-tooltip="视频" appLimitedLine [maxWidth]="496">
+            <md-icon>videocam</md-icon>
+            {{item.video.desc | blackboardMessage}}
+          </p>
+          <video *ngIf="item.video" src="{{item.video.playUrl}}" width="320" controls="controls"></video>
+
+          <!-- 图片 -->
+          <app-preview *ngFor="let image of item.images"
+                       thumbnail="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{image.thumbnail}}&defaultImage=wen.png"
+                       original="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{image.original}}&defaultImage=wen.png">
+          </app-preview>
+          <!--<img class="msg-img app-thumbnail" *ngFor="let image of item.images" width="32" height="32" alt="图片"-->
+               <!--src="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{image.original}}&defaultImage=wen.png">-->
+        </div>
+      </md-card-content>
+    </md-card>
+  </perfect-scrollbar>
+  <div md-dialog-actions>
+    <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
+  </div>
+</div>
+<md-progress-bar class="app-progress-bar-bottom" mode="indeterminate" *ngIf="inQuery"></md-progress-bar>

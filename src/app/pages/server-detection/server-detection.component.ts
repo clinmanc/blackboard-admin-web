@@ -25,7 +25,7 @@ export class ServerDetectionComponent extends BasePage implements OnInit {
     this.columns = [
       { key: 'name', name: '服务器' },
       { key: 'url', name: '访问链接' },
-      { key: 'status', name: '状态', sortable: true }
+      { key: 'status', name: '状态' }
     ];
     this.toolbar = {
       persistentButtons: [],

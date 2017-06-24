@@ -1,11 +1,10 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MdSnackBar } from '@angular/material';
 import { GrowthRecordService } from './growth-record.service';
 import { BasePage } from '../../base-page';
 import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from 'app/components/table/table-column';
-import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
 
 @Component({
   selector: 'app-growth-record',
@@ -20,12 +19,11 @@ export class GrowthRecordComponent extends BasePage implements OnInit {
   columns: TableColumn[] = [];
   toolbar = {};
 
-  @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
+  @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
   @ViewChild('statusImpl') statusImpl: TemplateRef<any>;
 
   constructor(
     snackBar: MdSnackBar,
-    private dialog: MdDialog,
     private growthRecordService: GrowthRecordService
   ) {
     super(snackBar);
@@ -33,12 +31,12 @@ export class GrowthRecordComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'content', name: '内容', sortable: true },
-      { key: 'createBy', name: '创建人', cellTemplate: this.viewImpl },
-      { key: 'createTime', name: '创建时间', sortable: true },
-      { key: 'praiseNum', name: '点赞数', sortable: true },
-      { key: 'commentsNum', name: '评论数', sortable: true },
-      { key: 'status', name: '状态', sortable: true, cellTemplate: this.statusImpl }
+      { key: 'content', name: '内容' },
+      { key: 'createBy', name: '创建人', cellTemplate: this.previewImpl },
+      { key: 'createTime', name: '创建时间' },
+      { key: 'praiseNum', name: '点赞数' },
+      { key: 'commentsNum', name: '评论数' },
+      { key: 'status', name: '状态', cellTemplate: this.statusImpl }
     ];
     this.toolbar = {
       persistentButtons: [],
@@ -63,10 +61,5 @@ export class GrowthRecordComponent extends BasePage implements OnInit {
 
   reload() {
     return this.load();
-  }
-
-  openViewDialog(event) {
-    const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
-
   }
 }

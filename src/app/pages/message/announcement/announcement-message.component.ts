@@ -1,11 +1,11 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BasePage } from '../../base-page';
 import { TableColumn } from '../../../components/table/table-column';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { ItemListDialogComponent } from '../../../components/dialog/item-list/item-list-dialog.component';
 import { AnnouncementMessageService } from './announcement-message.service';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
 import { Router } from '@angular/router';
+import { BlackboardMessagePipe } from '../../../pipes/blackboard-message.pipe';
 
 @Component({
   selector: 'app-announcement-message',
@@ -20,9 +20,6 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
   selected = [];
   toolbar = {};
 
-  @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
-  @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
-
   constructor(
     snackBar: MdSnackBar,
     private router: Router,
@@ -33,10 +30,10 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'receiveType', name: '接收类型', sortable: true },
-      { key: 'title', name: '标题', sortable: true },
-      { key: 'content', name: '内容', cellTemplate: this.viewImpl },
-      { key: 'createTime', name: '创建时间', sortable: true, numeric: true }
+      { key: 'receiveType', name: '接收类型' },
+      { key: 'title', name: '标题' },
+      { key: 'content', name: '内容', pipe: new BlackboardMessagePipe, maxWidth: 400 },
+      { key: 'createTime', name: '创建时间', numeric: true }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
@@ -59,11 +56,6 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
 
   reload() {
     this.load();
-  }
-
-  openViewDialog(event) {
-    const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
-
   }
 
   select(selected) {

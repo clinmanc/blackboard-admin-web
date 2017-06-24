@@ -4,11 +4,12 @@ import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../../shared/rest-client';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
+import { environment } from '../../../../environments/environment';
 
 class QueryInput extends Pageable { }
 
 @ResourceParams({
-  url: '/growth/records'
+  url: `${environment.url}/growth/records`
 })
 @Injectable()
 export class GrowthRecordService extends RestClient {

@@ -11,5 +11,6 @@ export const environment = {
   authUrl: 'http://localhost:9124/api/v1',
   imgProxyUrl: 'http://localhost:9124/proxy/image',
   builtinImgUrl: 'http://www.xiaoheiban.cn/Public/banhui',
-  fileUrl: 'http://testfile.xiaoheiban.cn'
+  fileUrl: 'http://testfile.xiaoheiban.cn',
+  audioFileUrl: 'http://demo.xiaoheiban.cn/audio'
 };

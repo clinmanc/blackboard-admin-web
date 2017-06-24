@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MdDialogRef, MdSnackBar } from '@angular/material';
 import { BasePage } from '../../../pages/base-page';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-item-list-dialog',
@@ -12,12 +12,15 @@ export class ItemListDialogComponent extends BasePage {
   title: string;
   items: any[];
 
-  constructor(public dialogRef: MdDialogRef<ItemListDialogComponent>, protected snackBar: MdSnackBar) {
+  constructor(
+    snackBar: MdSnackBar,
+    public dialogRef: MdDialogRef<ItemListDialogComponent>
+  ) {
     super(snackBar);
     this.completeQueryDelay = 250;
   }
 
-  getKeys(item){
+  getKeys(item) {
     return Object.keys(item).filter(key => !_.startsWith(key, '$'));
   }
 }

@@ -36,10 +36,10 @@ export class TipComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'tipUrl', name: '图片', sortable: true, cellTemplate: this.previewImpl },
+      { key: 'tipUrl', name: '图片', cellTemplate: this.previewImpl },
       { key: 'deviceType', name: '设备类型', cellTemplate: this.viewImpl },
-      { key: 'priority', name: '权重', sortable: true, numeric: true, cellTemplate: this.weightImpl },
-      { key: 'version', name: '版本号', sortable: true, numeric: true }
+      { key: 'priority', name: '权重', numeric: true, cellTemplate: this.weightImpl },
+      { key: 'version', name: '版本号', numeric: true }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],

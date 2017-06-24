@@ -11,7 +11,7 @@ import { SysRole } from '../../../shared/sys-role';
 export class QueryInput extends Pageable { }
 
 @ResourceParams({
-  url: '/sys/roles'
+  url: `${environment.authUrl}/sys/roles`
 })
 @Injectable()
 export class SysRoleService extends RestClient {
@@ -44,9 +44,4 @@ export class SysRoleService extends RestClient {
     method: RequestMethod.Delete
   })
   removeAll: ResourceMethod<void, void>;
-
-
-  getUrl(methodOptions?: any): string | Promise<string> {
-    return environment.authUrl + this.getResourcePath();
-  }
 }

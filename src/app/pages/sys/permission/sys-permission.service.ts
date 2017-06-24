@@ -11,7 +11,7 @@ import { SysPermission } from '../../../shared/sys-permission';
 class QueryInput extends Pageable { }
 
 @ResourceParams({
-  url: '/sys/permissions'
+  url: `${environment.authUrl}/sys/permissions`
 })
 @Injectable()
 export class SysPermissionService extends RestClient {
@@ -45,8 +45,4 @@ export class SysPermissionService extends RestClient {
     method: RequestMethod.Delete
   })
   removeAll: ResourceMethod<void, void>;
-
-  getUrl(methodOptions?: any): string | Promise<string> {
-    return environment.authUrl + this.getResourcePath();
-  }
 }

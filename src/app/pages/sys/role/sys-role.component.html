@@ -1,7 +1,7 @@
 <md-card>
   <md-progress-bar class='app-progress-bar-top' mode='query' *ngIf='inQuery'></md-progress-bar>
   <app-toolbar [selected]='selected' [toolbar]='toolbar'></app-toolbar>
-  <md-card-content>
+  <md-card-content perfect-scrollbar>
     <app-table [columns]='columns' [data]='page.content' [selectable]='true' (select)='select($event)'>
       <ng-template #chipListImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <md-chip-list>
@@ -9,6 +9,6 @@
         </md-chip-list>
       </ng-template>
     </app-table>
-    <app-pagination [page]='page' (change)='load($event)'></app-pagination>
+    <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
   </md-card-content>
 </md-card>

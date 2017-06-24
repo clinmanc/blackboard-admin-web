@@ -15,7 +15,7 @@ export class QueryInput extends Pageable {
 
 @Injectable()
 @ResourceParams({
-  url: '/users/location_statistics',
+  url: `${environment.url}/users/location_statistics`,
 })
 export class UserLocationStatisticsService extends RestClient {
 

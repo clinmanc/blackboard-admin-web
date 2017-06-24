@@ -1,0 +1,29 @@
+<h1 md-dialog-title>添加负责人</h1>
+<form md-dialog-content [formGroup]="createForm" novalidate (ngSubmit)="create()">
+  <md-error>{{error}}</md-error>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="mobile" type="text" placeholder="手机号" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="province" type="text" placeholder="省" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="city" type="text" placeholder="城市" autocomplete="off">
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="number" type="text" placeholder="邀请码" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid" fxFlex>
+      创建
+    </button>
+  </div>
+</form>

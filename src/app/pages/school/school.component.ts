@@ -31,8 +31,8 @@ export class SchoolComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '学校', sortable: true },
-      { key: 'members', name: '注册人员', sortable: true, cellTemplate: this.viewImpl }
+      { key: 'name', name: '学校' },
+      { key: 'members', name: '注册人员', cellTemplate: this.viewImpl }
     ];
     this.toolbar = {
       persistentButtons: [],

@@ -1,0 +1,17 @@
+<md-card>
+  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
+  <app-toolbar [toolbar]="toolbar"></app-toolbar>
+  <md-card-content perfect-scrollbar>
+    <app-table [columns]="columns" [data]="page.content">
+      <ng-template #actionImpl let-row="row">
+        <button  md-icon-button md-tooltip="删除" (click)="clear(row.id)">
+          <md-icon class="app-table-cell-icon">clear</md-icon>
+        </button>
+        <!--<button  md-icon-button md-tooltip="编辑" (click)="edit(row)">-->
+          <!--<md-icon class="app-table-cell-icon">edit</md-icon>-->
+        <!--</button>-->
+      </ng-template>
+    </app-table>
+    <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
+  </md-card-content>
+</md-card>

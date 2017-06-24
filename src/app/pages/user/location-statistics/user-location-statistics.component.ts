@@ -40,7 +40,7 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '日期范围', sortable: true, cellTemplate: this.viewImpl },
+      { key: 'name', name: '日期范围', cellTemplate: this.viewImpl },
       { key: 'createTime', name: '创建时间', pipe: new LocalDateTimePipe() },
       { key: 'action', name: '操作', numeric: true, cellTemplate: this.actionImpl }
     ];
@@ -72,7 +72,7 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
   load(pageable = this.pageable) {
     this.pageable = pageable;
 
-    this.withHandler(this.userLocationStatisticsService.query().$observable)
+    this.withHandler(this.userLocationStatisticsService.query(this.pageable).$observable)
       .subscribe(page => this.page = page);
   }
 

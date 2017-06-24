@@ -33,9 +33,9 @@ export class SysPermissionComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '权限', sortable: true },
-      { key: 'description', name: '描述', sortable: true },
-      { key: 'url', name: '地址', sortable: true }
+      { key: 'name', name: '权限' },
+      { key: 'description', name: '描述' },
+      { key: 'url', name: '地址' }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],

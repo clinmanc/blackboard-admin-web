@@ -3,24 +3,20 @@ import { NavItem } from './nav-item';
 export const NAV_ITEMS: NavItem[] = [
     { name: '概览', icon: 'dashboard', url: '/dashboard', roles: ['ROLE_ADMIN'] },
     {
-        name: '班级管理', icon: 'school', roles: ['ROLE_ADMIN'],
+        name: '班级管理', icon: 'school', roles: ['ROLE_ADMIN', 'ROLE_OPERATOR'],
         children: [
-            { name: '班级信息列表', url: '/classroom/info' },
-            { name: '活跃班级信息', url: '/classroom/active', queryParams: { type: 'active' } },
-            { name: '最近活跃班级', url: '/classroom/recent', queryParams: { type: 'recent' } }
+            { name: '班级信息', url: '/classroom' },
         ]
     },
     {
-        name: '用户管理', icon: 'person', roles: ['ROLE_ADMIN'],
+        name: '用户管理', icon: 'person', roles: ['ROLE_ADMIN', 'ROLE_OPERATOR'],
         children: [
-            { name: '用户信息', url: '/user/info' },
-            { name: '学校信息', url: '/school' },
-            { name: '教师邀请反馈', url: '/invitation/record' },
-            { name: '活跃用户信息', url: '/user/active' }
+            { name: '用户信息', url: '/user' },
+            { name: '学校信息', url: '/school' }
         ]
     },
     {
-        name: '反馈管理', icon: 'feedback', roles: ['ROLE_ADMIN'],
+        name: '反馈管理', icon: 'feedback', roles: ['ROLE_ADMIN', 'ROLE_OPERATOR'],
         children: [
             { name: '反馈意见管理', url: '/feedback' }
         ]
@@ -33,10 +29,12 @@ export const NAV_ITEMS: NavItem[] = [
         ]
     },
     {
-        name: '培训统计', icon: 'insert_chart', roles: ['ROLE_ADMIN', 'ROLE_USER'],
+        name: '培训统计', icon: 'insert_chart', roles: ['ROLE_ADMIN', 'ROLE_TRAINER', 'ROLE_OPERATOR', 'ROLE_SUPERTRAINER'],
         children: [
             { name: '班级关联', url: '/classroom/associated' },
-            { name: '邀请统计', url: '/invitation/statistics' }
+            { name: '邀请统计', url: '/invitation/statistics' },
+            { name: '教师邀请反馈', url: '/invitation/record' },
+            { name: '邀请码负责人', url: '/promotersInfo' }
         ]
     },
     {
@@ -50,6 +48,7 @@ export const NAV_ITEMS: NavItem[] = [
     {
         name: '系统管理', icon: 'settings', roles: ['ROLE_ADMIN'],
         children: [
+            { name: '批量任务', url: '/sys/batch' },
             { name: 'APP版本管理', url: '/blackboard/version' },
             { name: 'Tips管理', url: '/tip' },
             { name: '服务器检测', url: '/server/detection' },
@@ -57,7 +56,7 @@ export const NAV_ITEMS: NavItem[] = [
         ]
     },
     {
-        name: '数据动态', icon: 'timeline', roles: ['ROLE_ADMIN'],
+        name: '数据动态', icon: 'timeline', roles: ['ROLE_ADMIN', 'ROLE_OPERATOR'],
         children: [
             { name: '成长记录列表', url: '/growth/record' },
             { name: '消息列表', url: '/message/common' },

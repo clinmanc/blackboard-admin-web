@@ -5,12 +5,13 @@ import { RestClient } from '../../shared/rest-client';
 import { Pageable } from '../../shared/pageable';
 import { Page } from '../../shared/page';
 import { RequestMethod } from '@angular/http';
+import { environment } from '../../../environments/environment';
 
 class QueryInput extends Pageable {
 }
 
 @ResourceParams({
-  url: '/tips'
+  url: `${environment.url}/tips`
 })
 @Injectable()
 export class TipService extends RestClient {

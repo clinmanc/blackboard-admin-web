@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { HomeMaterialModule } from './home-material.module';
+import { HomeMaterialModule } from './home-material';
 import { MdlModule } from '@angular-mdl/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { LocalDatePipe } from '../pipes/local-date.pipe';
 import { LocalDateTimePipe } from '../pipes/local-date-time.pipe';
-import { MessageCategoryPipe } from './message/message-category.pipe';
+import { BlackboardMessagePipe } from '../pipes/blackboard-message.pipe';
 
 import { ToolbarComponent } from '../components/toolbar/toolbar.component';
 import { PaginationComponent } from '../components/pagination/pagination.component';
@@ -17,9 +17,13 @@ import { TableComponent } from '../components/table/table.component';
 import { TableColumnDirective } from '../components/table/column/table-column.directive';
 import { TableColumnHeaderDirective } from '../components/table/column/table-column-header.directive';
 import { TableColumnCellDirective } from '../components/table/column/table-column-cell.directive';
+import { TableColumnPipe } from 'app/components/table/column/table-column.pipe';
+import { TableHeaderCellComponent } from '../components/table/header/table-header-cell.component';
 import { TableBodyCellComponent } from '../components/table/body/table-body-cell.component';
 import { ViewComponent } from '../components/table/cell/view.component';
-import { AvatarPreviewComponent } from '../components/table/cell/preview.component';
+import { PreviewComponent } from '../components/table/cell/preview.component';
+import { TextEditComponent } from '../components/table/cell/text-edit.component';
+import { DetailComponent } from '../components/table/cell/detail.component';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
@@ -56,11 +60,18 @@ import { ExportComponent } from './export/export.component';
 
 import { AlertDialogComponent } from '../components/dialog/alert/alert-dialog.component';
 import { ConfirmDialogComponent } from '../components/dialog/confirm/confirm-dialog.component';
+import { PromptDialogComponent } from '../components/dialog/prompt/prompt-dialog.component';
 import { ItemListDialogComponent } from '../components/dialog/item-list/item-list-dialog.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { MessagesDialogComponent } from '../components/dialog/messages/messages-dialog.component';
+import { LimitedLineDirective } from '../components/limited-text/limited-line.directive';
+import { PromoterInfoComponent } from './promoter-info/promoter-info.component';
+import { PromoterInfoCreateComponent } from './promoter-info/create/promoter-info-create.component';
+import { UserFieldComponent } from 'app/components/table/cell/user-field.component';
+import { SysBatchComponent } from './sys/batch/sys-batch.component';
 
 @NgModule({
-  imports: [
+imports: [
     CommonModule,
     FormsModule,
     HttpModule,
@@ -79,17 +90,23 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
     TableColumnDirective,
     TableColumnHeaderDirective,
     TableColumnCellDirective,
+    TableColumnPipe,
+    TableHeaderCellComponent,
     TableBodyCellComponent,
 
     ViewComponent,
-    AvatarPreviewComponent,
+    PreviewComponent,
+    TextEditComponent,
+    DetailComponent,
+    UserFieldComponent,
 
     LocalDatePipe,
     LocalDateTimePipe,
-    MessageCategoryPipe,
+    BlackboardMessagePipe,
 
     HomeComponent,
     DashboardComponent,
+    SysBatchComponent,
     SysUserComponent,
     SysRoleComponent,
     SysPermissionComponent,
@@ -117,11 +134,16 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
     GrowthTagComponent,
     GrowthTagCreateComponent,
     GrowthRecordComponent,
-    ExportComponent,
 
+    ExportComponent,
     ItemListDialogComponent,
     AlertDialogComponent,
     ConfirmDialogComponent,
+    PromptDialogComponent,
+    MessagesDialogComponent,
+    LimitedLineDirective,
+    PromoterInfoComponent,
+    PromoterInfoCreateComponent
   ],
   entryComponents: [
     GrowthTagCreateComponent,
@@ -132,7 +154,9 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
     AlertDialogComponent,
     ConfirmDialogComponent,
+    PromptDialogComponent,
     ItemListDialogComponent,
+    MessagesDialogComponent
   ]
 })
 export class HomeModule { }

@@ -1,0 +1,21 @@
+<md-card>
+  <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+    <md-select placeholder="任务" formControlName="jobName" (change)="onJobNameChange($event)" required>
+      <md-option *ngFor="let jobName of jobNames$ | async" value="jobName">{{jobName}}</md-option>
+    </md-select>
+    <md-select placeholder="任务实例" formControlName="jobInstance" (change)="onJobInstanceChange($event)" required>
+      <md-option *ngFor="let jobInstance of jobInstances$ | async" value="jobInstance.id">{{jobInstance.id}}</md-option>
+    </md-select>
+    <md-select placeholder="执行体" formControlName="jobExecution" (change)="onJobExecutionChange($event)" required>
+      <md-option *ngFor="let jobExecution of jobExecutions$ | async" value="jobExecution.id">{{jobExecution.id}}</md-option>
+    </md-select>
+    <!--<button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>-->
+  </form>
+</md-card>
+<md-card>
+  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
+  <app-toolbar [toolbar]="toolbar"></app-toolbar>
+  <md-card-content perfect-scrollbar>
+    <app-table [columns]="columns" [data]="data$ | async"></app-table>
+  </md-card-content>
+</md-card>

@@ -17,10 +17,10 @@
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <app-toolbar [toolbar]="toolbar"></app-toolbar>
-  <md-card-content>
+  <md-card-content perfect-scrollbar>
     <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)">
       <ng-template #previewImpl let-value="value" let-row="row">
-        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
+        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [original]="row.avatar?.big"></app-preview>
       </ng-template>
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <app-view [text]="value" [value]="{
@@ -31,6 +31,6 @@
         }" (view)="openViewDialog($event)"></app-view>
       </ng-template>
     </app-table>
-    <app-pagination [page]="page" (change)="onSwitchPage($event)"></app-pagination>
+    <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
   </md-card-content>
 </md-card>

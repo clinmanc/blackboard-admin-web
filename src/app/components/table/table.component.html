@@ -8,7 +8,7 @@
       <md-checkbox [ngModel]="store.length && selected.length === store.length" (change)="onSelectAll($event)"></md-checkbox>
     </th>
     <th *ngFor="let column of columns" [ngClass]="{'mdl-data-table__cell--non-numeric': !column.numeric}">
-      {{column.name}}
+      <app-table-header-cell [column]="column" [(sort)]="sort" [(direction)]="direction">{{column.name}}</app-table-header-cell>
     </th>
   </tr>
   </thead>

@@ -3,12 +3,13 @@ import { Pageable } from '../../shared/pageable';
 import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
+import { environment } from '../../../environments/environment';
 
 export class QueryInput extends Pageable { }
 
 @Injectable()
 @ResourceParams({
-  url: '/app/version'
+  url: `${environment.url}/app/version`
 })
 export class BlackboardVersionService extends RestClient {
 

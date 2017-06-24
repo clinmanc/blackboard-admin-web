@@ -33,9 +33,9 @@ export class GrowthTagComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '名称', sortable: true },
+      { key: 'name', name: '名称' },
       { key: 'usages', name: '使用次数', numeric: true },
-      { key: 'weight', name: '权重', sortable: true, numeric: true, cellTemplate: this.weightImpl }
+      { key: 'weight', name: '权重', numeric: true, cellTemplate: this.weightImpl }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],

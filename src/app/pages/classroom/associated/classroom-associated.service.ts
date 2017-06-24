@@ -6,7 +6,8 @@ import { ResourceMethod, ResourceMethodStrict } from 'ngx-resource/src/Interface
 import { RequestMethod } from '@angular/http';
 import { Page } from '../../../shared/page';
 import { UserHelper } from '../../../helper/user-helper';
-import { AvatarHelper } from '../../../helper/badge-helper';
+import { AvatarHelper } from '../../../helper/avatar-helper';
+import { environment } from '../../../../environments/environment';
 
 export class QueryInput extends Pageable {
   classroomCode?: string;
@@ -15,7 +16,7 @@ export class QueryInput extends Pageable {
 }
 
 @ResourceParams({
-  url: '/classrooms/'
+  url: `${environment.url}/classrooms/`
 })
 @Injectable()
 export class ClassroomAssociatedService extends RestClient {

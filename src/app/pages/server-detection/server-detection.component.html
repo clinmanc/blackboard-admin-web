@@ -1,7 +1,7 @@
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
-  <app-toolbar [selected]="selected" [toolbar]="toolbar"></app-toolbar>
-  <md-card-content>
+  <app-toolbar [toolbar]="toolbar"></app-toolbar>
+  <md-card-content perfect-scrollbar>
     <app-table [columns]="columns" [data]="data"></app-table>
   </md-card-content>
 </md-card>

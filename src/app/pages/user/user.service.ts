@@ -4,62 +4,102 @@ import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { Page } from '../../shared/page';
-import { AvatarHelper } from '../../helper/badge-helper';
+import { AvatarHelper } from '../../helper/avatar-helper';
 import { UserHelper } from '../../helper/user-helper';
+import { MessageCategoryHelper } from '../../helper/message-category-helper';
 
 export class QueryInput extends Pageable {
   keyword?: string;
-  from?: string;
-  to?: string;
+  fromDate?: string;
+  toDate?: string;
+}
+
+export class QueryMessagesInput extends Pageable {
+  userId: string;
+  category: string;
+  fromDate?: string;
+  toDate?: string;
 }
 
 export class UseRoleMapper {
   static PARENT = '家长';
   static STUDENT = '学生';
-  static TEACHER = '老师';
-}
-
-export class UseStatusMapper {
-  static OFFLINE = '离线';
-  static ONLINE = '在线';
-  static DISABLED = '禁用';
+  static TEACHER = '教师';
 }
 
 @Injectable()
 @ResourceParams()
 export class UserService extends RestClient {
-  static getResultMap(type) {
-
-    return (page: Page<any>) => {
+  @ResourceAction({
+    path: '/statistics/message/user_message',
+    map: (page: Page<any>) => {
       page.content = page.content.map((item) => {
-        const teacher = type === 'info' ? item : item.teacher;
+        const user = item.user || {};
 
         return {
-          userId: teacher && teacher.id,
-          name: UserHelper.getDisplayName(teacher),
-          status: teacher && UseStatusMapper[teacher.status],
-          role: teacher && UseRoleMapper[teacher.role],
-          school: teacher && teacher.school,
-          messages: type === 'info' ? '查看消息' : item.published,
-          createTime: teacher && new Date(teacher.createTime).toLocaleDateString() || '',
-          avatar: AvatarHelper.parseFromUser(teacher || {})
-        }
+          user: user,
+          avatar: AvatarHelper.parseFromUser(user),
+          userId: user.id,
+          name: UserHelper.getDisplayName(user),
+          role:  UseRoleMapper[user.role],
+          invitationCode: (item.invitedUser || {}).number,
+          invitedUser: item.invitedUser,
+          school: user.school,
+          createdClassroom: item.createdClassroom,
+          memberCount: item.memberCount,
+          joinedClassroom: item.joinedClassroom,
+          createTime: user.createTime && new Date(user.createTime).toLocaleDateString(),
+          noticeCount: item.noticeCount,
+          topicMessageCount: item.topicMessageCount,
+          surveyCount: item.surveyCount,
+          videoCount: item.videoCount,
+          activityCount: item.activityCount,
+          growthCount: item.growthCount,
+          paperSlipCount: item.paperSlipCount,
+          messageCount: item.messageCount
+        };
       });
       return page;
     }
-  }
+  })
+  queryStatistics: ResourceMethod<QueryInput, Page<any>>;
 
   @ResourceAction({
-    path: '/users',
-    map: UserService.getResultMap('info')
+    path: '/statistics/message/user_message_count'
   })
-  queryInfo: ResourceMethod<QueryInput, any>;
+  queryMessageCount: ResourceMethod<QueryInput, any>;
 
   @ResourceAction({
-    path: '/users/active',
-    map: UserService.getResultMap('active')
+    path: '/users/{:userId}/members',
+    isArray: true,
+    map: user => {
+      return {
+        userId: user.id,
+        name: UserHelper.getDisplayName(user)
+      };
+    }
   })
-  queryActive: ResourceMethod<QueryInput, any>;
+  queryUserMembers: ResourceMethod<{ userId: string }, any[]>;
+
+  @ResourceAction({
+    path: '/statistics/message/user_messages',
+    // path: '/users/{:userId}/messages',
+    map: (page: Page<any>) => {
+      page.content = page.content.map(history => {
+        const message = history.message || {};
+        message.sender = message.sender || {};
+
+        message.title = MessageCategoryHelper.parse(message);
+        message.direction = history.direction;
+        message.senderId = (message.sender || {}).id;
+        message.senderName = UserHelper.getDisplayName(message.sender);
+        message.senderAvatar = AvatarHelper.parseFromUser(message.sender);
+        return message;
+      });
+      return page;
+    }
+  })
+  queryUserMessages: ResourceMethod<QueryMessagesInput, Page<any>>;
 
   @ResourceAction({
     path: '/users/registered_statistics',
@@ -68,24 +108,8 @@ export class UserService extends RestClient {
       return {
         date: item._id,
         count: item.countNum
-      }
-    }
-  })
-  queryRegisteredStatistics: ResourceMethod<any, any>;
-
-  @ResourceAction({
-    path: '/messages/teacher',
-    isArray: true,
-    map: (history: any) => {
-      let message = history.message || {};
-      return {
-        createTime: message.createTime && new Date(message.createTime).toLocaleString(),
-        content: message.content
       };
     }
   })
-  queryTeacherMessages: ResourceMethod<{
-    ownerId: string,
-    from: string
-  }, any>;
+  queryRegisteredStatistics: ResourceMethod<any, any>;
 }

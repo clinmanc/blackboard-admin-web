@@ -3,9 +3,10 @@ import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { Page } from '../../shared/page';
+import { environment } from '../../../environments/environment';
 
 @ResourceParams({
-  url: '/server/detection'
+  url: `${environment.url}/server/detection`
 })
 @Injectable()
 export class ServerDetectionService extends RestClient {

@@ -1,10 +1,9 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MdDialog, MdSnackBar } from '@angular/material';
 import { BasePage } from '../base-page';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
 import { TableColumn } from '../../components/table/table-column';
-import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { FeedbackService } from './feedback.service';
 
 @Component({
@@ -21,11 +20,9 @@ export class FeedbackComponent extends BasePage implements OnInit {
   toolbar = {};
 
   @ViewChild('previewImpl') previewImpl: TemplateRef<any>;
-  @ViewChild('viewImpl') viewImpl: TemplateRef<any>;
 
   constructor(
     snackBar: MdSnackBar,
-    private dialog: MdDialog,
     private feedbackService: FeedbackService
   ) {
     super(snackBar);
@@ -33,10 +30,10 @@ export class FeedbackComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '用户', sortable: true, cellTemplate: this.previewImpl },
-      { key: 'role', name: '角色', sortable: true },
-      { key: 'advice', name: '反馈意见', cellTemplate: this.viewImpl, maxWidth: 160 },
-      { key: 'createTime', name: '反馈时间', sortable: true, numeric: true }
+      { key: 'name', name: '用户', cellTemplate: this.previewImpl },
+      { key: 'role', name: '角色' },
+      { key: 'advice', name: '反馈意见', maxWidth: 400 },
+      { key: 'createTime', name: '反馈时间', numeric: true }
     ];
     this.toolbar = {
       persistentButtons: [],
@@ -61,10 +58,5 @@ export class FeedbackComponent extends BasePage implements OnInit {
 
   reload() {
     return this.load();
-  }
-
-  openViewDialog(event) {
-    const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
-
   }
 }

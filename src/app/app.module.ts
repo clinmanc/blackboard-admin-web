@@ -14,7 +14,7 @@ import { ResourceModule } from 'ngx-resource';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
+  suppressScrollX: false
 };
 
 @NgModule({

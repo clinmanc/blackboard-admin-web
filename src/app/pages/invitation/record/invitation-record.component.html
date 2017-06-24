@@ -4,6 +4,12 @@
       <md-input-container>
         <input mdInput formControlName="invitationCode" type="text" placeholder="邀请码" maxlength="6" autocomplete="off">
       </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="province" type="text" placeholder="省" maxlength="20" autocomplete="off">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="city" type="text" placeholder="地级市" maxlength="20" autocomplete="off">
+      </md-input-container>
       <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
     </form>
   </md-card-content>
@@ -11,8 +17,17 @@
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <app-toolbar [toolbar]="toolbar"></app-toolbar>
-  <md-card-content>
-    <app-table [columns]="columns" [data]="page.content"></app-table>
+  <md-card-content perfect-scrollbar>
+    <app-table [columns]="columns" [data]="page.content">
+      <ng-template #textEdit let-value="value" let-column="column" let-row="row" let-index="index">
+        <app-text-edit [maxlength]="6" [value]="value" [extra]="{
+          value: value,
+          column: column,
+          row: row,
+          index: index
+        }" (edit)="saveData($event)"></app-text-edit>
+      </ng-template>
+    </app-table>
   </md-card-content>
-  <app-pagination [page]="page" (change)="load($event)"></app-pagination>
+  <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
 </md-card>

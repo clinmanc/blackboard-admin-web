@@ -18,17 +18,17 @@
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <app-toolbar [toolbar]="toolbar"></app-toolbar>
-  <md-card-content>
-    <app-table [columns]="columns" [data]="page.content" (view)="openViewDialog($event)">
+  <md-card-content perfect-scrollbar>
+    <app-table [columns]="columns" [data]="page.content">
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <app-view [text]="value" [value]="{
           value: value,
           column: column,
           row: row,
           index: index
-        }" (view)="openViewDialog($event)"></app-view>
+        }" (view)="generate($event)"></app-view>
       </ng-template>
     </app-table>
-    <app-pagination [page]="page" (change)="load($event)"></app-pagination>
+    <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
   </md-card-content>
 </md-card>

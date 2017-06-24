@@ -1,30 +1,40 @@
 <md-card>
   <md-card-content>
     <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
-      <ng-container *ngIf="queryType === 'active' || queryType === 'recent'; else searchElseBlock">
-        <md-input-container>
-          <input mdInput formControlName="from" type="date" placeholder="开始时间" autocomplete="off">
-        </md-input-container>
-        <md-input-container>
-          <input mdInput formControlName="to" type="date" placeholder="结束时间" autocomplete="off">
-        </md-input-container>
-      </ng-container>
-      <ng-template #searchElseBlock>
-        <md-input-container>
-          <input mdInput formControlName="keyword" type="text" placeholder="关键字" autocomplete="off">
-        </md-input-container>
-      </ng-template>
+      <md-select placeholder="活跃或创建时间" formControlName="createOrActive" (change)="onCreateOrActiveChange($event)" required>
+        <md-option value="false">活跃时间</md-option>
+        <md-option value="true">创建时间</md-option>
+      </md-select>
+      <md-input-container>
+        <input mdInput formControlName="fromDate" type="date" placeholder="开始时间" autocomplete="off">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="toDate" type="date" placeholder="结束时间" autocomplete="off">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="keyword" type="text" placeholder="关键字" autocomplete="off">
+      </md-input-container>
       <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
     </form>
   </md-card-content>
 </md-card>
 <md-card>
+  <p>
+    总计：
+    通知 <a>{{total.noticeCount}}</a> 讨论 <a>{{total.topicMessageCount}}</a>
+    调查 <a>{{total.surveyCount}}</a> 视频 <a>{{total.videoCount}}</a>
+    活动 <a>{{total.activityCount}}</a> 纸条 <a>{{total.paperSlipCount}}</a>
+    总数 <a>{{total.messageCount}}</a> 成长 <a>{{total.growthCount}}</a>
+  </p>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <app-toolbar [toolbar]="toolbar"></app-toolbar>
-  <md-card-content>
-    <app-table [columns]="columns" [data]="page.content">
+  <md-card-content perfect-scrollbar>
+    <app-table [columns]="columns" [data]="page.content" [sort]="'messagesNum'" [direction]="'desc'" (sortChange)="sort($event)">
+      <ng-template #userFieldImpl let-row="row">
+        <app-user-field [user]="row?.manager"></app-user-field>
+      </ng-template>
       <ng-template #previewImpl let-value="value" let-row="row">
-        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [preview]="row.avatar?.big"></app-preview>
+        <app-preview [text]="value" [thumbnail]="row.avatar?.small" [original]="row.avatar?.big"></app-preview>
       </ng-template>
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <app-view [text]="value" [value]="{
@@ -34,7 +44,10 @@
           index: index
         }" (view)="openViewDialog($event)"></app-view>
       </ng-template>
+      <ng-template #detailImpl let-value="value" let-row="row">
+        <span [md-tooltip]="getInvitedUserName(row.invitedUser?.teacher)">{{value}}</span>
+      </ng-template>
     </app-table>
-    <app-pagination [page]="page" (change)="load($event)"></app-pagination>
+    <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
   </md-card-content>
 </md-card>

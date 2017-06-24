@@ -23,12 +23,28 @@ export class TableComponent {
   @Output()
   select = new EventEmitter<any>();
 
-  _data: any[] = [];
   store = [];
   selected = [];
 
-  _columnTemplates: QueryList<TableColumnDirective>;
+  _sort: string;
+  @Input()
+  set sort(sort: string) {
+    if (this._sort) {
+      const dir = this.direction && (',' + this.direction) || '';
+      this.sortChange.emit(sort + dir);
+    }
+    this._sort = sort;
+  }
+  get sort() {
+    return this._sort;
+  }
+  @Output()
+  sortChange = new EventEmitter<string>();
 
+  @Input()
+  direction: string;
+
+  _columnTemplates: QueryList<TableColumnDirective>;
   @ContentChildren(TableColumnDirective)
   set columnTemplates(val: QueryList<TableColumnDirective>) {
     this._columnTemplates = val;
@@ -44,6 +60,7 @@ export class TableComponent {
     }
   }
 
+  _data: any[] = [];
   @Input()
   set data(data: any[]) {
     this._data = data || [];
@@ -56,7 +73,6 @@ export class TableComponent {
     this.selected = [];
     this.select.emit(this.selected);
   }
-
   get data() {
     return this._data;
   }

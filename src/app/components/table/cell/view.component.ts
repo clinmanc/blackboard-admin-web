@@ -11,3 +11,4 @@ export class ViewComponent {
   @Input() value: any;
   @Output() view = new EventEmitter<any>();
 }
+

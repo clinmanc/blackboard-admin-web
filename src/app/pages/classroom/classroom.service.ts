@@ -4,8 +4,9 @@ import { Pageable } from '../../shared/pageable';
 import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
-import { AvatarHelper } from '../../helper/badge-helper';
+import { AvatarHelper } from '../../helper/avatar-helper';
 import { UserHelper } from '../../helper/user-helper';
+import { MessageCategoryHelper } from '../../helper/message-category-helper';
 
 export class QueryInput extends Pageable {
   keyword: string;
@@ -16,71 +17,77 @@ export class QueryInput extends Pageable {
 export class ClassroomService extends RestClient {
 
   @ResourceAction({
-    path: '/classrooms',
-    map: ClassroomService.getResultMap('info')
+    path: '/statistics/message/classroom_message',
+    map: (page: Page<any>) => {
+      page.content = page.content.map(item => {
+        const classroom = item.classroom || {};
+
+        return {
+          manager: classroom.manager,
+          avatar: AvatarHelper.parseFromClassroom(classroom),
+          classroomId: classroom.id,
+          name: classroom.name,
+          code: classroom.code,
+          memberCount: item.memberCount,
+          ownerId: classroom.manager && classroom.manager.id,
+          createBy: UserHelper.getDisplayName(classroom.manager),
+          invitationCode: (item.invitedUser || {}).number,
+          invitedUser: item.invitedUser,
+          createTime: classroom.createTime && new Date(classroom.createTime).toLocaleDateString(),
+          noticeCount: item.noticeCount,
+          topicMessageCount: item.topicMessageCount,
+          surveyCount: item.surveyCount,
+          videoCount: item.videoCount,
+          activityCount: item.activityCount,
+          growthCount: item.growthCount,
+          paperSlipCount: item.paperSlipCount,
+          messageCount: item.messageCount
+        };
+      });
+      return page;
+    }
   })
-  queryInfo: ResourceMethod<QueryInput, any>;
+  queryStatistics: ResourceMethod<QueryInput, Page<any>>;
 
   @ResourceAction({
-    path: '/classrooms/active',
-    map: ClassroomService.getResultMap('active')
+    path: '/statistics/message/classroom_message_count'
   })
-  queryActive: ResourceMethod<QueryInput, any>;
-
-  @ResourceAction({
-    path: '/classrooms/recent',
-    map: ClassroomService.getResultMap('recent')
-  })
-  queryRecent: ResourceMethod<QueryInput, any>;
+  queryMessageCount: ResourceMethod<QueryInput, any>;
 
   @ResourceAction({
     path: '/classrooms/{:classroomId}/members',
     isArray: true,
     map: (member: any) => {
       return {
-        id: member.id,
+        classroomId: member.id,
         name: UserHelper.getDisplayName(member)
       };
     }
   })
-  queryClassroomMembers: ResourceMethod<{ classroomId: string }, any>;
+  queryClassroomMembers: ResourceMethod<{ classroomId: string }, any[]>;
 
   @ResourceAction({
-    path: '/messages/classroom',
-    isArray: true,
-    map: (history: any) => {
-      const message = history.message || {};
-      return {
-        createTime: message.createTime && new Date(message.createTime).toLocaleString(),
-        content: message.content
-      };
+    path: '/statistics/message/classroom_messages',
+    // path: '/classrooms/{:classroomId}/messages',
+    map: (page: Page<any>) => {
+      page.content = page.content.map(history => {
+        const message = history.message || {};
+        message.sender = message.sender || {};
+
+        message.title = MessageCategoryHelper.parse(message);
+        message.direction = history.direction;
+        message.senderId = (message.sender || {}).id;
+        message.senderName = UserHelper.getDisplayName(message.sender);
+        message.senderAvatar = AvatarHelper.parseFromUser(message.sender);
+        return message;
+      });
+      return page;
     }
   })
   queryClassroomMessages: ResourceMethod<{
     classroomId: string,
-    ownerId: string,
-    from: string
-  }, any>;
-
-  static getResultMap(type) {
-
-    return (page: Page<any>) => {
-      page.content = page.content.map((item) => {
-        const classroom = type === 'info' ? item : item.classroom;
-
-        return {
-          classroomId: classroom && classroom.id,
-          name: classroom && classroom.name || '',
-          code: classroom && classroom.code || '',
-          ownerId: classroom && classroom.manager && classroom.manager.id,
-          createBy: classroom && UserHelper.getDisplayName(classroom.manager) || '',
-          createTime: classroom && new Date(classroom.createTime).toLocaleDateString() || '',
-          members: '查看成员',
-          messages: type === 'info' ? '查看消息' : item.published,
-          avatar: AvatarHelper.parseFromClassroom(classroom || {})
-        };
-      });
-      return page;
-    };
-  }
+    category: string,
+    fromDate: string,
+    toDate: string
+  }, Page<any>>;
 }

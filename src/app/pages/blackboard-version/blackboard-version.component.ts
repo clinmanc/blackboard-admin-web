@@ -27,11 +27,11 @@ export class BlackboardVersionComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '当前版本', sortable: true },
-      { key: 'downloadUrl', name: '下载地址', sortable: true, cellTemplate: this.viewImpl },
-      { key: 'description', name: '版本描述', sortable: true },
-      { key: 'mandatoryUpdate', name: '强制更新', sortable: true, cellTemplate: this.statusImpl },
-      { key: 'createTime', name: '创建时间', sortable: true }
+      { key: 'name', name: '当前版本' },
+      { key: 'downloadUrl', name: '下载地址', cellTemplate: this.viewImpl },
+      { key: 'description', name: '版本描述' },
+      { key: 'mandatoryUpdate', name: '强制更新', cellTemplate: this.statusImpl },
+      { key: 'createTime', name: '创建时间' }
     ];
     this.toolbar = {
       persistentButtons: [],

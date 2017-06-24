@@ -5,12 +5,13 @@ import { RestClient } from '../../shared/rest-client';
 import { Pageable } from '../../shared/pageable';
 import { Page } from '../../shared/page';
 import { UserHelper } from '../../helper/user-helper';
+import { environment } from '../../../environments/environment';
 
 class QueryInput extends Pageable {
 }
 
 @ResourceParams({
-  url: '/feedbacks'
+  url: `${environment.url}/feedbacks`
 })
 @Injectable()
 export class FeedbackService extends RestClient {

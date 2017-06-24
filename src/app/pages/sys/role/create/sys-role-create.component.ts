@@ -9,7 +9,8 @@ import { SysPermission } from '../../../../shared/sys-permission';
 @Component({
   selector: 'app-sys-role-create',
   templateUrl: './sys-role-create.component.html',
-  styleUrls: ['./sys-role-create.component.scss']
+  styleUrls: ['./sys-role-create.component.scss'],
+  providers: [SysPermissionService, SysRoleService]
 })
 export class SysRoleCreateComponent extends BasePage implements OnInit {
 

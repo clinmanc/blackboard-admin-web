@@ -25,6 +25,9 @@ import { ServerDetectionComponent } from './server-detection/server-detection.co
 import { GrowthTagComponent } from './growth/tag/growth-tag.component';
 import { GrowthRecordComponent } from './growth/record/growth-record.component';
 import { ExportComponent } from './export/export.component';
+import { PromoterInfoComponent } from './promoter-info/promoter-info.component';
+import { PromoterInfoCreateComponent } from './promoter-info/create/promoter-info-create.component';
+import { SysBatchComponent } from './sys/batch/sys-batch.component';
 
 export const homeRoutes: Routes = [
   {
@@ -42,6 +45,13 @@ export const homeRoutes: Routes = [
           title: '概览'
         },
         component: DashboardComponent
+      },
+      {
+        path: 'sys/batch',
+        data: {
+          title: '批量任务'
+        },
+        component: SysBatchComponent
       },
       {
         path: 'sys/user',
@@ -79,11 +89,25 @@ export const homeRoutes: Routes = [
         component: UserLocationStatisticsComponent
       },
       {
-        path: 'user/:queryType',
+        path: 'user',
         data: {
           title: '用户信息'
         },
         component: UserComponent
+      },
+      {
+        path: 'promotersInfo',
+        data: {
+          title: '邀请码负责人'
+        },
+        component: PromoterInfoComponent
+      },
+      {
+        path: 'promotersInfo/create',
+        data: {
+          title: '添加负责人'
+        },
+        component: PromoterInfoCreateComponent
       },
       {
         path: 'school',
@@ -100,7 +124,7 @@ export const homeRoutes: Routes = [
         component: ClassroomAssociatedComponent
       },
       {
-        path: 'classroom/:queryType',
+        path: 'classroom',
         data: {
           title: '班级信息'
         },
@@ -216,4 +240,5 @@ export const homeRoutes: Routes = [
     RouterModule
   ]
 })
-export class HomeRoutingModule { }
+export class HomeRoutingModule {
+}

@@ -30,8 +30,8 @@ export class SysRoleComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'name', name: '角色', sortable: true },
-      { key: 'code', name: '权限码', sortable: true },
+      { key: 'name', name: '角色' },
+      { key: 'code', name: '权限码' },
       { key: 'permissions', name: '权限', cellTemplate: this.chipListImpl }
     ];
     this.toolbar = {

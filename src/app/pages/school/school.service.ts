@@ -5,6 +5,7 @@ import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../shared/rest-client';
 import { Page } from '../../shared/page';
 import { UserHelper } from '../../helper/user-helper';
+import { environment } from '../../../environments/environment';
 
 export class QueryInput extends Pageable {
 
@@ -12,7 +13,7 @@ export class QueryInput extends Pageable {
 
 @Injectable()
 @ResourceParams({
-  url: '/users/schools'
+  url: `${environment.url}/users/schools`
 })
 export class SchoolService extends RestClient {
 

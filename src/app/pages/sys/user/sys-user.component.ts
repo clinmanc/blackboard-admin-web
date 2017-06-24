@@ -35,8 +35,8 @@ export class SysUserComponent extends BasePage implements OnInit {
 
   ngOnInit() {
     this.columns = [
-      { key: 'username', name: '用户', sortable: true },
-      { key: 'roles', name: '角色', sortable: true, cellTemplate: this.chipListImpl }
+      { key: 'username', name: '用户' },
+      { key: 'roles', name: '角色', cellTemplate: this.chipListImpl }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],

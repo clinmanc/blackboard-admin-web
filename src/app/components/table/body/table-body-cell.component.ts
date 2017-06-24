@@ -1,9 +1,12 @@
 import {
-  Component, HostBinding, Input, OnDestroy, OnInit, PipeTransform, ViewChild, ViewContainerRef
+  Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, PipeTransform, ViewChild, ViewContainerRef,
+  ViewEncapsulation
 } from '@angular/core';
 import { TableColumn } from '../table-column';
+import { TableColumnPipe } from '../column/table-column.pipe';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'app-table-body-cell',
   template: `
     <ng-template #cellTemplate
@@ -19,7 +22,14 @@ import { TableColumn } from '../table-column';
     <ng-template #cellTemplateElseBlock>
       {{ value }}
     </ng-template>
-  `
+  `,
+  styles: [`
+    .app-line-limit-length {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  `]
 })
 export class TableBodyCellComponent implements OnInit, OnDestroy {
 
@@ -27,10 +37,12 @@ export class TableBodyCellComponent implements OnInit, OnDestroy {
   @Input() index: number;
   @Input() row: any;
 
+  tableColumnPipe = new TableColumnPipe();
+
   get value(): any {
     if (!this.row || !this.column || !this.column.key) { return ''; }
 
-    const val = this.row[this.column.key];
+    const val = this.tableColumnPipe.transform(this.column.key, this.row);
     const userPipe: PipeTransform = this.column.pipe;
 
     if (userPipe) { return userPipe.transform(val); }
@@ -47,15 +59,20 @@ export class TableBodyCellComponent implements OnInit, OnDestroy {
 
   @HostBinding('style.minWidth.px')
   get minWidth(): number {
-    return this.column.width;
+    return this.column.minWidth;
   }
 
   @HostBinding('style.maxWidth.px')
   get maxWidth(): number {
-    return this.column.minWidth;
+    if (this.column.maxWidth) {
+      this.ele.nativeElement.parentNode.title = this.value;
+      this.ele.nativeElement.parentNode.style.maxWidth = this.column.maxWidth + 'px';
+      this.ele.nativeElement.parentNode.classList.add('app-line-limit-length');
+    }
+    return this.column.maxWidth;
   }
 
-  constructor() { }
+  constructor(private ele: ElementRef) { }
 
   ngOnInit() { }
 

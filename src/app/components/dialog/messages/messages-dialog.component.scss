@@ -1,0 +1,53 @@
+div[md-dialog-content] {
+  //background-color: #eee;
+}
+
+md-card {
+  box-shadow: none !important;
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
+  }
+  .app-content {
+    display: flex;
+    align-items: center;
+  }
+  audio, video {
+    display: block;
+    width: 512px;
+  }
+  .msg-img {
+    margin: 1px;
+    vertical-align: middle;
+  }
+  .survey {
+    .survey-counter {
+      margin-right: 8px;
+    }
+    .opt-img {
+      height: 28px;
+    }
+  }
+}
+
+.empty-message {
+  width: 100%;
+  text-align: center;
+}
+
+.app-line-limit-length {
+  max-width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; //文本不换行，这样超出一行的部分被截取，显示...
+}
+
+.app-thumbnail {
+  position: relative;
+}
+
+.app-thumbnail:hover {
+  z-index: 10;
+  transform-origin: left top;
+  transform: scale(10, 10);
+  transition: .25s transform;
+}

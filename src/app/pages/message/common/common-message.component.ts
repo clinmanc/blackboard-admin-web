@@ -6,6 +6,7 @@ import { Page } from '../../../shared/page';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
 import { TableColumn } from '../../../components/table/table-column';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-common-message',
@@ -14,11 +15,13 @@ import { TableColumn } from '../../../components/table/table-column';
   providers: [CommonMessageService]
 })
 export class CommonMessageComponent extends BasePage implements OnInit {
+  defaultPageable = Object.assign(new Pageable(), { size: 25 });
+  environment = environment;
 
   searchForm: FormGroup;
 
   page = new Page<any>();
-  pageable: Pageable = Object.assign(new Pageable(), { size: 50 });
+  pageable: Pageable = this.defaultPageable;
   columns: TableColumn[] = [];
 
   constructor(
@@ -42,7 +45,7 @@ export class CommonMessageComponent extends BasePage implements OnInit {
     this.load();
   }
 
-  load(pageable = new Pageable()) {
+  load(pageable = this.defaultPageable) {
     this.pageable = pageable;
 
     this.withHandler(this.commonMessageService.query(this.pageable).$observable)
@@ -50,6 +53,6 @@ export class CommonMessageComponent extends BasePage implements OnInit {
   }
 
   reload() {
-    this.load(new Pageable());
+    this.load(this.defaultPageable);
   }
 }

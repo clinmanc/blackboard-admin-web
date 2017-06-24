@@ -9,7 +9,8 @@ import { SysRole } from '../../../../shared/sys-role';
 @Component({
   selector: 'app-create-sys-user-dialog',
   templateUrl: './sys-user-create-dialog.component.html',
-  styleUrls: ['./sys-user-create-dialog.component.scss']
+  styleUrls: ['./sys-user-create-dialog.component.scss'],
+  providers: [SysUserService, SysRoleService]
 })
 export class SysUserCreateDialogComponent extends BasePage implements OnInit {
 

@@ -1,6 +1,20 @@
-md-card {
-  margin: 8px;
-  width: 240px;
+//md-card {
+//  margin: 8px;
+//  width: 240px;
+//}
+//style="display: flex;flex-wrap: wrap;"
+.paper {
+  column-width: 240px;
+  column-gap: 4px;
+  md-card {
+    margin: 4px;
+    column-width: 240px;
+    display:inline-block;
+    img {
+      margin: 1px;
+      vertical-align: baseline;
+    }
+  }
 }
 
 md-icon {
@@ -24,4 +38,10 @@ md-icon {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap; //文本不换行，这样超出一行的部分被截取，显示...
+}
+
+app-pagination {
+  position: fixed;
+  bottom: 0;
+  right: 0;
 }

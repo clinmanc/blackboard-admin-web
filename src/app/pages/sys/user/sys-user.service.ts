@@ -11,7 +11,7 @@ import { environment } from '../../../../environments/environment';
 class QueryInput extends Pageable { }
 
 @ResourceParams({
-  url: '/sys/users'
+  url: `${environment.authUrl}/sys/users`
 })
 @Injectable()
 export class SysUserService extends RestClient {
@@ -33,8 +33,4 @@ export class SysUserService extends RestClient {
     method: RequestMethod.Delete
   })
   removeAll: ResourceMethod<void, void>;
-
-  getUrl(methodOptions?: any): string | Promise<string> {
-    return environment.authUrl + this.getResourcePath();
-  }
 }

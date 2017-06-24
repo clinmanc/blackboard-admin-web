@@ -1,0 +1,23 @@
+<div class="app-dialog-container">
+  <h3 md-dialog-title *ngIf="title">{{title}}</h3>
+  <div md-dialog-content>
+    <p>{{content}}</p>
+    <div fxLayout="column" fxLayout="row">
+      <md-input-container fxFlex>
+        <input mdInput type="text" [(ngModel)]="value">
+      </md-input-container>
+    </div>
+  </div>
+  <div md-dialog-actions class="app-row-reverse-container">
+    <div class="app-item-container">
+      <button md-button color="primary" [disabled]="affirmativeAction.disabled" (click)="dialogRef.close(value)">
+        {{affirmativeAction.text}}
+      </button>
+    </div>
+    <div class="app-item-container">
+      <button md-button color="primary" [disabled]="dismissiveAction.disabled" (click)="dialogRef.close('cancel')">
+        {{dismissiveAction.text}}
+      </button>
+    </div>
+  </div>
+</div>

@@ -14,7 +14,7 @@
 <md-card>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <app-toolbar [toolbar]="toolbar"></app-toolbar>
-  <md-card-content>
+  <md-card-content perfect-scrollbar>
     <app-table [columns]="columns" [data]="page.content" class="app-line-limit-length">
       <ng-template #actionImpl let-row="row">
         <button *ngIf="row.isDoing !== 'true'; else redoElseBlock" md-icon-button md-tooltip="重新生成" (click)="regenerate(row.name)">
@@ -38,6 +38,6 @@
         </ng-template>
       </ng-template>
     </app-table>
-    <app-pagination [page]="page" (change)="load($event)"></app-pagination>
+    <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
   </md-card-content>
 </md-card>

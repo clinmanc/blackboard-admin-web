@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MdSnackBar } from '@angular/material';
 import { UserService } from '../user.service';
 import { BasePage } from 'app/pages/base-page';
+import * as moment from 'moment';
 import * as echarts from 'echarts';
 import ECharts = echarts.ECharts;
 import EChartOption = echarts.EChartOption;
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-registered-user-statistics',
@@ -21,6 +22,8 @@ export class RegisteredUserStatisticsComponent extends BasePage implements OnIni
   private xAxis = [];
   private yAxis = [];
 
+  total: number;
+
   constructor(protected snackBar: MdSnackBar,
     private elementRef: ElementRef,
     private userService: UserService,
@@ -35,12 +38,10 @@ export class RegisteredUserStatisticsComponent extends BasePage implements OnIni
   }
 
   buildForm(): void {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth();
+    const month = moment().startOf('month').format('YYYY-MM');
 
     this.searchForm = this.formBuilder.group({
-      month: [`${year}-${month}`, [Validators.required]]
+      month: [month, [Validators.required]]
     });
   }
 
@@ -51,12 +52,15 @@ export class RegisteredUserStatisticsComponent extends BasePage implements OnIni
       .subscribe((items: any[]) => {
         this.completeQuery();
         this.updateChart(items);
+        this.total = items
+          .map(item => item.count)
+          .reduce((previousValue, currentValue) => previousValue + currentValue);
       }, this.handleError.bind(this));
   }
 
   createChart() {
     // 基于准备好的dom，初始化echarts实例
-    this.chart = echarts.init(this.elementRef.nativeElement.querySelector('#main'), 'shine');
+    this.chart = echarts.init(this.elementRef.nativeElement.querySelector('#mainGraph'), 'shine');
 
     // 指定图表的配置项和数据
 
