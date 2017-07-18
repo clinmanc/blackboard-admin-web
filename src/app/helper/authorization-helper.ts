@@ -16,7 +16,7 @@ export class AuthHelper {
     return 'Basic ' + btoa(`${username}:${password}`);
   }
 
-  static extendHeaders(header): any {
+  static extendHeaders(header: any = {}): any {
     (header || Object.assign({}, AuthHelper.DEFAULT_HEADER)).Authorization = AuthHelper.auth.token;
     return header;
   }

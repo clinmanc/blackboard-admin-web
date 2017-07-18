@@ -3,12 +3,7 @@
   width: 56px;
   text-align: center;
 }
-//table {
-//  table-layout: fixed;
-//}
-//
-//td {
-//  overflow: hidden;
-//  white-space: nowrap;
-//  text-overflow: ellipsis;
-//}
+
+.app-table tr.selected {
+  background-color: #eeeeee;
+}

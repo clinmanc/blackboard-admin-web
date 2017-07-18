@@ -12,7 +12,7 @@ import { SysPermission } from '../../../../shared/sys-permission';
   styleUrls: ['./sys-role-create.component.scss'],
   providers: [SysPermissionService, SysRoleService]
 })
-export class SysRoleCreateComponent extends BasePage implements OnInit {
+export class SysRoleCreateDialogComponent extends BasePage implements OnInit {
 
   createForm: FormGroup;
   error: string;
@@ -20,7 +20,7 @@ export class SysRoleCreateComponent extends BasePage implements OnInit {
 
   constructor(
     snackBar: MdSnackBar,
-    public dialogRef: MdDialogRef<SysRoleCreateComponent>,
+    public dialogRef: MdDialogRef<SysRoleCreateDialogComponent>,
     private formBuilder: FormBuilder,
     private sysRoleService: SysRoleService,
     private sysPermissionService: SysPermissionService
@@ -36,7 +36,7 @@ export class SysRoleCreateComponent extends BasePage implements OnInit {
   buildForm() {
     this.createForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      code: ['ROLE_', [Validators.required, Validators.pattern(/^ROLE_[0-9A-Z]+$/)]],
+      code: ['ROLE_', [Validators.required, Validators.pattern(/^ROLE_[_0-9A-Z]+$/)]],
       permissions: []
     });
   }

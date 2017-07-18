@@ -6,8 +6,9 @@ import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
 import { SysRole } from '../../../shared/sys-role';
 import { SysRoleService } from './sys-role.service';
-import { SysRoleCreateComponent } from './create/sys-role-create.component';
+import { SysRoleCreateDialogComponent } from './create/sys-role-create.component';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
+import { SysRoleUpdateDialogComponent } from './update/sys-role-update-dialog.component';
 
 @Component({
   selector: 'app-sys-role',
@@ -23,6 +24,7 @@ export class SysRoleComponent extends BasePage implements OnInit {
   toolbar = {};
 
   @ViewChild('chipListImpl') chipListImpl: TemplateRef<any>;
+  @ViewChild('editImpl') editImpl: TemplateRef<any>;
 
   constructor(protected snackBar: MdSnackBar, private sysRoleService: SysRoleService, private dialog: MdDialog) {
     super(snackBar);
@@ -32,7 +34,8 @@ export class SysRoleComponent extends BasePage implements OnInit {
     this.columns = [
       { key: 'name', name: '角色' },
       { key: 'code', name: '权限码' },
-      { key: 'permissions', name: '权限', cellTemplate: this.chipListImpl }
+      { key: 'permissions', name: '权限', cellTemplate: this.chipListImpl },
+      { name: '操作', numeric: true, cellTemplate: this.editImpl }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
@@ -64,8 +67,18 @@ export class SysRoleComponent extends BasePage implements OnInit {
   }
 
   add() {
-    const dialogRef: MdDialogRef<SysRoleCreateComponent> = this.dialog.open(SysRoleCreateComponent);
+    const dialogRef: MdDialogRef<SysRoleCreateDialogComponent> = this.dialog.open(SysRoleCreateDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.reload();
+      }
+    });
+  }
+
+  edit(role: SysRole) {
+    const dialogRef = this.dialog.open(SysRoleUpdateDialogComponent);
+    dialogRef.componentInstance.role = role;
+    dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         this.reload();
       }

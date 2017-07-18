@@ -31,6 +31,12 @@ export class SysPermissionService extends RestClient {
   save: ResourceMethod<SysPermission, SysPermission>;
 
   @ResourceAction({
+    path: '/{:permissionId}',
+    method: RequestMethod.Put
+  })
+  update: ResourceMethod<SysPermission, SysPermission>;
+
+  @ResourceAction({
     method: RequestMethod.Delete
   })
   remove: ResourceMethod<{ permissionId: string }, void>;

@@ -8,4 +8,11 @@ export class UserHelper {
     }
     return `${username}（${mobile}）`;
   }
+
+  static resolveMessageTitle(classroom: any = {}, user: any = {}) {
+    const classroomName = classroom.name;
+    const userName = user.realname || user.username || '';
+
+    return classroomName ? `${classroomName}（${userName}）` : userName;
+  }
 }

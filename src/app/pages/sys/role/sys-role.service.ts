@@ -24,6 +24,12 @@ export class SysRoleService extends RestClient {
   save: ResourceMethod<SysRole, SysRole>;
 
   @ResourceAction({
+    path: '/{:roleId}',
+    method: RequestMethod.Put
+  })
+  update: ResourceMethod<SysRole, SysRole>;
+
+  @ResourceAction({
     path: '/all',
     isArray: true
   })

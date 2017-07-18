@@ -3,8 +3,9 @@ import { ResourceAction, ResourceParams } from 'ngx-resource';
 import { ResourceMethod } from 'ngx-resource/src/Interfaces';
 import { RestClient } from '../../../shared/rest-client';
 import { Page } from '../../../shared/page';
-import { RequestMethod } from '@angular/http';
+import { Headers, RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { environment } from '../../../../environments/environment';
+import { AuthHelper } from '../../../helper/authorization-helper';
 
 export class ReceiveType {
   static ALL = '所有';
@@ -33,10 +34,20 @@ export class AnnouncementMessageService extends RestClient {
   })
   query: ResourceMethod<any, Page<any>>;
 
-  @ResourceAction({
-    method: RequestMethod.Post
-  })
-  save: ResourceMethod<any, any>;
+  save(params) {
+    const data = new FormData();
+    for (const key in params) {
+      if (params.hasOwnProperty(key) && 'cover' !== key) {
+        data.set(key, params[key]);
+      }
+    }
+    data.append('cover', params.cover);
+
+    const options: RequestOptionsArgs = new RequestOptions();
+    options.headers = new Headers(AuthHelper.extendHeaders());
+
+    return this.http.post(`${environment.url}/messages/announcement`, data, options);
+  }
 
   @ResourceAction({
     path: '/batch',

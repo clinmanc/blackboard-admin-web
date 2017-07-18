@@ -5,12 +5,11 @@ import { Pageable } from '../../shared/pageable';
 import { BasePage } from '../base-page';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { ClassroomService } from './classroom.service';
-import { ItemListDialogComponent } from '../../components/dialog/item-list/item-list-dialog.component';
 import { TableColumn } from '../../components/table/table-column';
 import * as moment from 'moment';
 import { MessagesDialogComponent } from '../../components/dialog/messages/messages-dialog.component';
 import { UserHelper } from '../../helper/user-helper';
-import { noUndefined } from '@angular/compiler/src/util';
+import {ClassroomUserInfoComponent} from '../../components/dialog/classroom-user-info/classroom-user-info.component';
 
 @Component({
   selector: 'app-classroom',
@@ -29,7 +28,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
   pageable: Pageable;
   columns: TableColumn[] = [];
   toolbar = {};
-
+  types = [];
   total = {};
 
   lastFromDate: string;
@@ -63,19 +62,23 @@ export class ClassroomComponent extends BasePage implements OnInit {
       { key: 'surveyCount', name: '调查', numeric: true, sortable: true, cellTemplate: this.viewImpl },
       { key: 'videoCount', name: '视频', numeric: true, sortable: true, cellTemplate: this.viewImpl },
       { key: 'activityCount', name: '活动', numeric: true, sortable: true, cellTemplate: this.viewImpl },
-      { key: 'messageCount', name: '总数', numeric: true, sortable: true },
-      { key: 'growthCount', name: '成长', numeric: true, cellTemplate: this.viewImpl }
+      { key: 'growthCount', name: '成长', numeric: true, sortable: true, cellTemplate: this.viewImpl },
+      { key: 'messageCount', name: '消息总数', numeric: true, sortable: true }
     ];
     this.toolbar = {
       persistentButtons: [],
       iconButtons: [{ icon: 'help_outline', name: '统计数据有一天延迟' }, { icon: 'refresh', action: this.reload.bind(this) }],
-      contextualIconButtons: [],
-      menus: [{ icon: 'open_in_browser', name: '导出数据', action: this.exportStatistics.bind(this) }]
+      contextualIconButtons: []
+      // menus: [{ icon: 'open_in_browser', name: '导出数据', action: this.exportStatistics.bind(this) }]
     };
-
+    this.types = [
+      { name: '班级号', value: 'CODE' },
+      { name: '班级ID', value: 'CLASSROOM_ID'},
+      { name: '班级名称', value: 'NAME'},
+      { name: '用户手机号', value: 'MOBILE'},
+      { name: '用户ID', value: 'USER_ID'}
+    ];
     this.buildForm();
-
-    this.search();
   }
 
   buildForm(): void {
@@ -86,7 +89,8 @@ export class ClassroomComponent extends BasePage implements OnInit {
       createOrActive: ['false', Validators.required],
       fromDate: [fromDate],
       toDate: [toDate],
-      keyword: []
+      keyword: [],
+      type:  ['CODE'],
     });
 
     this.lastFromDate = fromDate;
@@ -100,7 +104,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
   load(pageable = this.pageable) {
     this.pageable = pageable;
     const formModel = this.searchForm.value;
-
+    console.log(formModel);
     this.withHandler(this.classroomService.queryStatistics(Object.assign(formModel, this.pageable)).$observable)
       .subscribe(page => this.page = page);
 
@@ -116,7 +120,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
   }
 
   exportStatistics() {
-
+    this.classroomService.exportStatistics(this.searchForm.value);
   }
 
   openViewDialog(event) {
@@ -130,10 +134,11 @@ export class ClassroomComponent extends BasePage implements OnInit {
       const queryInput = {
         classroomId: event.row.classroomId
       };
-      const dialogRef: MdDialogRef<ItemListDialogComponent> = this.dialog.open(ItemListDialogComponent);
+      const dialogRef: MdDialogRef<ClassroomUserInfoComponent> = this.dialog.open(ClassroomUserInfoComponent);
       dialogRef.componentInstance.title = title;
-      dialogRef.componentInstance.withHandler(this.classroomService.queryClassroomMembers(queryInput).$observable)
-        .subscribe(items => dialogRef.componentInstance.items = items);
+      dialogRef.componentInstance.classroomId = queryInput.classroomId;
+      // dialogRef.componentInstance.withHandler(this.classroomService.queryClassroomMembers(queryInput).$observable)
+      //   .subscribe(items => dialogRef.componentInstance.items = items);
     } else {
       let category: string;
       if (event.column.key === 'noticeCount') {
@@ -173,21 +178,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
         }, dialogRef.componentInstance.pageable);
 
         dialogRef.componentInstance.withHandler(this.classroomService.queryClassroomMessages(queryInput).$observable)
-          .map(res => {
-            const page = res as Page<any>;
-            if (category === 'GROWTH') {
-              page.numberOfElements = page.content.length;
-              page.number = pageable.page;
-              page.size = pageable.size;
-
-              page.totalElements = page.content.length !== 0 && pageable.page * pageable.size + pageable.size > event.row.growthsNum
-                ? pageable.page * pageable.size + page.content.length : event.row.growthsNum;
-              page.totalPages = pageable.size === 0 ? 1 : page.totalElements / page.size;
-              page.first = page.number === 0;
-              page.last = page.number + 1 >= page.totalPages;
-            }
-            return page;
-          })
+          .map(res => res as Page<any>)
           .subscribe(page => dialogRef.componentInstance.page = page );
       }.bind(this);
     }

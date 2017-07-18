@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SysRoleCreateComponent } from './sys-role-create.component';
+import { SysRoleCreateDialogComponent } from './sys-role-create.component';
 
-describe('SysRoleCreateComponent', () => {
-  let component: SysRoleCreateComponent;
-  let fixture: ComponentFixture<SysRoleCreateComponent>;
+describe('SysRoleCreateDialogComponent', () => {
+  let component: SysRoleCreateDialogComponent;
+  let fixture: ComponentFixture<SysRoleCreateDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SysRoleCreateComponent ]
+      declarations: [ SysRoleCreateDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SysRoleCreateComponent);
+    fixture = TestBed.createComponent(SysRoleCreateDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

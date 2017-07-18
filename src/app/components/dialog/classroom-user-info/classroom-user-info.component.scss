@@ -1,0 +1,21 @@
+.app-dialog-container {
+  table {
+    width: 100%;
+    td.app-table-index {
+      text-align: right;
+    }
+    td:not(.app-table-index) > div {
+      max-width: 1200px;
+      margin-left: 30px;
+      word-break: keep-all;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .empty-message {
+    text-align: center;
+  }
+}
+

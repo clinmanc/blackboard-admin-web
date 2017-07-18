@@ -1,0 +1,46 @@
+<div class="app-dialog-container">
+  <h4 md-dialog-title>
+    {{title}}
+    <br/>
+    <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+      <md-input-container>
+        <input mdInput formControlName="fromDate" type="date" placeholder="开始时间" autocomplete="off">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="toDate" type="date" placeholder="结束时间" autocomplete="off">
+      </md-input-container>
+      <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
+    </form>
+  </h4>
+  <perfect-scrollbar md-dialog-content>
+    <table contenteditable="true">
+      <tr>
+        <th>序号</th>
+        <th>教师Id</th>
+        <th>教师姓名</th>
+        <th>建班</th>
+        <th>人数</th>
+        <th>加班</th>
+        <th>消息总数</th>
+      </tr>
+      <tr *ngIf="!inQuery && (items == null || items.length === 0)">
+        <td class="empty-message">列表为空</td>
+      </tr>
+      <ng-container *ngIf="!inQuery && items != null && items.length !== 0">
+        <tr *ngFor="let item of items; let i = index">
+          <td class="app-table-index">{{i + 1}}</td>
+          <td *ngFor="let key of getKeys(item)">
+            <div [attr.title]="item[key]">{{item[key]}}</div>
+          </td>
+        </tr>
+      </ng-container>
+    </table>
+  </perfect-scrollbar>
+  <div md-dialog-actions *ngIf="!inQuery" class="app-row-reverse-container">
+    <div class="app-item-container">
+      <small md-subheader *ngIf="!inQuery && (items != null && items.length !== 0)">共 {{items?.length}} 项</small>
+      <button md-dialog-close md-button>关闭</button>
+    </div>
+  </div>
+</div>
+<md-progress-bar class="app-progress-bar-bottom" mode="indeterminate" *ngIf="inQuery"></md-progress-bar>

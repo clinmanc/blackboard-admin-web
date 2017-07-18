@@ -12,5 +12,6 @@ export const environment = {
   imgProxyUrl: 'http://localhost:9124/proxy/image',
   builtinImgUrl: 'http://www.xiaoheiban.cn/Public/banhui',
   fileUrl: 'http://testfile.xiaoheiban.cn',
-  audioFileUrl: 'http://demo.xiaoheiban.cn/audio'
+  audioFileUrl: 'http://demo.xiaoheiban.cn/audio',
+  announcementToken: '58d0f2720cf20bdd7d45e0b9'
 };

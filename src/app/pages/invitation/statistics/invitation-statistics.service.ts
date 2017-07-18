@@ -51,6 +51,6 @@ export class InvitationStatisticsService extends RestClient {
         url += (url && '&') + key + '=' + params[key];
       }
     }
-    window.location.href = environment.baseUrl + '/invitation/exportV2?' + url;
+    window.location.href = environment.baseUrl + '/invitation/export?' + url;
   }
 }

@@ -69,7 +69,7 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
   remove() {
     const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
     dialogRef.componentInstance.content = '删除后不可恢复，确认删除吗？';
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         this.announcementMessageService.removeInBatch({
           method: 'DELETE',
@@ -83,7 +83,7 @@ export class AnnouncementMessageComponent extends BasePage implements OnInit {
   removeAll() {
     const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
     dialogRef.componentInstance.content = '清空后不可恢复，确认清空吗？';
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         this.announcementMessageService.removeAll().$observable
           .subscribe(this.reload.bind(this), this.handleError.bind(this));

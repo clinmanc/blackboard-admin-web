@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+
+.message-content {
+  margin-top: 16px;
+}
+
+.comments-content {
+  padding: 16px;
+  border: 1px solid #80e27e;
+  .comment {
+    margin: 0 0 8px;
+  }
+}
+
+.activity-results {
+  border: 1px solid #ff7961;
+  md-card {
+    box-shadow: none !important;
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, .12);
+    }
+  }
+
+  .comment-username {
+    color: #4caf50;
+  }
+}

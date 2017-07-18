@@ -3,10 +3,10 @@
   <p md-dialog-content>{{content}}</p>
   <div md-dialog-actions class="app-row-reverse-container">
     <div class="app-item-container">
-      <button md-button color="primary" [disabled]="affirmativeAction.disabled" (click)="dialogRef.close('ok')">{{affirmativeAction.text}}</button>
+      <button md-button [color]="affirmativeAction.color" [disabled]="affirmativeAction.disabled" (click)="dialogRef.close('ok')">{{affirmativeAction.text}}</button>
     </div>
     <div class="app-item-container">
-      <button md-button color="primary" [disabled]="dismissiveAction.disabled" (click)="dialogRef.close('cancel')">{{dismissiveAction.text}}</button>
+      <button md-button [color]="dismissiveAction.color" [disabled]="dismissiveAction.disabled" (click)="dialogRef.close('cancel')">{{dismissiveAction.text}}</button>
     </div>
   </div>
 </div>

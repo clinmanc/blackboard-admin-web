@@ -11,20 +11,26 @@
       <md-input-container>
         <input mdInput formControlName="toDate" type="date" placeholder="结束时间" autocomplete="off">
       </md-input-container>
+      <md-select placeholder="查询类型" formControlName="type"  required>
+        <md-option *ngFor="let type of types" [value]="type.value">{{ type.name }}</md-option>
+      </md-select>
       <md-input-container>
         <input mdInput formControlName="keyword" type="text" placeholder="关键字" autocomplete="off">
       </md-input-container>
-      <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid" required>搜索</button>
+      <button md-raised-button type="submit" color="primary" [disabled]="!searchForm.valid || inQuery" required>搜索</button>
     </form>
   </md-card-content>
 </md-card>
 <md-card>
   <p>
     总计：
-    通知 <a>{{total.noticeCount}}</a> 讨论 <a>{{total.topicMessageCount}}</a>
-    调查 <a>{{total.surveyCount}}</a> 视频 <a>{{total.videoCount}}</a>
-    活动 <a>{{total.activityCount}}</a> 纸条 <a>{{total.paperSlipCount}}</a>
-    总数 <a>{{total.messageCount}}</a> 成长 <a>{{total.growthCount}}</a>
+    通知 <a>{{total.noticeCount}}</a>
+    讨论 <a>{{total.topicMessageCount}}</a>
+    调查 <a>{{total.surveyCount}}</a>
+    视频 <a>{{total.videoCount}}</a>
+    活动 <a>{{total.activityCount}}</a>
+    成长 <a>{{total.growthCount}}</a>
+    总数 <a>{{total.messageCount}}</a>
   </p>
   <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <app-toolbar [toolbar]="toolbar"></app-toolbar>

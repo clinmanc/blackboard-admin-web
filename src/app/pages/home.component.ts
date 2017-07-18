@@ -21,7 +21,7 @@ import 'rxjs/add/operator/switchMapTo';
 export class HomeComponent implements OnInit {
   SYSTEM_NAME = '晓黑板后台管理系统';
 
-  navItems = NAV_ITEMS;
+  navItems: NavItem[];
   allowExpandSubmenu = true;
   selectedItem: NavItem;
   navTitle = '';
@@ -35,14 +35,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.auth.user) {
-      this.navItems = this.navItems.filter(item => {
-        const intersection = item.roles.filter(role => {
-          return this.auth.user.roles.map(roleObj => roleObj.code as string).includes(role);
-        });
-        return intersection && intersection.length;
-      });
-    }
+    this.buildMenus();
 
     this.router.events
       .filter(event => event instanceof NavigationEnd)
@@ -66,6 +59,41 @@ export class HomeComponent implements OnInit {
         }
         this.titleService.setTitle(title);
       });
+  }
+
+  buildMenus() {
+    if (this.auth.user) {
+      const menus = NAV_ITEMS.map(menu => {
+        if (menu.children && menu.children.length) {
+          const children = menu.children.filter(subMenu => this.hasPermission(subMenu.name));
+          if (children.length) {
+            const menuCopy = Object.create(menu);
+            menuCopy.children = children;
+            return menuCopy;
+          } else {
+            return null;
+          }
+        } else {
+          return this.hasPermission(menu.name) ? menu : null;
+        }
+      });
+      this.navItems = menus.filter(menu => menu);
+    } else {
+      this.navItems = [];
+    }
+  }
+
+  hasPermission(name: string) {
+    if (this.auth.user) {
+      for (const role of this.auth.user.roles) {
+        for (const permission of role.permissions) {
+          if (permission.name === '所有权限' || permission.name === name) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   toggleExpanded(item: NavItem) {

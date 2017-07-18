@@ -4,6 +4,8 @@ import { MdDialogRef, MdSnackBar } from '@angular/material';
 import { Page } from '../../../shared/page';
 import { Pageable } from '../../../shared/pageable';
 import { environment } from '../../../../environments/environment';
+import { ResourceHelper } from '../../../helper/resource-helper';
+import { UserHelper } from '../../../helper/user-helper';
 
 @Component({
   selector: 'app-messages-dialog',
@@ -17,6 +19,8 @@ export class MessagesDialogComponent extends BasePage implements OnInit {
   page = new Page<any>();
   pageable: Pageable;
   title = '消息列表';
+  resourceHelper = ResourceHelper;
+  userHelper = UserHelper;
 
   constructor(
     snackBar: MdSnackBar,

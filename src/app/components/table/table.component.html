@@ -5,7 +5,10 @@
   <thead>
   <tr>
     <th *ngIf="selectable" class="app-table-checkbox">
-      <md-checkbox [ngModel]="store.length && selected.length === store.length" (change)="onSelectAll($event)"></md-checkbox>
+      <md-checkbox [ngModel]="store.length && selected.length === store.length"
+                   [indeterminate]="selected.length && selected.length < store.length"
+                   (change)="onSelectAll($event)">
+      </md-checkbox>
     </th>
     <th *ngFor="let column of columns" [ngClass]="{'mdl-data-table__cell--non-numeric': !column.numeric}">
       <app-table-header-cell [column]="column" [(sort)]="sort" [(direction)]="direction">{{column.name}}</app-table-header-cell>
@@ -16,7 +19,7 @@
   <tr *ngIf="store.length === 0">
     <td [attr.colspan]="selectable ? columns.length + 1 : columns.length" style="text-align: center;">没有数据</td>
   </tr>
-  <tr *ngFor="let row of store; let i = index">
+  <tr *ngFor="let row of store; let i = index" [ngClass]="{'selected': row.selected}">
     <td *ngIf="selectable" class="app-table-checkbox">
       <md-checkbox [ngModel]="row.selected" (change)="onRowSelect($event, row)"></md-checkbox>
     </td>

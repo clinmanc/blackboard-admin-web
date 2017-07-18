@@ -8,6 +8,7 @@ import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
 import { SysUserCreateDialogComponent } from './create/sys-user-create-dialog.component';
+import { SysUserUpdateDialogComponent } from './update/sys-user-update-dialog.component';
 
 @Component({
   selector: 'app-sys-user',
@@ -36,7 +37,8 @@ export class SysUserComponent extends BasePage implements OnInit {
   ngOnInit() {
     this.columns = [
       { key: 'username', name: '用户' },
-      { key: 'roles', name: '角色', cellTemplate: this.chipListImpl }
+      { key: 'roles', name: '角色', cellTemplate: this.chipListImpl },
+      { name: '操作', numeric: true, cellTemplate: this.editImpl }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
@@ -68,8 +70,18 @@ export class SysUserComponent extends BasePage implements OnInit {
   }
 
   add() {
-    const dialogRef: MdDialogRef<SysUserCreateDialogComponent> = this.dialog.open(SysUserCreateDialogComponent);
+    const dialogRef = this.dialog.open(SysUserCreateDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.reload();
+      }
+    });
+  }
+
+  edit(user: SysUser) {
+    const dialogRef = this.dialog.open(SysUserUpdateDialogComponent);
+    dialogRef.componentInstance.user = user;
+    dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         this.reload();
       }

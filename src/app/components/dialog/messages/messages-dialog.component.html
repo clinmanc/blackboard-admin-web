@@ -8,22 +8,22 @@
     </p>
     <md-card *ngFor="let item of page.content">
       <md-card-header>
-        <img md-card-avatar src="{{item.senderAvatar.small}}">
+        <img md-card-avatar [attr.src]="item.classroom ? resourceHelper.resolveClassroomImageUrl(item.classroom) : resourceHelper.resolveUserImageUrl(item.sender)">
         <md-card-title>
-          {{item.title}}
-          <small *ngIf="item.direction === 'OUTGOING'">（发）</small>
-          <small *ngIf="item.direction === 'INCOMING'">（收）</small>
+          {{userHelper.resolveMessageTitle(item.classroom, item.sender)}}
+          <md-icon *ngIf="item.direction === 'INCOMING'" class="material-icons md-18" style="color: rgb(139, 195, 74);">call_received</md-icon>
+          <md-icon *ngIf="item.direction === 'OUTGOING'" class="material-icons md-18" style="color: rgb(139, 195, 74);">call_made</md-icon>
         </md-card-title>
-        <md-card-subtitle>{{item.createTime | date:"MM/dd/yy hh:mm:ss"}}</md-card-subtitle>
+        <md-card-subtitle>{{item.createTime | date: "yyyy.MM.dd HH:mm"}}</md-card-subtitle>
       </md-card-header>
       <md-card-content>
-        <p *ngIf="item.content" class="app-line-limit-length" md-tooltip="消息" appLimitedLine [maxWidth]="496">
+        <p *ngIf="item.content" class="app-line-limit-length mat-body-1" appLimitedLine [maxWidth]="496">
           {{item.content | blackboardMessage}}
         </p>
         <div *ngIf="item.audio || item.topic || item.survey || item.video || item.images">
 
           <!-- 晓讨论 -->
-          <p *ngIf="item.topic" class="app-content" md-tooltip="晓讨论" appLimitedLine [maxWidth]="496">
+          <p *ngIf="item.topic" class="app-content" appLimitedLine [maxWidth]="496">
             <md-icon>chat</md-icon>
             {{item.topic.content | blackboardMessage}}
             <!-- 图片 -->
@@ -34,15 +34,13 @@
           </p>
 
           <!-- 晓活动 -->
-          <p *ngIf="item.activity">{{item.activity.tag}}</p>
-          <p *ngIf="item.activity" class="app-content" md-tooltip="晓活动" appLimitedLine [maxWidth]="496">
-            <md-icon>chat</md-icon>
-            {{item.activity.content | blackboardMessage}}
-          </p>
+          <app-activity-message *ngIf="item.activity" [message]="item"></app-activity-message>
+          <!-- 晓成长 -->
+          <!--<app-activity-message *ngIf="item.activity" [message]="item"></app-activity-message>-->
 
           <!-- 晓调查 -->
           <div *ngIf="item.survey">
-            <p *ngIf="item.survey" class="app-content" md-tooltip="晓调查" appLimitedLine [maxWidth]="496">
+            <p *ngIf="item.survey" class="app-content" appLimitedLine [maxWidth]="496">
               <md-icon>insert_chart</md-icon>
               {{item.survey.subject | blackboardMessage}}
             </p>
@@ -63,22 +61,22 @@
           </div>
 
           <!-- 语音 -->
-          <p *ngIf="item.audio" class="app-content" md-tooltip="语音">
+          <p *ngIf="item.audio" class="app-content">
             <md-icon>mic</md-icon>
           </p>
-          <audio *ngIf="item.audio" src="{{environment.audioFileUrl}}/{{item.audio.id}}/mp3" controls="controls"></audio>
+          <audio *ngIf="item.audio" [attr.src]="resourceHelper.resolveAudioUrl(item.audio.id)" controls="controls"></audio>
 
           <!-- 视频 -->
-          <p *ngIf="item.video" class="app-content" md-tooltip="视频" appLimitedLine [maxWidth]="496">
+          <p *ngIf="item.video" class="app-content" appLimitedLine [maxWidth]="496">
             <md-icon>videocam</md-icon>
             {{item.video.desc | blackboardMessage}}
           </p>
-          <video *ngIf="item.video" src="{{item.video.playUrl}}" width="320" controls="controls"></video>
+          <video *ngIf="item.video" [attr.src]="resourceHelper.resolveVideoUrl(item.video.playUrl)" width="320" controls="controls"></video>
 
           <!-- 图片 -->
           <app-preview *ngFor="let image of item.images"
-                       thumbnail="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{image.thumbnail}}&defaultImage=wen.png"
-                       original="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{image.original}}&defaultImage=wen.png">
+                       [thumbnail]="resourceHelper.resolveImageUrl(image.thumbnail)"
+                       [original]="resourceHelper.resolveImageUrl(image.original)">
           </app-preview>
           <!--<img class="msg-img app-thumbnail" *ngFor="let image of item.images" width="32" height="32" alt="图片"-->
                <!--src="{{environment.imgProxyUrl}}?url={{environment.fileUrl}}/{{image.original}}&defaultImage=wen.png">-->
@@ -89,5 +87,5 @@
   <div md-dialog-actions>
     <app-pagination [page]="page" [pageable]="pageable" (pageableChange)="load($event)"></app-pagination>
   </div>
+  <md-progress-bar class="app-progress-bar-bottom" mode="indeterminate" *ngIf="inQuery"></md-progress-bar>
 </div>
-<md-progress-bar class="app-progress-bar-bottom" mode="indeterminate" *ngIf="inQuery"></md-progress-bar>

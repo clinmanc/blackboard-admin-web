@@ -39,7 +39,7 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
     this.buildForm();
 
     this.columns = [
-      { key: 'inviter', name: '邀请人', sortable: true, cellTemplate: this.inviterDisplay },
+      { key: 'inviterName', name: '邀请人', sortable: true, cellTemplate: this.inviterDisplay },
       { key: 'invitationCode', name: '邀请码', sortable: true },
       { key: 'inviteeNum', name: '邀请的老师数量', sortable: true, numeric: true, cellTemplate: this.viewImpl },
       { key: 'classroomNum', name: '邀请的老师创建的班级数量', sortable: true, numeric: true, cellTemplate: this.viewImpl },
@@ -96,9 +96,8 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
     this.invitationStatisticsService.exportRecords({
       invitationCodes: formModel.invitationCodes,
       exportType: 'TOTAL',
-      from: formModel.from,
-      to: formModel.to,
-      bom: true
+      fromDate: formModel.from,
+      toDate: formModel.to
     });
   }
 
@@ -108,9 +107,8 @@ export class InvitationStatisticsComponent extends BasePage implements OnInit {
     this.invitationStatisticsService.exportRecords({
       invitationCodes: formModel.invitationCodes,
       exportType: 'DETAIL',
-      from: formModel.from,
-      to: formModel.to,
-      bom: true
+      fromDate: formModel.from,
+      toDate: formModel.to
     });
   }
 

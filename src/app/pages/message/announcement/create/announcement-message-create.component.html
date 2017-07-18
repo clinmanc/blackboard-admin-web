@@ -1,41 +1,67 @@
 <md-card>
+  <md-progress-bar class="app-progress-bar-top" mode="query" *ngIf="inQuery"></md-progress-bar>
   <md-card-content>
-    <form [formGroup]="createForm" novalidate (ngSubmit)="create()">
-      <div>
-        <md-input-container>
-          <input mdInput formControlName="title" type="text" placeholder="标题" autocomplete="off">
-        </md-input-container>
+    <div fxLayout="row">
+      <div fxFlex="40%">
+        <form [formGroup]="createForm" novalidate (ngSubmit)="create()">
+          <div class="form-item" fxLayout="row">
+            <label>
+              封面
+              <input type="file" formControlName="cover" #inputCover accept="image/*"
+                     (change)="onFileChange(inputCover.files)"
+                     placeholder="封面" autocomplete="off" fxFlex>
+            </label>
+          </div>
+          <div class="form-item" fxLayout="row">
+            <md-input-container fxFlex>
+              <textarea mdInput #message mdTextareaAutosize formControlName="content"
+                        [(ngModel)]="messageContent" minlength="1" maxlength="256" placeholder="内容" required>
+              </textarea>
+              <md-hint align="end">{{message.value.length}} / 256</md-hint>
+            </md-input-container>
+          </div>
+          <div class="form-item" fxLayout="row">
+            <md-input-container fxFlex>
+              <input mdInput formControlName="link" type="url" placeholder="链接" autocomplete="off" required>
+            </md-input-container>
+          </div>
+          <div class="form-item" fxLayout="row">
+            <md-input-container fxFlex>
+              <input mdInput formControlName="code" type="text" placeholder="验证码" minlength="4" maxlength="4" autocomplete="off" required>
+            </md-input-container>
+          </div>
+          <div class="form-item" fxLayout="row">
+            <label>
+              接收类型 *
+              <md-radio-group formControlName="destination" fxLayout="column" fxLayoutAlign="space-around start" required>
+                <md-radio-button class="form-radio-button" *ngFor="let type of receiverTypes" [value]="type.value">{{ type.name }}</md-radio-button>
+              </md-radio-group>
+            </label>
+          </div>
+          <div fxLayout="row">
+            <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid" fxFlex>
+              发送
+            </button>
+          </div>
+        </form>
       </div>
-      <div>
-        <md-input-container>
-          <textarea mdInput mdTextareaAutosize formControlName="content" rows="4" placeholder="内容" required></textarea>
-        </md-input-container>
+      <div fxFlex="20%">
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <div style="border-left: 1px solid rgba(0,0,0,.12);" fxFlex></div>
+        </div>
       </div>
-      <div>
-        <md-input-container>
-          <input mdInput formControlName="linkTitle" type="text" placeholder="链接标题" autocomplete="off">
-        </md-input-container>
+      <div fxFlex="40%" class="message-container" fxLayout="row" fxLayoutAlign="center center">
+        <div class="message-card">
+          <div class="message-cover-container" [style.background-image]="previewCoverSafeStyle">
+            <!--<img class="message-cover" [attr.src]="previewCoverSafeUrl" alt="封面">-->
+          </div>
+          <p class="message-content">{{messageContent}}</p>
+          <div class="message-footer" fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{now | date: 'MM月dd日 HH:mm'}}</div>
+            <div><md-icon class="message-view-icon">visibility</md-icon>150608</div>
+          </div>
+        </div>
       </div>
-      <div>
-        <md-input-container>
-          <input mdInput formControlName="link" type="url" placeholder="链接" autocomplete="off">
-        </md-input-container>
-      </div>
-      <div>
-        <md-input-container>
-          <input mdInput formControlName="verificationCode" type="text" placeholder="验证码" required autocomplete="off">
-        </md-input-container>
-        <md-input-container>
-          <input mdInput formControlName="token" type="text" placeholder="令牌" required minlength="24" maxlength="24"
-                 autocomplete="off">
-        </md-input-container>
-        <md-select placeholder="接收类型" formControlName="receiverType" required>
-          <md-option *ngFor="let type of receiverTypes" [value]="type.value">{{ type.name }}</md-option>
-        </md-select>
-        <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid">
-          发送
-        </button>
-      </div>
-    </form>
+    </div>
   </md-card-content>
 </md-card>

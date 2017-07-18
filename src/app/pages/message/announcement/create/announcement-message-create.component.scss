@@ -1,3 +1,52 @@
-td > * {
-  width: 100%;
+.form-item {
+  margin: 16px;
+}
+
+.form-radio-button {
+  margin: 8px;
+}
+
+.message-container {
+  background-color: #373737;
+  padding: 48px;
+}
+
+.message-card {
+  box-sizing: border-box;
+  width: 290px;
+  padding: 4px;
+  border-radius: 0 4px 4px 4px;
+  background-color: #ffffff;
+
+  .message-cover-container {
+    width: 282px;
+    height: 160px;
+    background: no-repeat center center;
+    background-size: cover;
+  }
+
+  .message-content {
+    font-family: STHeitiSC-Light, Roboto, "Helvetica Neue", sans-serif;
+    width: 282px;
+    font-size: 17px;
+    color: #333333;
+    letter-spacing: -0.3px;
+    word-break: break-all;
+    line-height: 20px;
+  }
+
+  .message-footer {
+    font-family: STHeitiSC-Light, Roboto, "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    color: #aaaaaa;
+    letter-spacing: -0.29px;
+    line-height: 15px;
+
+    .message-view-icon {
+      vertical-align: middle;
+      font-size: 12px;
+      width: 12px;
+      height: 12px;
+    }
+  }
 }

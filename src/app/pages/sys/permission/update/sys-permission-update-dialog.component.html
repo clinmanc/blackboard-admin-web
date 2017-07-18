@@ -1,0 +1,24 @@
+<h1 md-dialog-title>修改权限</h1>
+<form md-dialog-content [formGroup]="updateForm" novalidate (ngSubmit)="update()">
+  <md-error>{{error}}</md-error>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="name" type="text" placeholder="权限名" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="description" type="text" placeholder="描述" autocomplete="off">
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <md-input-container fxFlex>
+      <input mdInput formControlName="url" type="text" placeholder="权限路径" autocomplete="off" required>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout="row">
+    <button md-raised-button type="submit" color="primary" [disabled]="!updateForm.valid" fxFlex>
+      更新
+    </button>
+  </div>
+</form>

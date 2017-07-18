@@ -1,13 +1,43 @@
 <md-card>
   <md-card-content>
     <form [formGroup]="searchForm" novalidate (ngSubmit)="generate()">
-      <md-input-container>
-        <input mdInput formControlName="from" type="date" placeholder="开始时间" required>
+      <md-select placeholder="导出类型" formControlName="exportType"  required  (change)="changeType($event)">
+        <md-option *ngFor="let exportType of exportTypes" [value]="exportType.value">{{ exportType.name }}</md-option>
+      </md-select>
+
+      <md-select *ngIf="exportType == 'USER_INFO'" placeholder="活跃或注册时间" formControlName="createOrActive" required>
+        <md-option value="false">活跃时间</md-option>
+        <md-option value="true">注册时间</md-option>
+      </md-select>
+      <md-select placeholder="角色" formControlName="role" *ngIf="exportType == 'USER_INFO'">
+        <md-option *ngFor="let role of roles" [value]="role.value">{{ role.name }}</md-option>
+      </md-select>
+      <md-select placeholder="收/发/全部" formControlName="messageDirection" *ngIf="exportType == 'USER_INFO'">
+        <md-option *ngFor="let option of messageDirections" [value]="option.value">{{ option.name }}</md-option>
+      </md-select>
+      <md-select placeholder="建立班" formControlName="createdClassroom" *ngIf="exportType == 'USER_INFO'">
+        <md-option *ngFor="let option of boolOptions" [value]="option.value">{{ option.name }}</md-option>
+      </md-select>
+      <md-select placeholder="加入班" formControlName="joinedClassroom" *ngIf="exportType == 'USER_INFO'">
+        <md-option *ngFor="let option of boolOptions" [value]="option.value">{{ option.name }}</md-option>
+      </md-select>
+      <md-select placeholder="查询类型" formControlName="type"  required *ngIf="exportType == 'USER_INFO'">
+        <md-option *ngFor="let type of types" [value]="type.value">{{ type.name }}</md-option>
+      </md-select>
+      <md-input-container *ngIf="exportType == 'USER_INFO' || exportType == 'CLASSROOM_USER_INFO'">
+        <input mdInput formControlName="keyword" type="text" placeholder="关键字" autocomplete="off">
       </md-input-container>
       <md-input-container>
-        <input mdInput formControlName="to" type="date" placeholder="结束时间" required>
+        <input mdInput formControlName="fromDate" type="date" placeholder="开始时间" required>
       </md-input-container>
-      <button md-raised-button type="submit" color="accent" [disabled]="!searchForm.valid">生成数据</button>
+      <md-input-container>
+        <input mdInput formControlName="toDate" type="date" placeholder="结束时间" required>
+      </md-input-container>
+      <!--<md-input-container *ngIf="exportType == 'CLASSROOM_USER_INFO'">-->
+        <!--<input mdInput formControlName="classroomIds" type="string" placeholder="班级Id" required>-->
+      <!--</md-input-container>-->
+
+      <button md-raised-button type="submit" color="accent" [disabled]="!searchForm.valid && exportType == 'CLASSROOM_USER_INFO'">生成数据</button>
     </form>
   </md-card-content>
 </md-card>
@@ -16,16 +46,16 @@
   <app-toolbar [toolbar]="toolbar"></app-toolbar>
   <md-card-content perfect-scrollbar>
     <app-table [columns]="columns" [data]="page.content" class="app-line-limit-length">
-      <ng-template #actionImpl let-row="row">
-        <button *ngIf="row.isDoing !== 'true'; else redoElseBlock" md-icon-button md-tooltip="重新生成" (click)="regenerate(row.name)">
-          <md-icon class="app-table-cell-icon">autorenew</md-icon>
-        </button>
-        <ng-template #redoElseBlock>
-          <button md-icon-button md-tooltip="正在生成...">
-            <md-icon class="app-table-cell-icon">hourglass_empty</md-icon>
-          </button>
-        </ng-template>
-      </ng-template>
+      <!--<ng-template #actionImpl let-row="row">-->
+        <!--<button *ngIf="row.isDoing !== 'true'; else redoElseBlock" md-icon-button md-tooltip="重新生成" (click)="regenerate(row.name)">-->
+          <!--<md-icon class="app-table-cell-icon">autorenew</md-icon>-->
+        <!--</button>-->
+        <!--<ng-template #redoElseBlock>-->
+          <!--<button md-icon-button md-tooltip="正在生成...">-->
+            <!--<md-icon class="app-table-cell-icon">hourglass_empty</md-icon>-->
+          <!--</button>-->
+        <!--</ng-template>-->
+      <!--</ng-template>-->
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <ng-container *ngIf="row.isDoing === 'true'; else existElseBlock">{{value}}</ng-container>
         <ng-template #existElseBlock>

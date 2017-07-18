@@ -1,0 +1,76 @@
+<div fxLayout="row" fxLayoutAlign="space-between none">
+  <div class="mat-caption app-line-limit max-length-320">标签：<span>{{message?.activity?.tag}}</span></div>
+  <div class="mat-caption">
+    活动结束时间：{{message?.activity?.expireTime | date: "yyyy.MM.dd HH:mm"}}
+  </div>
+</div>
+<p class="mat-body message-content" appLimitedLine [maxWidth]="496">
+  {{message?.activity?.content}}
+</p>
+<div *ngIf="message?.activity?.audio" fxLayout="row">
+  <audio [attr.src]="resourceHelper.resolveAudioUrl(message.activity?.audio?.id)"
+         controls="controls" fxFlex></audio>
+</div>
+<app-preview *ngFor="let image of message?.activity?.images"
+             [thumbnail]="resourceHelper.resolveImageUrl(image.thumbnail)"
+             [original]="resourceHelper.resolveImageUrl(image.original)">
+</app-preview>
+<div fxLayout="row" fxLayoutAlign="end none">
+  <div class="mat-button">
+    <md-icon class="material-icons md-18">visibility</md-icon>
+    <span>{{message?.receipt?.receipted}}/{{message?.receipt?.total}}</span>
+  </div>
+  <div class="mat-button">
+    <md-icon class="material-icons md-18">stars</md-icon>
+    <span>{{message?.receipt?.feedbacked}}/{{message?.receipt?.total}}</span>
+  </div>
+  <md-button-toggle (change)="toggleShowResults($event)" md-tooltip="查看活动成果"><md-icon>list</md-icon></md-button-toggle>
+</div>
+<div *ngIf="showResults" class="activity-results" [@shrinkInOutAnimation]="'in'">
+  <md-card *ngFor="let item of page.content">
+    <!-- 发送人 -->
+    <md-card-header>
+      <img md-card-avatar [attr.src]="resourceHelper.resolveAvatarUrl(item.record.createrInfo.avatar)">
+      <md-card-title>{{item.record.createrInfo.realname}}</md-card-title>
+      <md-card-subtitle>{{item.record.createTime | date: 'yyyy.MM.dd HH:mm'}}</md-card-subtitle>
+    </md-card-header>
+    <md-card-content>
+      <!-- 文本 -->
+      <p class="mat-body message-content" appLimitedLine [maxWidth]="496">
+        {{item.record.content}}
+      </p>
+      <!-- 音频 -->
+      <div *ngIf="item.audio" fxLayout="row">
+        <audio [attr.src]="resourceHelper.resolveAudioUrl(item.audio.audioUrl)" controls="controls" fxFlex></audio>
+      </div>
+      <!-- 视频 -->
+      <video *ngIf="item.video" [attr.src]="resourceHelper.resolveVideoUrl(item.video.playUrl)" width="320" controls="controls"></video>
+      <!-- 图片 -->
+      <app-preview *ngFor="let image of item.images"
+                   [thumbnail]="resourceHelper.resolveImageUrl(image.thumbnail)"
+                   [original]="resourceHelper.resolveImageUrl(image.original)">
+      </app-preview>
+      <br>
+      <!-- 标签 -->
+      <md-chip-list *ngIf="item.tags.length">
+        <md-chip *ngFor="let tag of item.tags">{{tag}}</md-chip>
+      </md-chip-list>
+      <!-- 点赞 -->
+      <button md-icon-button>
+        <md-icon>thumb_up</md-icon>
+        {{item.praises.length}}
+      </button>
+      <button *ngFor="let praiseInfo of item.praises" md-icon-button>
+        <img width="18" height="18" [attr.src]="resourceHelper.resolveAvatarUrl(praiseInfo.user.avatar)">
+      </button>
+      <!-- 评论 -->
+      <div *ngIf="item.comments?.length" class="comments-content">
+        <p *ngFor="let commentInfo of item.comments" class="comment">
+          <span class="comment-username">{{commentInfo.sender.realname}}: </span>
+          <span class="app-line-limit max-length-400"><span>{{commentInfo.comment.content}}</span></span>
+        </p>
+      </div>
+    </md-card-content>
+  </md-card>
+  <!--<md-progress-spinner mode="determinate"></md-progress-spinner>-->
+</div>

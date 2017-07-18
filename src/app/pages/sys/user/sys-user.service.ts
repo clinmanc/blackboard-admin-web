@@ -24,6 +24,12 @@ export class SysUserService extends RestClient {
   save: ResourceMethod<SysUser, SysUser>;
 
   @ResourceAction({
+    path: '/{:userId}',
+    method: RequestMethod.Put
+  })
+  update: ResourceMethod<SysUser, SysUser>;
+
+  @ResourceAction({
     path: '/batch',
     method: RequestMethod.Patch
   })

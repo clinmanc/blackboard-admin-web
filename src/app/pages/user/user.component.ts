@@ -30,6 +30,7 @@ export class UserComponent extends BasePage implements OnInit {
   roles = [];
   boolOptions = [];
   messageDirections = [];
+  types = [];
 
   total = {};
 
@@ -67,8 +68,8 @@ export class UserComponent extends BasePage implements OnInit {
       { key: 'videoCount', name: '视频', numeric: true, sortable: true, cellTemplate: this.viewImpl },
       { key: 'activityCount', name: '活动', numeric: true, sortable: true, cellTemplate: this.viewImpl },
       { key: 'paperSlipCount', name: '纸条', numeric: true, sortable: true, cellTemplate: this.viewImpl },
-      { key: 'messageCount', name: '总数', numeric: true, sortable: true },
-      { key: 'growthCount', name: '成长', numeric: true, cellTemplate: this.viewImpl }
+      { key: 'growthCount', name: '成长', numeric: true, sortable: true, cellTemplate: this.viewImpl },
+      { key: 'messageCount', name: '消息总数', numeric: true, sortable: true }
     ];
     this.toolbar = {
       persistentButtons: [],
@@ -92,10 +93,15 @@ export class UserComponent extends BasePage implements OnInit {
       { name: '收', value: 'INCOMING' },
       { name: '发', value: 'OUTGOING' }
     ];
+    this.types = [
+      { name: '用户ID', value: 'USER_ID' },
+      { name: '手机号', value: 'MOBILE'},
+      { name: '学校', value: 'SCHOOL'},
+      // { name: '昵称', value: 'USERNAME'},
+      { name: '真实名称', value: 'REALNAME'}
+    ];
 
     this.buildForm();
-
-    this.search();
   }
 
   buildForm() {
@@ -110,7 +116,8 @@ export class UserComponent extends BasePage implements OnInit {
       messageDirection: [],
       createdClassroom: [],
       joinedClassroom: [],
-      keyword: []
+      keyword: [],
+      type: ['USER_ID']
     });
 
     this.lastFromDate = fromDate;
@@ -140,7 +147,9 @@ export class UserComponent extends BasePage implements OnInit {
   }
 
   exportStatistics() {
-
+    const queryInput = Object.assign(this.searchForm.value, this.pageable);
+    console.log(queryInput);
+    this.userService.export(queryInput);
   }
 
   openViewDialog(event) {
@@ -198,21 +207,7 @@ export class UserComponent extends BasePage implements OnInit {
         }, dialogRef.componentInstance.pageable);
 
         dialogRef.componentInstance.withHandler(this.userService.queryUserMessages(queryInput).$observable)
-          .map(res => {
-            const page = res as Page<any>;
-            if (category === 'GROWTH') {
-              page.numberOfElements = page.content.length;
-              page.number = pageable.page;
-              page.size = pageable.size;
-
-              page.totalElements = page.content.length !== 0 && pageable.page * pageable.size + pageable.size > event.row.growthsNum
-                ? pageable.page * pageable.size + page.content.length : event.row.growthsNum;
-              page.totalPages = pageable.size === 0 ? 1 : page.totalElements / page.size;
-              page.first = page.number === 0;
-              page.last = page.number + 1 >= page.totalPages;
-            }
-            return page;
-          })
+          .map(res => res as Page<any>)
           .subscribe(page => dialogRef.componentInstance.page = page);
       }.bind(this);
     }

@@ -29,8 +29,8 @@ export class SysUserCreateDialogComponent extends BasePage implements OnInit {
   }
 
   ngOnInit() {
-    this.buildForm();
     this.loadRoles();
+    this.buildForm();
   }
 
   buildForm() {

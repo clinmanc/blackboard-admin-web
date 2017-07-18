@@ -6,17 +6,17 @@ import { BasePage } from '../../../base-page';
 
 @Component({
   selector: 'app-sys-permission-create',
-  templateUrl: './sys-permission-create.component.html',
-  styleUrls: ['./sys-permission-create.component.scss'],
+  templateUrl: './sys-permission-create-dialog.component.html',
+  styleUrls: ['./sys-permission-create-dialog.component.scss'],
   providers: [SysPermissionService]
 })
-export class SysPermissionCreateComponent extends BasePage implements OnInit {
+export class SysPermissionCreateDialogComponent extends BasePage implements OnInit {
 
   createForm: FormGroup;
   error: string;
 
   constructor(
-    public dialogRef: MdDialogRef<SysPermissionCreateComponent>,
+    public dialogRef: MdDialogRef<SysPermissionCreateDialogComponent>,
     snackBar: MdSnackBar,
     private formBuilder: FormBuilder,
     private sysPermissionService: SysPermissionService
@@ -32,7 +32,7 @@ export class SysPermissionCreateComponent extends BasePage implements OnInit {
     this.createForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: [''],
-      url: ['']
+      url: ['', [Validators.required]]
     });
   }
 

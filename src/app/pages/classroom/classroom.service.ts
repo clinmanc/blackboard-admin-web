@@ -7,9 +7,13 @@ import { RestClient } from '../../shared/rest-client';
 import { AvatarHelper } from '../../helper/avatar-helper';
 import { UserHelper } from '../../helper/user-helper';
 import { MessageCategoryHelper } from '../../helper/message-category-helper';
+import { isNullOrUndefined } from 'util';
+import { environment } from '../../../environments/environment';
+import {RequestMethod} from "@angular/http";
 
 export class QueryInput extends Pageable {
   keyword: string;
+  type: string;
 }
 
 @Injectable()
@@ -18,6 +22,7 @@ export class ClassroomService extends RestClient {
 
   @ResourceAction({
     path: '/statistics/message/classroom_message',
+    method: RequestMethod.Post,
     map: (page: Page<any>) => {
       page.content = page.content.map(item => {
         const classroom = item.classroom || {};
@@ -49,18 +54,33 @@ export class ClassroomService extends RestClient {
   })
   queryStatistics: ResourceMethod<QueryInput, Page<any>>;
 
+  exportStatistics (params) {
+    let url = '';
+    for (const key in params) {
+      if (params.hasOwnProperty(key) && !isNullOrUndefined(params[key])) {
+        url += (url && '&') + key + '=' + params[key];
+      }
+    }
+    window.location.href = environment.baseUrl + '/statistics/message/classroom/export?' + url;
+  }
+
   @ResourceAction({
+    method: RequestMethod.Post,
     path: '/statistics/message/classroom_message_count'
   })
   queryMessageCount: ResourceMethod<QueryInput, any>;
 
   @ResourceAction({
-    path: '/classrooms/{:classroomId}/members',
+    path: '/classrooms/{:classroomId}/membersInfo',
     isArray: true,
     map: (member: any) => {
       return {
-        classroomId: member.id,
-        name: UserHelper.getDisplayName(member)
+        classroomId: member.userId,
+        name: UserHelper.getDisplayName(member),
+        createdClassroom: member.createdClassroom,
+        joinedClassroom: member.joinedClassroom,
+        peopleNum: member.peopleNum,
+        messageNum: member.messageNum
       };
     }
   })

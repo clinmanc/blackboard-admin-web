@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { BasePage } from '../../base-page';
 import { Pageable } from '../../../shared/pageable';
 import { Page } from '../../../shared/page';
 import { TableColumn } from '../../../components/table/table-column';
 import { SysPermissionService } from './sys-permission.service';
-import { SysPermissionCreateComponent } from './create/sys-permission-create.component';
+import { SysPermissionCreateDialogComponent } from './create/sys-permission-create-dialog.component';
 import { SysPermission } from '../../../shared/sys-permission';
 import { ConfirmDialogComponent } from '../../../components/dialog/confirm/confirm-dialog.component';
+import { SysPermissionUpdateDialogComponent } from './update/sys-permission-update-dialog.component';
 
 @Component({
   selector: 'app-sys-permission',
@@ -23,6 +24,8 @@ export class SysPermissionComponent extends BasePage implements OnInit {
   selected: SysPermission[] = [];
   toolbar = {};
 
+  @ViewChild('editImpl') editImpl: TemplateRef<any>;
+
   constructor(
     snackBar: MdSnackBar,
     private dialog: MdDialog,
@@ -35,7 +38,8 @@ export class SysPermissionComponent extends BasePage implements OnInit {
     this.columns = [
       { key: 'name', name: '权限' },
       { key: 'description', name: '描述' },
-      { key: 'url', name: '地址' }
+      { key: 'url', name: '地址' },
+      { name: '操作', numeric: true, cellTemplate: this.editImpl }
     ];
     this.toolbar = {
       persistentButtons: [{ name: '添加', action: this.add.bind(this) }],
@@ -67,8 +71,18 @@ export class SysPermissionComponent extends BasePage implements OnInit {
   }
 
   add() {
-    const dialogRef: MdDialogRef<SysPermissionCreateComponent> = this.dialog.open(SysPermissionCreateComponent);
+    const dialogRef: MdDialogRef<SysPermissionCreateDialogComponent> = this.dialog.open(SysPermissionCreateDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.reload();
+      }
+    });
+  }
+
+  edit(permission: SysPermission) {
+    const dialogRef = this.dialog.open(SysPermissionUpdateDialogComponent);
+    dialogRef.componentInstance.permission = permission;
+    dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         this.reload();
       }

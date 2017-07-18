@@ -25,6 +25,9 @@ import { PreviewComponent } from '../components/table/cell/preview.component';
 import { TextEditComponent } from '../components/table/cell/text-edit.component';
 import { DetailComponent } from '../components/table/cell/detail.component';
 
+import { TopicMessageComponent } from '../components/message/topic-message/topic-message.component';
+import { ActivityMessageComponent } from '../components/message/activity-message/activity-message.component';
+
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 
@@ -33,8 +36,11 @@ import { SysUserComponent } from './sys/user/sys-user.component';
 import { SysRoleComponent } from './sys/role/sys-role.component';
 import { SysPermissionComponent } from './sys/permission/sys-permission.component';
 import { SysUserCreateDialogComponent } from './sys/user/create/sys-user-create-dialog.component';
-import { SysRoleCreateComponent } from './sys/role/create/sys-role-create.component';
-import { SysPermissionCreateComponent } from './sys/permission/create/sys-permission-create.component';
+import { SysUserUpdateDialogComponent } from './sys/user/update/sys-user-update-dialog.component';
+import { SysRoleCreateDialogComponent } from './sys/role/create/sys-role-create.component';
+import { SysRoleUpdateDialogComponent } from './sys/role/update/sys-role-update-dialog.component';
+import { SysPermissionCreateDialogComponent } from './sys/permission/create/sys-permission-create-dialog.component';
+import { SysPermissionUpdateDialogComponent } from './sys/permission/update/sys-permission-update-dialog.component';
 import { InvitationStatisticsComponent } from './invitation/statistics/invitation-statistics.component';
 import { InvitationRecordComponent } from './invitation/record/invitation-record.component';
 import { ClassroomComponent } from './classroom/classroom.component';
@@ -69,6 +75,7 @@ import { PromoterInfoComponent } from './promoter-info/promoter-info.component';
 import { PromoterInfoCreateComponent } from './promoter-info/create/promoter-info-create.component';
 import { UserFieldComponent } from 'app/components/table/cell/user-field.component';
 import { SysBatchComponent } from './sys/batch/sys-batch.component';
+import { ClassroomUserInfoComponent } from '../components/dialog/classroom-user-info/classroom-user-info.component';
 
 @NgModule({
 imports: [
@@ -100,6 +107,9 @@ imports: [
     DetailComponent,
     UserFieldComponent,
 
+    TopicMessageComponent,
+    ActivityMessageComponent,
+
     LocalDatePipe,
     LocalDateTimePipe,
     BlackboardMessagePipe,
@@ -111,8 +121,11 @@ imports: [
     SysRoleComponent,
     SysPermissionComponent,
     SysUserCreateDialogComponent,
-    SysRoleCreateComponent,
-    SysPermissionCreateComponent,
+    SysUserUpdateDialogComponent,
+    SysRoleCreateDialogComponent,
+    SysRoleUpdateDialogComponent,
+    SysPermissionCreateDialogComponent,
+    SysPermissionUpdateDialogComponent,
     InvitationStatisticsComponent,
     InvitationRecordComponent,
     ClassroomComponent,
@@ -143,20 +156,25 @@ imports: [
     MessagesDialogComponent,
     LimitedLineDirective,
     PromoterInfoComponent,
-    PromoterInfoCreateComponent
+    PromoterInfoCreateComponent,
+    ClassroomUserInfoComponent
   ],
   entryComponents: [
     GrowthTagCreateComponent,
     TipCreateComponent,
     SysUserCreateDialogComponent,
-    SysRoleCreateComponent,
-    SysPermissionCreateComponent,
+    SysUserUpdateDialogComponent,
+    SysRoleCreateDialogComponent,
+    SysRoleUpdateDialogComponent,
+    SysPermissionCreateDialogComponent,
+    SysPermissionUpdateDialogComponent,
 
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
     ItemListDialogComponent,
-    MessagesDialogComponent
+    MessagesDialogComponent,
+    ClassroomUserInfoComponent
   ]
 })
 export class HomeModule { }

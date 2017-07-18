@@ -8,26 +8,40 @@ import { RequestMethod } from '@angular/http';
 import { environment } from '../../../../environments/environment';
 
 export class QueryInput extends Pageable {
-  keyword?: string;
+  classroomNum?: any[];
   from?: string;
   to?: string;
+  type?: string;
 }
 
 @Injectable()
-@ResourceParams({
-  url: `${environment.url}/users/location_statistics`,
-})
+@ResourceParams()
 export class UserLocationStatisticsService extends RestClient {
-
-  @ResourceAction()
-  query: ResourceMethod<QueryInput, Page<any>>;
+  @ResourceAction({
+    method: RequestMethod.Post,
+    path: '/classrooms/exportUserInfo'
+  })
+  queryClassroomUserInfoStatus: ResourceMethod<QueryInput, any>;
 
   @ResourceAction({
-    path: '/status'
+    method: RequestMethod.Post,
+    path: '/exports/{:exportType}'
+  })
+  exportUserInfo: ResourceMethod<QueryInput, any>;
+
+  @ResourceAction({
+    path: '/exports'
+  })
+  query: ResourceMethod<any, Page<any>>;
+
+  @ResourceAction({
+    method: RequestMethod.Post,
+    path: '/exports/location_statistics/status'
   })
   queryStatus: ResourceMethod<QueryInput, any>;
 
   @ResourceAction({
+    path: '/users/location_statistics',
     method: RequestMethod.Post
   })
   generate: ResourceMethod<QueryInput, any[]>;
@@ -35,4 +49,11 @@ export class UserLocationStatisticsService extends RestClient {
   preview(input: { name: string }) {
     window.open(`${environment.baseUrl}/location/preView/${input.name}`);
   }
+
+
+  download(input: { name: string, exportType: string }) {
+    window.open(`${environment.baseUrl}/dataExport/downloadFile/${input.name}/${input.exportType}`);
+  }
+
+
 }

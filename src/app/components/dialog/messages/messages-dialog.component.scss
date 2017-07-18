@@ -2,6 +2,10 @@ div[md-dialog-content] {
   //background-color: #eee;
 }
 
+md-expansion-panel {
+  box-shadow: none !important;
+}
+
 md-card {
   box-shadow: none !important;
   &:not(:last-child) {

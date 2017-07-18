@@ -7,6 +7,9 @@ import { Page } from '../../shared/page';
 import { AvatarHelper } from '../../helper/avatar-helper';
 import { UserHelper } from '../../helper/user-helper';
 import { MessageCategoryHelper } from '../../helper/message-category-helper';
+import { environment } from '../../../environments/environment';
+import { isNullOrUndefined } from 'util';
+import {RequestMethod} from "@angular/http";
 
 export class QueryInput extends Pageable {
   keyword?: string;
@@ -31,6 +34,7 @@ export class UseRoleMapper {
 @ResourceParams()
 export class UserService extends RestClient {
   @ResourceAction({
+    method: RequestMethod.Post,
     path: '/statistics/message/user_message',
     map: (page: Page<any>) => {
       page.content = page.content.map((item) => {
@@ -65,9 +69,26 @@ export class UserService extends RestClient {
   queryStatistics: ResourceMethod<QueryInput, Page<any>>;
 
   @ResourceAction({
+    method: RequestMethod.Post,
     path: '/statistics/message/user_message_count'
   })
   queryMessageCount: ResourceMethod<QueryInput, any>;
+
+  @ResourceAction({
+    method: RequestMethod.Post,
+    path: '/statistics/message/user/export'
+  })
+  export: ResourceMethod<QueryInput, any>;
+
+  exportStatistics (params) {
+    let url = '';
+    for (const key in params) {
+      if (params.hasOwnProperty(key) && !isNullOrUndefined(params[key])) {
+        url += (url && '&') + key + '=' + params[key];
+      }
+    }
+    window.location.href = environment.baseUrl + '/statistics/message/user/export?' + url;
+  }
 
   @ResourceAction({
     path: '/users/{:userId}/members',

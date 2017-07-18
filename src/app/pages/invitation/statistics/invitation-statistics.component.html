@@ -20,7 +20,7 @@
   <md-card-content perfect-scrollbar>
     <app-table [columns]="columns" [data]="page.content">
       <ng-template #inviterDisplay let-row="row">
-        {{row.inviter}}（{{row.mobile}}）
+        {{row.inviterName}}（{{row.mobile}}）
       </ng-template>
       <ng-template #viewImpl let-value="value" let-column="column" let-row="row" let-index="index">
         <app-view [text]="value" [value]="{

@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeStyle, SafeUrl } from '@angular/platform-browser';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MdDialog, MdSnackBar, MdDialogRef } from '@angular/material';
 import { AnnouncementMessageService } from '../announcement-message.service';
 import { BasePage } from '../../../base-page';
-import { MdSnackBar } from '@angular/material';
+import { ConfirmDialogComponent } from '../../../../components/dialog/confirm/confirm-dialog.component';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-announcement-message-create',
@@ -11,7 +14,7 @@ import { MdSnackBar } from '@angular/material';
   styleUrls: ['./announcement-message-create.component.scss'],
   providers: [AnnouncementMessageService]
 })
-export class AnnouncementMessageCreateComponent extends BasePage implements OnInit {
+export class AnnouncementMessageCreateComponent extends BasePage implements OnInit, OnDestroy {
   createForm: FormGroup;
 
   receiverTypes = [{
@@ -28,8 +31,17 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
     name: '老师'
   }];
 
+  previewCoverSafeUrl: SafeUrl;
+  previewCoverSafeStyle: SafeStyle;
+  previewCoverUrl: string;
+  now: Date;
+  messageContent: string;
+  cover: File;
+
   constructor(
     snackBar: MdSnackBar,
+    private sanitizer: DomSanitizer,
+    private dialog: MdDialog,
     private formBuilder: FormBuilder,
     private location: Location,
     private announcementMessageService: AnnouncementMessageService
@@ -39,40 +51,65 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
 
   ngOnInit() {
     this.buildForm();
+
+    setInterval(() => this.now = new Date(), 1000);
   }
 
   buildForm(): void {
     this.createForm = this.formBuilder.group({
+      cover: [],
       content: [''],
-      title: [''],
       link: ['http://'],
-      linkTitle: [''],
-      verificationCode: [''],
-      receiverType: [''],
-      token: ['']
+      code: [''],
+      destination: ['']
     });
   }
 
   create() {
-    const formModel = this.createForm.value;
+    const dialogRef: MdDialogRef<ConfirmDialogComponent> = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.componentInstance.content = this.cover ? '发送后不可撤销，真的要发送吗？' : '未选择封面，真的要发送吗？';
+    dialogRef.componentInstance.dismissiveAction.text = '再想想';
+    dialogRef.componentInstance.affirmativeAction.text = '发送';
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'ok') {
+        const formModel = this.createForm.value;
 
-    const input = {
-      token: formModel.token, // 56e2406a2767c26553ab9dec
-      url: `http://127.0.0.1:9123/api/public/message/${formModel.token}/${formModel.receiverType}/${formModel.verificationCode}`,
-      data: {
-        content: formModel.content,
-        title: formModel.title,
-        extras: {
-          link: {
-            title: formModel.linkTitle,
-            url: formModel.link
-          }
-        },
-        reciverType: formModel.receiverType
+        const input = {
+          token: environment.announcementToken,
+          cover: this.cover,
+          content: formModel.content,
+          link: formModel.link,
+          code: formModel.code,
+          destination: formModel.destination
+        };
+
+        this.withHandler(this.announcementMessageService.save(input))
+          .subscribe(() => this.snackBar.open('发送成功', '知道了', { duration: 5000 }));
       }
-    };
+    });
+  }
 
-    this.withHandler(this.announcementMessageService.save(input).$observable)
-      .subscribe(this.location.back.bind(this));
+  onFileChange(files: FileList) {
+    if (this.previewCoverUrl) {
+      window.URL.revokeObjectURL(this.previewCoverUrl);
+    }
+
+    if (files.length > 0) {
+      this.cover = files[0];
+      this.previewCoverUrl = window.URL.createObjectURL(this.cover);
+      this.previewCoverSafeUrl = this.sanitizer.bypassSecurityTrustUrl(this.previewCoverUrl);
+      this.previewCoverSafeStyle = this.sanitizer.bypassSecurityTrustStyle('url(' + this.previewCoverUrl + ')');
+    } else {
+      this.cover = null;
+      this.previewCoverUrl = null;
+      this.previewCoverSafeUrl = null;
+      this.previewCoverSafeStyle = null;
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.previewCoverUrl) {
+      window.URL.revokeObjectURL(this.previewCoverUrl);
+    }
   }
 }

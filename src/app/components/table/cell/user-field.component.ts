@@ -4,14 +4,14 @@ import { BasePage } from '../../../pages/base-page';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { PromptDialogComponent } from 'app/components/dialog/prompt/prompt-dialog.component';
 import { UserHelper } from '../../../helper/user-helper';
-import { AvatarHelper } from '../../../helper/avatar-helper';
+import { ResourceHelper } from '../../../helper/resource-helper';
 
 @Component({
   selector: 'app-user-field',
   template: `
     <app-preview #ele [text]="getDisplayName(user)"
-                 [thumbnail]="getAvatar(user)?.small"
-                 [original]="getAvatar(user)?.big" (click)="showPrivacy()">
+                 [thumbnail]="getAvatar(user)"
+                 [original]="getAvatar(user)" (click)="showPrivacy()">
     </app-preview>`,
   styles: [``],
   providers: [UserFieldService]
@@ -24,8 +24,7 @@ export class UserFieldComponent extends BasePage implements OnInit {
   constructor(
     snackBar: MdSnackBar,
     private userFieldService: UserFieldService,
-    private dialog: MdDialog,
-    private eleRef: ElementRef
+    private dialog: MdDialog
   ) {
     super(snackBar);
   }
@@ -61,6 +60,6 @@ export class UserFieldComponent extends BasePage implements OnInit {
   }
 
   getAvatar(user) {
-    return AvatarHelper.parseFromUser(user);
+    return ResourceHelper.resolveUserImageUrl(user);
   }
 }
