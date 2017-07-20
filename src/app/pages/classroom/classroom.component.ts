@@ -9,7 +9,7 @@ import { TableColumn } from '../../components/table/table-column';
 import * as moment from 'moment';
 import { MessagesDialogComponent } from '../../components/dialog/messages/messages-dialog.component';
 import { UserHelper } from '../../helper/user-helper';
-import {ClassroomUserInfoComponent} from '../../components/dialog/classroom-user-info/classroom-user-info.component';
+import { ClassroomUserInfoComponent } from '../../components/dialog/classroom-user-info/classroom-user-info.component';
 
 @Component({
   selector: 'app-classroom',
@@ -73,10 +73,10 @@ export class ClassroomComponent extends BasePage implements OnInit {
     };
     this.types = [
       { name: '班级号', value: 'CODE' },
-      { name: '班级ID', value: 'CLASSROOM_ID'},
-      { name: '班级名称', value: 'NAME'},
-      { name: '用户手机号', value: 'MOBILE'},
-      { name: '用户ID', value: 'USER_ID'}
+      { name: '班级ID', value: 'CLASSROOM_ID' },
+      { name: '班级名称', value: 'NAME' },
+      { name: '用户手机号', value: 'MOBILE' },
+      { name: '用户ID', value: 'USER_ID' }
     ];
     this.buildForm();
   }
@@ -90,7 +90,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
       fromDate: [fromDate],
       toDate: [toDate],
       keyword: [],
-      type:  ['CODE'],
+      type: ['CODE'],
     });
 
     this.lastFromDate = fromDate;
@@ -179,7 +179,7 @@ export class ClassroomComponent extends BasePage implements OnInit {
 
         dialogRef.componentInstance.withHandler(this.classroomService.queryClassroomMessages(queryInput).$observable)
           .map(res => res as Page<any>)
-          .subscribe(page => dialogRef.componentInstance.page = page );
+          .subscribe(page => dialogRef.componentInstance.page = page);
       }.bind(this);
     }
   }

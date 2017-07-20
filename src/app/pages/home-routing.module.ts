@@ -28,6 +28,7 @@ import { ExportComponent } from './export/export.component';
 import { PromoterInfoComponent } from './promoter-info/promoter-info.component';
 import { PromoterInfoCreateComponent } from './promoter-info/create/promoter-info-create.component';
 import { SysBatchComponent } from './sys/batch/sys-batch.component';
+import { UserAssistComponent } from './user/assist/user-assist.component';
 
 export const homeRoutes: Routes = [
   {
@@ -222,11 +223,11 @@ export const homeRoutes: Routes = [
         component: GrowthRecordComponent
       },
       {
-        path: 'export',
+        path: 'user/assist',
         data: {
-          title: '数据导出'
+          title: '用户协助'
         },
-        component: ExportComponent
+        component: UserAssistComponent
       }
     ]
   }

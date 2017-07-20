@@ -133,4 +133,10 @@ export class UserService extends RestClient {
     }
   })
   queryRegisteredStatistics: ResourceMethod<any, any>;
+
+  @ResourceAction({
+    path: '/users/spy?mobile={:mobile}',
+    method: RequestMethod.Post
+  })
+  generateSpy: ResourceMethod<any, any>;
 }

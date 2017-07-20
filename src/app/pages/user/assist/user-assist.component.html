@@ -1,0 +1,23 @@
+<md-card>
+  <form [formGroup]="searchForm" novalidate (ngSubmit)="search()">
+    <md-input-container>
+      <input mdInput type="tel" formControlName="mobile" placeholder="手机号" autocomplete="off" minlength="11" maxlength="11" required>
+      <md-icon mdSuffix>smartphone</md-icon>
+    </md-input-container>
+    <button md-raised-button color="primary" [disabled]="!searchForm.valid || inQuery" required>查看</button>
+  </form>
+</md-card>
+<md-card>
+  <md-list>
+    <h3 md-subheader>SPY</h3>
+    <md-list-item>
+      <md-icon md-list-icon>touch_app</md-icon>
+      <h4 md-line>{{log ? log.code : '点击按钮查看验证码'}}</h4>
+    </md-list-item>
+    <md-list-item>
+      <md-icon md-list-icon>fingerprint</md-icon>
+      <h4 md-line>{{log ? log.spy : '点击按钮查看密码'}}</h4>
+    </md-list-item>
+  </md-list>
+  <md-progress-bar class="app-progress-bar-bottom" mode="query" *ngIf="inQuery"></md-progress-bar>
+</md-card>

@@ -17,49 +17,49 @@ $appPaginationFontSize: 13px;
   padding: 2px;
 
   .app-pagination-rows {
-    label {
-      display: inline-flex;
-      white-space: nowrap;
-      align-items: center;
-      margin-left: 12px;
-      margin-right: 12px;
+       label {
+         display: inline-flex;
+         white-space: nowrap;
+         align-items: center;
+         margin-left: 12px;
+         margin-right: 12px;
+         font-size: $appPaginationFontSize;
+       }
+       .mat-select-trigger {
+         min-width: 64px !important;
+         width: 64px !important;
+         .mat-select-value-text {
+           width: 40px !important;
+           font-size: 13px !important;
+           text-align: right !important;
+         }
+         .mat-select-underline {
+           height: 0 !important;
+         }
+       }
+       .md-option {
+         text-align: right !important;
+       }
+     }
+
+    .app-pagination-state {
+      margin-left: 24px;
+      margin-right: 24px;
       font-size: $appPaginationFontSize;
     }
-    .mat-select-trigger {
-      min-width: 64px !important;
-      width: 64px !important;
-      .mat-select-value-text {
-        width: 40px !important;
-        font-size: 13px !important;
-        text-align: right !important;
-      }
-      .mat-select-underline {
-        height: 0 !important;
-      }
-    }
-    .md-option {
-      text-align: right !important;
-    }
-  }
 
-  .app-pagination-state {
-    margin-left: 24px;
-    margin-right: 24px;
-    font-size: $appPaginationFontSize;
-  }
-
-  .app-pagination-pager {
-    button {
-      display: flex;
-      align-items: center;
-      min-width: 24px;
-      min-height: 24px;
-      width: 24px;
-      height: 24px;
-      padding: 0;
-      margin-left: 12px;
-      margin-right: 12px;
-      line-height: 24px;
-    }
+    .app-pagination-pager {
+      button {
+        display: flex;
+        align-items: center;
+        min-width: 24px;
+        min-height: 24px;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        margin-left: 12px;
+        margin-right: 12px;
+        line-height: 24px;
+      }
   }
 }

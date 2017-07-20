@@ -25,6 +25,19 @@ export class AuthHelper {
     AuthHelper.auth.user = null;
     AuthHelper.auth.token = null;
   }
+
+  static hasPermission(name: string) {
+    if (AuthHelper.auth.user) {
+      for (const role of AuthHelper.auth.user.roles) {
+        for (const permission of role.permissions) {
+          if (permission.name === '所有权限' || permission.name === name) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
 }
 //
 // export function utf8_to_b64(str) {

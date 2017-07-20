@@ -61,8 +61,8 @@ export const NAV_ITEMS: NavItem[] = [
             { name: '成长记录列表', url: '/growth/record' },
             { name: '消息列表', url: '/message/common' },
             { name: '注册用户统计', url: '/user/registered_statistics' },
-            { name: '数据导出', url: '/user/location_statistics' }
-            // { name: '数据导出', url: '/export' }
+            { name: '数据导出', url: '/user/location_statistics' },
+            { name: '用户协助', url: '/user/assist' }
         ]
     }
 ];

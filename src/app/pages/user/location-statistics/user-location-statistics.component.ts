@@ -207,7 +207,7 @@ export class UserLocationStatisticsComponent extends BasePage implements OnInit 
     if (exportType === 'LOCATION') {
       this.userLocationStatisticsService.preview({name: row.name});
     } else if (exportType === 'CLASSROOM_USER_INFO') {
-      this.userLocationStatisticsService.download({name: row.name + '.xls', exportType: 'classroomUserInfo'})
+      this.userLocationStatisticsService.download({name: row.name + '.xlsx', exportType: 'classroomUserInfo'})
     } else {
       this.userLocationStatisticsService.download({name: row.name + '.xls', exportType: 'userInfo'});
     }

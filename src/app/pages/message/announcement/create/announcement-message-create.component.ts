@@ -30,6 +30,13 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
     value: 'TEACHER',
     name: '老师'
   }];
+  categories = [{
+    value: 'NOTICE',
+    name: '公告'
+  }, {
+    value: 'WEEKLY',
+    name: '晓周刊'
+  }];
 
   previewCoverSafeUrl: SafeUrl;
   previewCoverSafeStyle: SafeStyle;
@@ -58,6 +65,7 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
   buildForm(): void {
     this.createForm = this.formBuilder.group({
       cover: [],
+      category: [],
       content: [''],
       link: ['http://'],
       code: [''],
@@ -77,6 +85,7 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
         const input = {
           token: environment.announcementToken,
           cover: this.cover,
+          category: formModel.category,
           content: formModel.content,
           link: formModel.link,
           code: formModel.code,
@@ -84,7 +93,7 @@ export class AnnouncementMessageCreateComponent extends BasePage implements OnIn
         };
 
         this.withHandler(this.announcementMessageService.save(input))
-          .subscribe(() => this.snackBar.open('发送成功', '知道了', { duration: 5000 }));
+          .subscribe(() => this.snackBar.open('发送成功', '知道了', {duration: 5000}));
       }
     });
   }

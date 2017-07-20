@@ -1,3 +1,33 @@
-<md-card style="display: flex; align-items: center; justify-content: center; height: 85vh; color: rgba(0, 0, 0, .5)">
-  <h1>Coming soon</h1>
-</md-card>
+<h4 class="mat-title">开发动态</h4>
+
+<app-development-log-create *ngIf="writeLog"
+                            [value]="editingLog"
+                            (save)="editingLog ? update($event) : create($event)"
+                            (cancel)="writeLog = false; editingLog = {}">
+</app-development-log-create>
+<!--<md-card>-->
+<md-accordion>
+  <md-expansion-panel *ngFor="let log of developmentLogs | async; let i = index" hideToggle="true" [expanded]="i === 0">
+    <md-expansion-panel-header>
+      <mat-panel-title>{{log.title}}</mat-panel-title>
+      <mat-panel-description style="flex-grow: 0; align-self: flex-end;">
+        {{log.updateTime | date: 'yyyy年MM月dd日 HH:mm'}}
+        <!--<button md-icon-button md-tooltip="编辑">-->
+        <!--<md-icon>mode_edit</md-icon>-->
+        <!--</button>-->
+        <!--<button md-icon-button md-tooltip="删除">-->
+        <!--<md-icon>delete</md-icon>-->
+        <!--</button>-->
+      </mat-panel-description>
+    </md-expansion-panel-header>
+    <p [innerHTML]="log.content"></p>
+    <md-action-row *ngIf="hasWriteLogPermission">
+      <button md-button color="primary" (click)="onEdit(log)">编辑</button>
+      <button md-button color="accent" (click)="remove(log.id)">删除</button>
+    </md-action-row>
+  </md-expansion-panel>
+</md-accordion>
+<!--</md-card>-->
+<button *ngIf="hasWriteLogPermission && !writeLog" md-mini-fab class="add-fab" (click)="writeLog = true">
+  <md-icon>mode_edit</md-icon>
+</button>

@@ -95,10 +95,10 @@ export class UserComponent extends BasePage implements OnInit {
     ];
     this.types = [
       { name: '用户ID', value: 'USER_ID' },
-      { name: '手机号', value: 'MOBILE'},
-      { name: '学校', value: 'SCHOOL'},
+      { name: '手机号', value: 'MOBILE' },
+      { name: '学校', value: 'SCHOOL' },
       // { name: '昵称', value: 'USERNAME'},
-      { name: '真实名称', value: 'REALNAME'}
+      { name: '真实名称', value: 'REALNAME' }
     ];
 
     this.buildForm();

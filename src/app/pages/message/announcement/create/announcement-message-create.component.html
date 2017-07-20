@@ -5,6 +5,12 @@
       <div fxFlex="40%">
         <form [formGroup]="createForm" novalidate (ngSubmit)="create()">
           <div class="form-item" fxLayout="row">
+            <h4 class="mat-subheading-1">消息类别 *</h4>
+            <md-radio-group formControlName="category" fxLayout="column" fxLayoutAlign="space-around start" required>
+              <md-radio-button class="form-radio-button" *ngFor="let category of categories" [value]="category.value">{{ category.name }}</md-radio-button>
+            </md-radio-group>
+          </div>
+          <div class="form-item" fxLayout="row">
             <label>
               封面
               <input type="file" formControlName="cover" #inputCover accept="image/*"
@@ -31,12 +37,10 @@
             </md-input-container>
           </div>
           <div class="form-item" fxLayout="row">
-            <label>
-              接收类型 *
-              <md-radio-group formControlName="destination" fxLayout="column" fxLayoutAlign="space-around start" required>
-                <md-radio-button class="form-radio-button" *ngFor="let type of receiverTypes" [value]="type.value">{{ type.name }}</md-radio-button>
-              </md-radio-group>
-            </label>
+            <h4 class="mat-subheading-1">接收类型 *</h4>
+            <md-radio-group formControlName="destination" fxLayout="column" fxLayoutAlign="space-around start" required>
+              <md-radio-button class="form-radio-button" *ngFor="let type of receiverTypes" [value]="type.value">{{ type.name }}</md-radio-button>
+            </md-radio-group>
           </div>
           <div fxLayout="row">
             <button md-raised-button type="submit" color="primary" [disabled]="!createForm.valid" fxFlex>

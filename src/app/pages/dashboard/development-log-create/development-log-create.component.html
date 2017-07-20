@@ -1,0 +1,14 @@
+<md-card>
+  <form [formGroup]="createForm" (ngSubmit)="save.emit(createForm.value)" novalidate fxLayout="column">
+    <md-card-content fxLayout="column">
+      <md-input-container>
+        <input mdInput formControlName="title" placeholder="标题" autocomplete="off" required>
+      </md-input-container>
+      <quill-editor formControlName="content" placeholder="在这里输入内容 ..." required></quill-editor>
+    </md-card-content>
+    <md-card-actions>
+      <button md-button type="reset" (click)="cancel.emit()">取消</button>
+      <button md-raised-button color="primary" [disabled]="!createForm.valid">发布</button>
+    </md-card-actions>
+  </form>
+</md-card>

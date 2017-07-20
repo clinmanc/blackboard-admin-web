@@ -7,6 +7,9 @@ import { HomeMaterialModule } from './home-material';
 import { MdlModule } from '@angular-mdl/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { QuillModule } from 'ngx-quill'
+
 import { LocalDatePipe } from '../pipes/local-date.pipe';
 import { LocalDateTimePipe } from '../pipes/local-date-time.pipe';
 import { BlackboardMessagePipe } from '../pipes/blackboard-message.pipe';
@@ -32,6 +35,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DevelopmentLogCreateComponent } from './dashboard/development-log-create/development-log-create.component';
 import { SysUserComponent } from './sys/user/sys-user.component';
 import { SysRoleComponent } from './sys/role/sys-role.component';
 import { SysPermissionComponent } from './sys/permission/sys-permission.component';
@@ -68,7 +72,6 @@ import { AlertDialogComponent } from '../components/dialog/alert/alert-dialog.co
 import { ConfirmDialogComponent } from '../components/dialog/confirm/confirm-dialog.component';
 import { PromptDialogComponent } from '../components/dialog/prompt/prompt-dialog.component';
 import { ItemListDialogComponent } from '../components/dialog/item-list/item-list-dialog.component';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { MessagesDialogComponent } from '../components/dialog/messages/messages-dialog.component';
 import { LimitedLineDirective } from '../components/limited-text/limited-line.directive';
 import { PromoterInfoComponent } from './promoter-info/promoter-info.component';
@@ -76,9 +79,10 @@ import { PromoterInfoCreateComponent } from './promoter-info/create/promoter-inf
 import { UserFieldComponent } from 'app/components/table/cell/user-field.component';
 import { SysBatchComponent } from './sys/batch/sys-batch.component';
 import { ClassroomUserInfoComponent } from '../components/dialog/classroom-user-info/classroom-user-info.component';
+import { UserAssistComponent } from './user/assist/user-assist.component';
 
 @NgModule({
-imports: [
+  imports: [
     CommonModule,
     FormsModule,
     HttpModule,
@@ -88,6 +92,7 @@ imports: [
     MdlModule,
     FlexLayoutModule,
     HomeRoutingModule,
+    QuillModule,
     PerfectScrollbarModule.forChild()
   ],
   declarations: [
@@ -116,6 +121,7 @@ imports: [
 
     HomeComponent,
     DashboardComponent,
+    DevelopmentLogCreateComponent,
     SysBatchComponent,
     SysUserComponent,
     SysRoleComponent,
@@ -157,7 +163,8 @@ imports: [
     LimitedLineDirective,
     PromoterInfoComponent,
     PromoterInfoCreateComponent,
-    ClassroomUserInfoComponent
+    ClassroomUserInfoComponent,
+    UserAssistComponent
   ],
   entryComponents: [
     GrowthTagCreateComponent,

@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
     if (this.auth.user) {
       const menus = NAV_ITEMS.map(menu => {
         if (menu.children && menu.children.length) {
-          const children = menu.children.filter(subMenu => this.hasPermission(subMenu.name));
+          const children = menu.children.filter(subMenu => AuthHelper.hasPermission(subMenu.name));
           if (children.length) {
             const menuCopy = Object.create(menu);
             menuCopy.children = children;
@@ -74,26 +74,13 @@ export class HomeComponent implements OnInit {
             return null;
           }
         } else {
-          return this.hasPermission(menu.name) ? menu : null;
+          return AuthHelper.hasPermission(menu.name) ? menu : null;
         }
       });
       this.navItems = menus.filter(menu => menu);
     } else {
       this.navItems = [];
     }
-  }
-
-  hasPermission(name: string) {
-    if (this.auth.user) {
-      for (const role of this.auth.user.roles) {
-        for (const permission of role.permissions) {
-          if (permission.name === '所有权限' || permission.name === name) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
   }
 
   toggleExpanded(item: NavItem) {

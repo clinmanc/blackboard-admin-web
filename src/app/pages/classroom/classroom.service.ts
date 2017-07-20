@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RequestMethod } from '@angular/http';
 import { Page } from '../../shared/page';
 import { Pageable } from '../../shared/pageable';
 import { ResourceAction, ResourceParams } from 'ngx-resource';
@@ -9,7 +10,6 @@ import { UserHelper } from '../../helper/user-helper';
 import { MessageCategoryHelper } from '../../helper/message-category-helper';
 import { isNullOrUndefined } from 'util';
 import { environment } from '../../../environments/environment';
-import {RequestMethod} from "@angular/http";
 
 export class QueryInput extends Pageable {
   keyword: string;
@@ -53,16 +53,6 @@ export class ClassroomService extends RestClient {
     }
   })
   queryStatistics: ResourceMethod<QueryInput, Page<any>>;
-
-  exportStatistics (params) {
-    let url = '';
-    for (const key in params) {
-      if (params.hasOwnProperty(key) && !isNullOrUndefined(params[key])) {
-        url += (url && '&') + key + '=' + params[key];
-      }
-    }
-    window.location.href = environment.baseUrl + '/statistics/message/classroom/export?' + url;
-  }
 
   @ResourceAction({
     method: RequestMethod.Post,
@@ -110,4 +100,14 @@ export class ClassroomService extends RestClient {
     fromDate: string,
     toDate: string
   }, Page<any>>;
+
+  exportStatistics(params) {
+    let url = '';
+    for (const key in params) {
+      if (params.hasOwnProperty(key) && !isNullOrUndefined(params[key])) {
+        url += (url && '&') + key + '=' + params[key];
+      }
+    }
+    window.location.href = environment.baseUrl + '/statistics/message/classroom/export?' + url;
+  }
 }
